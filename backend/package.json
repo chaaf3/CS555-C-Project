@@ -1,0 +1,19 @@
+{
+  "name": "cs555-c-project",
+  "version": "1.0.0",
+  "description": "This file is for the purpose of filling in relevat information to this agile project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaaf3/CS555-C-Project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chaaf3/CS555-C-Project/issues"
+  },
+  "homepage": "https://github.com/chaaf3/CS555-C-Project#readme"
+}
