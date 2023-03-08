@@ -16,12 +16,12 @@ const getCollectionFn = (collection) => {
 };
 
 /* Now, you can list your collections here: */
-// module.exports = {
-//   users: getCollectionFn("users"),
-//   projects: getCollectionFn("projects"),
-//   contractors: getCollectionFn("contractors"),
-// };
+module.exports = {
+  users: getCollectionFn("users"),
+  projects: getCollectionFn("projects"),
+  contractors: getCollectionFn("contractors"),
+};
 
-export const users =  getCollectionFn('users');
-export const projects =  getCollectionFn('projects');
-export const contractors =  getCollectionFn('contractors');
+// export const users =  getCollectionFn('users');
+// export const projects =  getCollectionFn('projects');
+// export const contractors =  getCollectionFn('contractors');
