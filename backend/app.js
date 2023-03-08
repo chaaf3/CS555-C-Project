@@ -1,10 +1,36 @@
 const express = require("express");
-const app = express();
 const configRoutes = require("./routes");
 const projects = require("./data/projects");
 const data = require("./data");
 
-app.use(express.json());
+data.contractors.createContractor(
+  "venkat",
+  "venkat@stevens.edu",
+  [
+    { from: "ssdfijiausrhfij", text: "message from a friend" },
+    { from: "ssdfijiausrhfij", text: "Another message from a friend" },
+  ],
+  [
+    { projectId: "ksjdhfihasdkifgjhlkj", tasks: ["task 1", "task2, task3"] },
+    {
+      projectId: "ksjdhfihasdkifgjhlkj",
+      tasks: ["task 2.1", "task2.2, task2.3"],
+    },
+  ],
+  "datetime here"
+);
+let temp;
+async function tempTasks() {
+  temp = await data.contractors.getContractor("6407ee67ae874c53804fbdd6");
+  let tasks = data.contractors.getTasks(temp);
+  console.log(tasks);
+}
+async function tempMessages() {
+  temp = await data.contractors.getContractor("6407ee67ae874c53804fbdd6");
+  let messages = data.contractors.getMessages(temp);
+  console.log(messages);
+}
+tempMessages();
 
 configRoutes(app);
 
