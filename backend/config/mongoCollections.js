@@ -21,3 +21,7 @@ module.exports = {
   projects: getCollectionFn("projects"),
   contractors: getCollectionFn("contractors"),
 };
+
+// export const users =  getCollectionFn('users');
+// export const projects =  getCollectionFn('projects');
+// export const contractors =  getCollectionFn('contractors');
