@@ -5,12 +5,30 @@ const contractors = mongoCollections.contractors;
 const { ObjectId } = require("mongodb");
 const data = require(".");
 
-function helloWorld() {
-  return "Hello World!";
+
+function BankRequest(contractor_id, project_id) {
+  for(let i = 0; i < contractors.length; i++){
+    if(contractor_id === contractors[i].id){
+        for(let n = 0; n < contractors[i].BankPayment.length; n++){
+            if(project_id === contractors[i].BankPayment[n].projectId){
+                if(contractors[i].BankPayment[n].approved){
+                    return true
+                }
+                else{
+                    return false
+                }
+            }
+        }
+        throw "Project id not found"
+    }
+  }
+  throw "Contractor id not found"
+
 }
 
+
 module.exports = {
-  helloWorld,
+  BankRequest
 };
 
 /*
