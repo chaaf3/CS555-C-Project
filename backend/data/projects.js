@@ -1,8 +1,11 @@
-const mongoCollections = require("../config/mongoCollections");
-const users = mongoCollections.users;
-const projects = mongoCollections.projects;
-const contractors = mongoCollections.contractors;
-const { ObjectId } = require("mongodb");
+// const mongoCollections = require("../config/mongoCollections");
+// const users = mongoCollections.users;
+// const projects = mongoCollections.projects;
+// const contractors = mongoCollections.contractors;
+// const { ObjectId } = require("mongodb");
+import { ObjectId } from "mongodb";
+import {projects} from '../config/mongoCollections.js';
+
 const data = require(".");
 //
 /* 
@@ -14,12 +17,11 @@ https://www.youtube.com/watch?v=VThjz_Vy450
 https://www.linkedin.com/learning/paths/explore-react-js-development?u=56742337
 https://www.linkedin.com/learning/react-js-essential-training-2020/building-modern-user-interfaces-with-react?autoplay=true&u=56742337
 
-
 */
-const helloWorld = function helloWorld() 
+const createReminder = async (projectid) =>
 {
-  return "Hello World!";
-};
+
+}
 
 module.exports = 
 {
