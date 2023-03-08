@@ -64,7 +64,7 @@ const createReminder = async (projectId) => {
     } 
 }
 
-const sendReminderEmail = async (contractorId, projectId) => {
+const sendReminderEmail = async (contractorId) => {
   var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
