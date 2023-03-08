@@ -5,17 +5,17 @@ function App() {
   return (
 
     <div className="App">
-      <div class="topnav">
+      <div className="topnav">
         <a href="home">Home</a>
         <a href="appointment">Appointment</a>
         <a href="contact-us">Contact Us</a>
       </div>
 
-      <div class="header">
+      <div className="header">
         Reserve an Appointment
       </div>
 
-      <div class="content">
+      <div className="content">
         Appointment Date & Time:
         <Calendar/>
       </div>

@@ -23,14 +23,14 @@ const theme = createTheme({
   });
 
 function Calendar() {
-    const [value, setValue] = React.useState(new Date('2014-08-18T21:11:54'));
-   
+    const [value, setValue] = React.useState(new Date());
+
     const onChange = (newValue) => {
         setValue(newValue);
     };
 
-    const storeDate = (confirmedValue) => {
-
+    const storeDate = () => {
+        console.log("Confirmed!");
     };
 
     return (
@@ -45,6 +45,7 @@ function Calendar() {
             />
             <button onClick={storeDate(value)}>Confirm</button>
             </Stack>
+
         </div>
         </ThemeProvider>
     );
