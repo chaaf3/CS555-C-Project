@@ -8,7 +8,7 @@ The goal of this project is to create a communication platform for solar panel i
 
 *Comparing Planned Features to Actual Features*:
 
-Given the amount of unanticipated factors outside of our control (expanded on below), we completed a very high percentage of the planned features, with only minor exceptions of filling in already selected times and dates due to already filled in slots. The only reason this task is still in progress is due to the oversight of requiring projects to have been already been initiated. Since our project database can be further refined, we can move this quality of life feature to a later sprint.
+Given the amount of unanticipated factors outside of our control (expanded on below), we completed a very high percentage of the planned features, with only minor exceptions of filling in already selected times and dates due to already filled in slots. Also, there were some complications regarding the bank updates since we do not have all of the required information to formally send a request and receive a response from a bank. The only reason this task is still in progress is due to the oversight of requiring projects to have been already been initiated. Since our project database can be further refined, we can move this quality of life feature to a later sprint.
 
 *New Features as User Stories*:
 
