@@ -7,16 +7,11 @@ import { ObjectId } from "mongodb";
 import {projects} from '../config/mongoCollections.js';
 
 const data = require(".");
-//
+
 /* 
 Referennces for reminder feature:
 Developer: Harshdeep Aujla 
-https://github.com/ericmahare/doctor_appointment_backend
-https://stackoverflow.com/questions/51065938/react-js-redux-making-reminder-app
-https://www.youtube.com/watch?v=VThjz_Vy450
-https://www.linkedin.com/learning/paths/explore-react-js-development?u=56742337
-https://www.linkedin.com/learning/react-js-essential-training-2020/building-modern-user-interfaces-with-react?autoplay=true&u=56742337
-
+CS 546 Lab 4 
 */
 
 const get = async (id) => 
@@ -49,7 +44,12 @@ const get = async (id) =>
 };
 
 
-
+/* this function will modify the project by adding two new fields.
+first new field is reminderDate which is the date when the reminder needs to be sent out
+second new field is reminderSent which is a boolean indicating if the reminder is sent yet or not
+By default reminderSent is false since the reminder is just recreated. 
+A different function will be used to send the reminder and update the reminderSent field
+*/
 const createReminder = async (projectId) =>
 {
   if (!projectId) throw 'Missing projectID';
@@ -59,17 +59,30 @@ const createReminder = async (projectId) =>
   if(!ObjectId.isValid(projectId)) throw `invalid object ID`
   
   let curProject = await get(id);
-  // basically using same logic I used for rename band. 
- // REMEMBER TO ADD ALL THE KEYS OF PROJECT BACK IN HERE OR ELSE PROJECT WILL BE MISSING INFORMATION
- //FOR THIS SPRINT ONLY GOING TO USE ID, DUE DATE, REMINDER DATE, AND REMINDER_SENT
+  
+  let reminderTime =  Date(curProject['dueDate'].getTime())
+  reminderTime.setDate(reminderTime.getDate() - 2); // setting the reminder date to be 2 days before the due date
   let addedReminder = 
   {
-
+    ...curProject, // this will include all the existing keys in the project
+    reminderDate: reminderTime,
+    reminderSent: false 
   }
+
+  const projectCollection = await projects();
+    const updatedInfo = await projectCollection.findOneAndUpdate(
+      {_id: new ObjectId(id)},
+      {$set: addedReminder},
+      {returnDocument: 'after'}
+    );
+    if (updatedInfo.lastErrorObject.n === 0) {
+      throw 'could not add reminder successfully';
+    } 
 
 }
 
-module.exports = 
+export 
 {
-  helloWorld,
+  createReminder,
+
 };
