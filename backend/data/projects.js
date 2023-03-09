@@ -1,10 +1,6 @@
 const mongoCollections = require("../config/mongoCollections");
-
 const { ObjectId } = require("mongodb");
 const projects = mongoCollections.projects;
-
-// team23pass@gmail.com
-// Team23Pass!
 const contractorData = require("./contractors");
 var nodemailer = require('nodemailer');
 
@@ -41,29 +37,31 @@ second new field is reminderSent which is a boolean indicating if the reminder i
 By default reminderSent is false since the reminder is just recreated. 
 A different function will be used to send the reminder and update the reminderSent field
 */
-const createReminder = async (projectId) => {
-  let curProject = await get(id);
-  
-  let reminderTime =  Date(curProject['dueDate'].getTime())
-  reminderTime.setDate(reminderTime.getDate() - 2); // setting the reminder date to be 2 days before the due date
-  let addedReminder = {
-    ...curProject, // this will include all the existing keys in the project
+const setReminderDate = async (id) => {
+  let currentProject = await getProject(id);
+  let projectDueDate = new Date(currentProject.dueDate);
+  reminderTime = projectDueDate.setDate(projectDueDate.getDate() - 2);
+  reminderTime = new Date(reminderTime);
+
+  let setReminder = { 
     reminderDate: reminderTime,
-    reminderSent: false 
   }
 
   const projectCollection = await projects();
-    const updatedInfo = await projectCollection.findOneAndUpdate(
-      {_id: new ObjectId(id)},
-      {$set: addedReminder},
-      {returnDocument: 'after'}
-    );
-    if (updatedInfo.lastErrorObject.n === 0) {
-      throw 'could not add reminder successfully';
-    } 
+  const updatedInfo = await projectCollection.updateOne(
+    {_id: new ObjectId(id)},
+    {$set: setReminder},
+  );
+  
+  // TODO: error check if update was successful
+  // if (updatedInfo.lastErrorObject.n === 0) {
+  //   throw 'Could not successfully set reminder date';
+  // } 
 }
 
-const sendReminderEmail = async (contractorId) => {
+// team23pass@gmail.com
+// Team23Pass!
+const sendReminderEmail = async (projectId, contractorId) => {
   var transporter = nodemailer.createTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',
@@ -75,31 +73,46 @@ const sendReminderEmail = async (contractorId) => {
     }
   });
 
-  //get contractor email address from database
   contractor = await contractorData.getContractor(contractorId);
   contractorEmail = contractor.email;
 
+  projectCollection = await projects();
+  currentProject = await projectCollection.findOne({_id: new ObjectId(projectId)});
 
   var mailOptions = {
     from: 'team23pass@gmail.com',
     to: contractorEmail,
-    subject: 'Reminder: Project Due Date',
+    subject: 'Reminder ' + currentProject._id + ': Upcoming Project Due Date',
     text:
     'This is a reminder that your project is due in 2 days. Please remember to keep track of your project.'
   };
 
-  transporter.sendMail(mailOptions, function(error, info){
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Email sent: ' + info.response);
-    }
+  transporter.sendMail(mailOptions, function (error, info) {
+    confirmEmailSent(projectId, error, info);
   });
+}
+
+confirmEmailSent =  async(projectId, error, info) => {
+  emailSent = false;
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+    emailSent = true;
+  }
+
+  if (emailSent) {
+    const projectCollection = await projects();
+    const updatedInfo = await projectCollection.updateOne(
+      {_id: new ObjectId(projectId)},
+      {$set: {reminderSent: true}},
+    );
+  }
 }
 
 module.exports = {
   createProject,
   getProject,
-  createReminder,
+  setReminderDate,
   sendReminderEmail
 };

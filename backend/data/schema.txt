@@ -1,0 +1,29 @@
+Users:
+{
+    id: lksdjfkiuhiasurhgojasdufh (ObjectId),
+    name: James something (String),
+    email: jamesSomething@gmail.com (String),
+    messages: [{from: (sender uuid), text: "this is a message from a friend"}],
+    calender: [{projectId: kajsdhfgiubiea, projectDeadline: DateTimeObjectInstance}],
+    implementation: [{projectId: most recent step completed}]
+}
+
+Contractors:
+{
+    id: lksdjfkiuhiasurhgojasdufh (ObjectId),
+    name: James Something (String),
+    email: jamesSomething@gmail.com (String),
+    messages: [{from: (sender uuid), text: "this is a message from a friend"}],
+    todo: [{projectId: alslksdjfoidifjpiuahjse, tasks:["This is a task in text", 'this is another text task']}],
+    calender: [{projectId: kajsdhfgiubiea, projectDeadline: DateTimeObject}],
+    bankPayment: [{projectId: kajsdhfgiubiea, approved: true}],
+}
+
+Projects:
+{
+    _id: sgwsjhsgwjsgwjhsg (ObjectId),
+    dueDate: DateTimeObject,
+    reminderTime: DateTimeObject (2-3 days before dueDate),
+    reminderSent: false (boolean),
+}
+
