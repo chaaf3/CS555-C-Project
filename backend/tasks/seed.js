@@ -16,15 +16,19 @@ const main = async () => {
     
     // Create projects
     const project1 = await projectsApi.createProject(
-        Date(2024, 1, 1)
+        new Date(2024, 1, 1)
     )
+    const project1ReminderDate = await projectsApi.setReminderDate(project1._id)
+
     const project2 = await projectsApi.createProject(
-        Date(2023, 6, 2)
+        new Date(2023, 6, 2)
     )
+    const project2ReminderDate = await projectsApi.setReminderDate(project2._id)
   
     const project3 = await projectsApi.createProject(
-        Date(2023, 11, 15)
+        new Date(2023, 11, 15)
     ) 
+    const project3ReminderDate = await projectsApi.setReminderDate(project3._id)
 
     // Create contractors
     const contractor1 = await contractorsApi.createContractor(
@@ -46,6 +50,12 @@ const main = async () => {
 
     // Create users
     // Need to create createUsers function
+
+    // TODO:
+    // Need to update reminderSent to true when email is sent
+    // Need to specify which project the reminder is for
+    // Need to send confirmation email of when an appointment is set
+
   console.log("Database has been seeded!")
    
 }
