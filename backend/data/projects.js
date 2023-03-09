@@ -1,10 +1,6 @@
 const mongoCollections = require("../config/mongoCollections");
-
 const { ObjectId } = require("mongodb");
 const projects = mongoCollections.projects;
-
-// team23pass@gmail.com
-// Team23Pass!
 const contractorData = require("./contractors");
 var nodemailer = require('nodemailer');
 
@@ -63,6 +59,8 @@ const createReminder = async (projectId) => {
     } 
 }
 
+// team23pass@gmail.com
+// Team23Pass!
 const sendReminderEmail = async (contractorId) => {
   var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -75,7 +73,6 @@ const sendReminderEmail = async (contractorId) => {
     }
   });
 
-  //get contractor email address from database
   contractor = await contractorData.getContractor(contractorId);
   contractorEmail = contractor.email;
 

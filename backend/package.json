@@ -4,7 +4,8 @@
   "description": "This file is for the purpose of filling in relevat information to this agile project.",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "seed": "node ./tasks/seed.js"
   },
   "repository": {
     "type": "git",

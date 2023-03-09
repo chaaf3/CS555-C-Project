@@ -53,16 +53,6 @@ async function getMessages(contractor) {
 
 async function createContractor(name, email, messages, todo, calender) {
   const contractorCollection = await contractors();
-  /*{
-    id: lksdjf;kiuhiasurhgojasd;ufh,
-    name: James something,
-    email: jamesSomething@gmail.com,
-    messages: [{from: (sender uuid), text: "this is a message from a friend"}],
-    todo: [{projectId: alslksdjfoidifjpiuahjse, tasks:["This is a task in text", 'this is another text task']}],
-    calender: [{projectId: kajsdhfgiubiea, DateTime: DateTimeObjectInstance}],
-    bankPayment: [{projectId: kajsdhfgiubiea, approved: true}],
-    }
-    */
   id = new ObjectId();
 
   let newContractor = {
@@ -153,16 +143,6 @@ const addToInQueue = async (contractorId, task) => {
 
 async function createContractor(name, email, messages, todo, calender) {
   const contractorCollection = await contractors();
-  /*{
-    id: lksdjf;kiuhiasurhgojasd;ufh,
-    name: James something,
-    email: jamesSomething@gmail.com,
-    messages: [{from: (sender uuid), text: "this is a message from a friend"}],
-    todo: [{projectId: alslksdjfoidifjpiuahjse, tasks:["This is a task in text", 'this is another text task']}],
-    calender: [{projectId: kajsdhfgiubiea, DateTime: DateTimeObjectInstance}],
-    bankPayment: [{projectId: kajsdhfgiubiea, approved: true}],
-    }
-    */
   id = new ObjectId();
 
   let newContractor = {
