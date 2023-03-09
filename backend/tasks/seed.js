@@ -48,12 +48,11 @@ const main = async () => {
         ]
     )
 
+    await projectsApi.sendReminderEmail(project1._id, contractor1._id)
     // Create users
     // Need to create createUsers function
 
     // TODO:
-    // Need to update reminderSent to true when email is sent
-    // Need to specify which project the reminder is for
     // Need to send confirmation email of when an appointment is set
 
   console.log("Database has been seeded!")
