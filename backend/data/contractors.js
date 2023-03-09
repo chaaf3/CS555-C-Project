@@ -1,6 +1,5 @@
 const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
-const projects = mongoCollections.projects;
 const contractors = mongoCollections.contractors;
 const { ObjectId } = require("mongodb");
 const data = require(".");
@@ -8,17 +7,20 @@ const { ConnectionCheckedInEvent, StreamDescription } = require("mongodb");
 
 async function getContractor(id) {
   // id is for the contractor
-  if (!id) {
-    throw "add an id";
-  }
-  if (typeof id != "string") {
-    throw "wrong input type";
-  }
-  const contractorCollection = await contractors();
-  const contractor = await contractorCollection.findOne({
-    _id: new ObjectId(id),
-  });
+  // if (!id) {
+  //   throw "add an id";
+  // }
+  // if (typeof id != "string") {
+  //   throw "wrong input type";
+  // }
 
+  // Return the contractor given the id
+
+  const contractorCollection = await contractors();
+  const contractor = await contractorCollection.findOne({ _id: new ObjectId(id) });
+  if (!contractor) {
+    throw "no contractor with that id";
+  }
   return contractor;
 }
 

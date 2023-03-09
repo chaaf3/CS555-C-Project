@@ -2,11 +2,10 @@ const mongoCollections = require("../config/mongoCollections");
 
 const { ObjectId } = require("mongodb");
 const projects = mongoCollections.projects;
-const contractors = mongoCollections.contractors;
 
 // team23pass@gmail.com
 // Team23Pass!
-const data = require(".");
+const contractorData = require("./contractors");
 var nodemailer = require('nodemailer');
 
 const createProject = async (dueDate) => {
@@ -67,14 +66,19 @@ const createReminder = async (projectId) => {
 const sendReminderEmail = async (contractorId) => {
   var transporter = nodemailer.createTransport({
     service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
       user: 'team23pass@gmail.com',
-      pass: 'Team23Pass!'
+      pass: 'wjfrcepybkbsicml'
     }
   });
 
-  let contractor = await data.contractors.getContractor(contractorId);
-  let contractorEmail = contractor['email'];
+  //get contractor email address from database
+  contractor = await contractorData.getContractor(contractorId);
+  contractorEmail = contractor.email;
+
 
   var mailOptions = {
     from: 'team23pass@gmail.com',
