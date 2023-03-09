@@ -23,7 +23,7 @@ Projects:
 {
     _id: sgwsjhsgwjsgwjhsg (ObjectId),
     dueDate: DateTimeObject,
-    reminder: DateTimeObject (2-3 days before dueDate),
+    reminderTime: DateTimeObject (2-3 days before dueDate),
     reminderSent: false (boolean),
 }
 
