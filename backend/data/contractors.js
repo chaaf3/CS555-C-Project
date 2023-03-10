@@ -189,21 +189,27 @@ function bankRequest(contractor_id, project_id) {
 
 async function updateApproval(contractor_id, project_id) {
   let contractor = await getContractor(contractor_id);
-  for (let i = 0; i < contractor.bankPayment.length; i++) {
-    if (project_id === contractor.bankPayment[i].projectId) {
-      if (contractor.bankPayment[i].approved) {
-        return "already approved";
+  let bankBuilder = contractor.bankPayment;
+  for (let i = 0; i < bankBuilder.length; i++) {
+    if (project_id === bankBuilder[i].projectId) {
+      if (bankBuilder[i].approved) {
+        return "Already approved";
       } else {
-        bankRequest(contractor_id, project_id);
-        const contractorCollection = await contractors();
-        await contractors.findOneAndReplace({
-          _id: contractor._id,
-          contractor,
-        });
+        if (bankRequest(contractor_id, project_id)) {
+          bankBuilder[i].approved = true;
+        } else {
+          return "The bank did not approve your request";
+        }
       }
     }
   }
-  throw "Project id not found";
+  contractor.bankPayment = bankBuilder;
+  const contractorCollection = await contractors();
+  await contractorCollection.updateOne(
+    { _id: new ObjectId(contractor_id) },
+    { $set: contractor }
+  );
+  return contractor;
 }
 
 module.exports = {
