@@ -5,6 +5,14 @@ const { ObjectId } = require("mongodb");
 const data = require(".");
 const { ConnectionCheckedInEvent, StreamDescription } = require("mongodb");
 
+async function getBankApproval() {
+  let newBank = {
+    id: new ObjectId(),
+    approved: approval,
+  };
+  return newBank;
+}
+
 async function getContractor(id) {
   // id is for the contractor
   // if (!id) {
@@ -17,7 +25,9 @@ async function getContractor(id) {
   // Return the contractor given the id
 
   const contractorCollection = await contractors();
-  const contractor = await contractorCollection.findOne({ _id: new ObjectId(id) });
+  const contractor = await contractorCollection.findOne({
+    _id: new ObjectId(id),
+  });
   if (!contractor) {
     throw "no contractor with that id";
   }
@@ -51,22 +61,31 @@ async function getMessages(contractor) {
   return builder;
 }
 
-async function createContractor(name, email, messages, todo, calender) {
+async function createContractor(
+  name,
+  email,
+  messages,
+  todo,
+  calendar,
+  bankPayment
+) {
+  console.log("im alive");
   const contractorCollection = await contractors();
-  id = new ObjectId();
 
   let newContractor = {
-    _id: id,
+    _id: new ObjectId(),
     name: name,
     email: email,
     messages: messages,
     todo: todo,
-    calender: calender,
+    calendar: calendar,
+    bankPayment: bankPayment,
   };
+  console.log(newContractor);
 
   const insertInfo = await contractorCollection.insertOne(newContractor);
   if (!insertInfo.acknowledged) {
-    throw "please try adding again";
+    throw "Could not add contractor";
   }
   return newContractor;
 }
@@ -141,21 +160,56 @@ const addToInQueue = async (contractorId, task) => {
   return true;
 };
 
-async function createContractor(name, email, messages, todo, calender) {
+async function isApproved(contractor_id, project_id) {
+  let contractor = await getContractor(contractor_id);
+
+  for (let i = 0; i < contractor.bankPayment.length; i++) {
+    if (project_id === contractor.bankPayment[i].projectId) {
+      if (contractor.bankPayment[i].approved) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+  throw "Project id not found";
+}
+
+function bankRequest(contractor_id, project_id) {
+  console.log("I am requesting bank approval for my project.");
+  const randomNum = Math.random();
+  if (randomNum === 0) {
+    console.log("The bank has not approved this project.");
+    return false;
+  } else {
+    console.log("The bank approves this request!");
+    return true;
+  }
+}
+
+async function updateApproval(contractor_id, project_id) {
+  let contractor = await getContractor(contractor_id);
+  let bankBuilder = contractor.bankPayment;
+  for (let i = 0; i < bankBuilder.length; i++) {
+    if (project_id === bankBuilder[i].projectId) {
+      if (bankBuilder[i].approved) {
+        return "Already approved";
+      } else {
+        if (bankRequest(contractor_id, project_id)) {
+          bankBuilder[i].approved = true;
+        } else {
+          return "The bank did not approve your request";
+        }
+      }
+    }
+  }
+  contractor.bankPayment = bankBuilder;
   const contractorCollection = await contractors();
-  id = new ObjectId();
-
-  let newContractor = {
-    _id: id,
-    name: name,
-    email: email,
-    messages: messages,
-    todo: todo,
-    calender: calender,
-  };
-
-  const insertInfo = await contractorCollection.insertOne(newContractor);
-  return newContractor;
+  await contractorCollection.updateOne(
+    { _id: new ObjectId(contractor_id) },
+    { $set: contractor }
+  );
+  return contractor;
 }
 
 module.exports = {
@@ -163,4 +217,7 @@ module.exports = {
   getTasks,
   getMessages,
   createContractor,
+  isApproved,
+  updateApproval,
+  bankRequest,
 };
