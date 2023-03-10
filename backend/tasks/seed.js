@@ -10,7 +10,7 @@ const usersApi = data.users
 // const projectsDb = mongoCollections.projects
 // const usersDb = mongoCollections.users
 
-const main = async () => {
+const side = async () => {
     const db = await mongoConnection.connectToDb()
     await db.dropDatabase()
     
@@ -33,7 +33,7 @@ const main = async () => {
     // Create contractors
     const contractor1 = await contractorsApi.createContractor(
         "Venkat Anna",
-        "vanna@stevens.edu",
+        "vanna@stevens.edu", // WHEN TESTING, INPUT YOUR EMAIL
         [
             {from: "SenderId1", text: "Hello World!" },
             {from: "SenderId2", text: "Please repsond back asap!" },
@@ -53,7 +53,9 @@ const main = async () => {
     // Need to create createUsers function
 
   console.log("Database has been seeded!")
-   
 }
-
-main() 
+const main = async () => {
+    await side();
+    mongoConnection.closeConnection();
+}
+main()
