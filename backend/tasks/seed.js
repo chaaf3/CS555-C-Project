@@ -10,7 +10,7 @@ const usersApi = data.users
 // const projectsDb = mongoCollections.projects
 // const usersDb = mongoCollections.users
 
-const side = async () => {
+const seeding = async () => {
     const db = await mongoConnection.connectToDb()
     await db.dropDatabase()
     
@@ -54,8 +54,10 @@ const side = async () => {
 
   console.log("Database has been seeded!")
 }
+
 const main = async () => {
-    await side();
+    await seeding();
     mongoConnection.closeConnection();
 }
+
 main()
