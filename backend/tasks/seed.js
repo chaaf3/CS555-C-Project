@@ -39,10 +39,14 @@ const seeding = async () => {
     [
       { projectId: project1._id, date: project1.dueDate },
       { projectId: project2._id, date: project2.dueDate },
+    ],
+    [
+      { projectId: project1._id, approved: true },
+      { projectId: project2._id, approved: false },
     ]
   );
 
-  await projectsApi.sendReminderEmail(project1._id, contractor1._id);
+  //  await projectsApi.sendReminderEmail(project1._id, contractor1._id);
   // Create users
   // Need to create createUsers function
 
