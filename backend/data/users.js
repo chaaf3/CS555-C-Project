@@ -22,7 +22,6 @@ function isApproved(contractor_id, project_id) {
     }
   }
   throw "Contractor id not found"
-
 }
 
 function bankRequest(contractor_id, project_id){

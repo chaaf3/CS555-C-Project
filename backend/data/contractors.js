@@ -6,16 +6,6 @@ const data = require(".");
 const { ConnectionCheckedInEvent, StreamDescription } = require("mongodb");
 
 async function getContractor(id) {
-  // id is for the contractor
-  // if (!id) {
-  //   throw "add an id";
-  // }
-  // if (typeof id != "string") {
-  //   throw "wrong input type";
-  // }
-
-  // Return the contractor given the id
-
   const contractorCollection = await contractors();
   const contractor = await contractorCollection.findOne({ _id: new ObjectId(id) });
   if (!contractor) {
