@@ -5,21 +5,18 @@ const contractors = mongoCollections.contractors;
 const { ObjectId } = require("mongodb");
 const data = require(".");
 
-function isApproved(contractor_id, project_id) {
-  for(let i = 0; i < contractors.length; i++){
-    if(contractor_id === contractors[i].id){
-        for(let n = 0; n < contractors[i].bankPayment.length; n++){
-            if(project_id === contractors[i].bankPayment[n].projectId){
-                if(contractors[i].bankPayment[n].approved){
-                    return true
-                }
-                else{
-                    return false
-                }
-            }
-        }
-        throw "Project id not found"
+/*
+database Layout
+User:
+    {
+    id: lksdjf;kiuhiasurhgojasd;ufh,
+    name: James something,
+    email: jamesSomething@gmail.com,
+    messages: [{from: (sender uuid), text: "this is a message from a friend"}],
+    calender: [{projectId: kajsdhfgiubiea, DateTime: DateTimeObjectInstance}],
+    implementation: [{projectId: most recent step completed}]
     }
+<<<<<<< HEAD
   }
   throw "Contractor id not found"
 }
@@ -32,32 +29,23 @@ function bankRequest(contractor_id, project_id){
     }
     else{
         return "it is not approved"
+=======
+Contractor:
+    {
+    id: lksdjf;kiuhiasurhgojasd;ufh,
+    name: James something,
+    email: jamesSomething@gmail.com,
+    messages: [{from: (sender uuid), text: "this is a message from a friend"}],
+    tasks: [{projectId: alslksdjfoidifjpiuahjse, tasks:["This is a task in text", 'this is another text task']}],
+    calender: [{projectId: kajsdhfgiubiea, DateTime: DateTimeObjectInstance}],
+    bankPayment: [{projectId: kajsdhfgiubiea, approved: true}],
+>>>>>>> f6c3ebf8e1f08d2815d688a9266d921dbe686591
     }
+    data folder:
+        users
+        projects
+        contractors
+    ToDo:
+    Contractor Document
 }
-
-function updateDB(contractor_id, project_id){
-    for(let i = 0; i < contractors.length; i++){
-        if(contractor_id === contractors[i].id){
-            for(let n = 0; n < contractors[i].bankPayment.length; n++){
-                if(project_id === contractors[i].bankPayment[n].projectId){
-                    if(contractors[i].bankPayment[n].approved){
-                        return "project is already approved"
-                    }
-                    else{
-                        contractors[i].bankPayment[n].approved = true
-                        return "Approval status has been updated"
-                    }
-                }
-            }
-            throw "Project id not found"
-        }
-      }
-      throw "Contractor id not found"
-
-}
-
-module.exports = {
-  isApproved,
-  bankRequest,
-  updateDB
-};
+*/
