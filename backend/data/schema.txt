@@ -5,7 +5,7 @@ Users:
     email: jamesSomething@gmail.com (String),
     messages: [{from: (sender uuid), text: "this is a message from a friend"}],
     calendar: [{projectId: kajsdhfgiubiea, projectDeadline: DateTimeObjectInstance}],
-    implementation: [{projectId: most recent step completed}]
+    status: [{projectId: most recent step completed}]
 }
 
 Contractors:

@@ -26,4 +26,5 @@ const checkForValue = (value) => {
 
 module.exports = {
     checkId,
+    checkForValue,
 }
