@@ -22,6 +22,8 @@ Contractors:
 Projects:
 {
     _id: sgwsjhsgwjsgwjhsg (ObjectId),
+    appointmentTime: DateTimeObject,
+    stage: String/Enum
     dueDate: DateTimeObject,
     reminderTime: DateTimeObject (2-3 days before dueDate),
     reminderSent: false (boolean),
