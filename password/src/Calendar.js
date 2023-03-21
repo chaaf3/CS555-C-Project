@@ -29,10 +29,10 @@ function Calendar() {
         setValue(newValue);
     };
 
-    // const storeDate = (confirmedValue) => {
-    //     // Store confirmedValue in database
+    const storeDate = (confirmedValue) => {
+        // Store confirmedValue in database
 
-    // };
+    };
 
     return (
         <ThemeProvider theme={theme}>

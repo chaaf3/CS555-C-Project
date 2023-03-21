@@ -6,8 +6,6 @@
         "@date-io/date-fns": "^2.16.0",
         "@emotion/react": "^11.10.6",
         "@emotion/styled": "^11.10.6",
-        "@mobiscroll/cli": "^1.8.0",
-        "@mobiscroll/react": "https://npm.mobiscroll.com/@mobiscroll/react-trial/-/react-trial-5.22.2.tgz",
         "@mui/lab": "^5.0.0-alpha.122",
         "@mui/material": "^5.11.12",
         "@mui/x-date-pickers": "^6.0.0",
