@@ -18,6 +18,11 @@ const checkId = (id) => {
   }
 }
 
+const checkForValue = (value) => {
+  if (!value) {
+    throw "Please provide a value";
+  }
+}
 
 module.exports = {
     checkId,

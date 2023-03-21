@@ -10,6 +10,8 @@ const usersApi = data.users;
 // const projectsDb = mongoCollections.projects
 // const usersDb = mongoCollections.users
 
+// TODO: test contractors code
+
 const seeding = async () => {
   const db = await mongoConnection.connectToDb();
   await db.dropDatabase();
