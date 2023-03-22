@@ -110,6 +110,16 @@ confirmEmailSent =  async(projectId, error, info) => {
   }
 }
 
+//this function will modify the project details by adding items to the equimentDelivered list 
+// and equipmentNotDelivered list. ProjectID is the _id of the project that needs to be modified
+//Items is an array of strings that need to be added to equipmentDelivered list after verifying that
+// each item in items is part of equipmentNeeded for the project
+const updateEquipmentDelivered = async (projectId, items) => 
+{
+
+}
+
+
 module.exports = {
   createProject,
   getProject,
