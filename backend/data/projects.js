@@ -13,7 +13,7 @@ const createProject = async (dueDate) => {
     dueDate: dueDate,
     reminderDate: null,
     reminderSent: false,
-    
+
   };
   const insertInfo = await projectCollection.insertOne(newProject);
   if (insertInfo.insertedCount === 0) {
@@ -128,13 +128,13 @@ const updateEquipmentDelivered = async (projectId, items) =>
   currentProject.equipmentDelivered.push(...items);
 
   // Determine the difference between equipmentNeeded and equipmentDelivered
-  let equipmentNotDelivered = currentProject.equipmentNeeded.filter((equipment) => !currentProject.equipmentDelivered.includes(equipment));
+  let neededEquipment = currentProject.equipmentRequired.filter((equipment) => !currentProject.equipmentDelivered.includes(equipment));
 
   // Update the project with the new equipmentDelivered and equipmentNotDelivered arrays
   await projectCollection.updateOne({_id: new ObjectId(projectId)}, {
     $set: {
       equipmentDelivered: currentProject.equipmentDelivered,
-      equipmentNotDelivered: equipmentNotDelivered
+      neededEquipment: neededEquipment
     }
   });
 
