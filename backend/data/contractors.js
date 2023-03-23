@@ -5,14 +5,6 @@ const { ObjectId } = require("mongodb");
 const validation = require("../validation");
 const { ConnectionCheckedInEvent, StreamDescription } = require("mongodb");
 
-async function getBankApproval() {
-  let newBank = {
-    id: new ObjectId(),
-    approved: approval,
-  };
-  return newBank;
-}
-
 async function getContractor(id) {
   validation.checkId(id);
 
@@ -24,19 +16,6 @@ async function getContractor(id) {
     throw "No contractor found with the given id";
   }
   return contractor;
-}
-
-async function getTasks(contractor) {
-  validation.checkForValue(contractor);
-
-  let tasksToDo = contractor.todo;
-  let builder = [];
-  for (let i = 0; i < tasksToDo.length; i++) {
-    for (let j = 0; j < tasksToDo[i].tasks.length; j++) {
-      builder.push(tasksToDo[i].tasks[j]);
-    }
-  }
-  return builder;
 }
 
 async function getMessages(contractor) {
@@ -163,40 +142,8 @@ const addToInQueue = async (contractorId, task) => {
   return true;
 };
 
-async function updateApproval(contractor_id, project_id) {
-  validation.checkId(contractor_id);
-  validation.checkId(project_id);
-
-  let contractor = await getContractor(contractor_id);
-  let bankBuilder = contractor.bankPayment;
-
-  for (let i = 0; i < bankBuilder.length; i++) {
-    if (project_id === bankBuilder[i].projectId) {
-      if (bankBuilder[i].approved) {
-        return "Already approved";
-      } else {
-        if (bankRequest(contractor_id, project_id)) {
-          bankBuilder[i].approved = true;
-        } else {
-          return "The bank did not approve your request";
-        }
-      }
-    }
-  }
-
-  contractor.bankPayment = bankBuilder;
-  const contractorCollection = await contractors();
-  await contractorCollection.updateOne(
-    { _id: new ObjectId(contractor_id) },
-    { $set: contractor }
-  );
-  return contractor;
-}
-
 module.exports = {
   getContractor,
-  getTasks,
   getMessages,
   createContractor,
-  updateApproval,
 };
