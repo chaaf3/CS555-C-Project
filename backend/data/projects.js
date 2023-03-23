@@ -3,8 +3,11 @@ const { ObjectId } = require("mongodb");
 const projects = mongoCollections.projects;
 const contractorData = require("./contractors");
 var nodemailer = require("nodemailer");
+const validation = require("../validation");
 
 const createProject = async (dueDate) => {
+  validation.checkForValue(dueDate);
+  
   const projectCollection = await projects();
   let newProject = {
     dueDate: dueDate,
@@ -21,6 +24,8 @@ const createProject = async (dueDate) => {
 };
 
 const getProject = async (id) => {
+  validation.checkId(id);
+
   const projectCollection = await projects();
   const project = await projectCollection.findOne({ _id: new ObjectId(id) });
   if (project === null) {
@@ -30,13 +35,9 @@ const getProject = async (id) => {
   return project;
 };
 
-/* this function will modify the project by adding two new fields.
-first new field is reminderDate which is the date when the reminder needs to be sent out
-second new field is reminderSent which is a boolean indicating if the reminder is sent yet or not
-By default reminderSent is false since the reminder is just recreated. 
-A different function will be used to send the reminder and update the reminderSent field
-*/
 const setReminderDate = async (id) => {
+  validation.checkId(id);
+
   let currentProject = await getProject(id);
   let projectDueDate = new Date(currentProject.dueDate);
   reminderTime = projectDueDate.setDate(projectDueDate.getDate() - 2);
@@ -61,6 +62,9 @@ const setReminderDate = async (id) => {
 // team23pass@gmail.com
 // Team23Pass!
 const sendReminderEmail = async (projectId, contractorId) => {
+  validation.checkId(projectId);
+  validation.checkId(contractorId);
+
   var transporter = nodemailer.createTransport({
     service: "gmail",
     host: "smtp.gmail.com",
@@ -92,7 +96,7 @@ const sendReminderEmail = async (projectId, contractorId) => {
   });
 };
 
-confirmEmailSent = async (projectId, error, info) => {
+const confirmEmailSent = async (projectId, error, info) => {
   emailSent = false;
   if (error) {
     console.log(error);
