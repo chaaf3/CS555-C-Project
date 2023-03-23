@@ -16,15 +16,29 @@ const checkId = (id) => {
   if (!ObjectId.isValid(id)) {
     throw "Invalid objectId";
   }
-}
+};
+
+const checkTextValue = (value) => {
+  if (!value) {
+    throw "Please provide a value";
+  }
+  if (typeof value != "string") {
+    throw "Please provide a text value";
+  }
+  value = value.trim();
+  if (value.length < 1) {
+    throw "Please provide a non-empty string";
+  }
+};
 
 const checkForValue = (value) => {
   if (!value) {
     throw "Please provide a value";
   }
-}
+};
 
 module.exports = {
-    checkId,
-    checkForValue,
-}
+  checkId,
+  checkForValue,
+  checkTextValue,
+};
