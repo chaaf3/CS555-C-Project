@@ -22,6 +22,14 @@ Contractors:
 Projects:
 {
     _id: sgwsjhsgwjsgwjhsg (ObjectId),
+    title: "Install solar panels" (String),
+    description: "Need to install 10 solar panels for this client" (String),
+    notes: ["This is a note", "Note number two"],
+    equipmentRequired: ["solar panels", "screwdriver", "hammer"],
+    deliveredEquipment: ["solar panels", "screwdriver"],
+    neededEquipment: ["hammer"],
+    status: [{"in progress": most recent task completed}],
+    expectedCompletionDate: DateTimeObject,
     dueDate: DateTimeObject,
     reminderTime: DateTimeObject (2-3 days before dueDate),
     reminderSent: false (boolean),
