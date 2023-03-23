@@ -16,17 +16,17 @@ const main = async () => {
     
     // Create projects
     const project1 = await projectsApi.createProject(
-        new Date(2024, 1, 1)
+        new Date(2024, 1, 1) , ["equipment 1", "equipment 2"]
     )
     // const project1ReminderDate = await projectsApi.setReminderDate(project1._id)
 
     const project2 = await projectsApi.createProject(
-        new Date(2023, 6, 2)
+        new Date(2023, 6, 2), ["equipment 1", "equipment 2"]
     )
     // const project2ReminderDate = await projectsApi.setReminderDate(project2._id)
   
     const project3 = await projectsApi.createProject(
-        new Date(2023, 11, 15)
+        new Date(2023, 11, 15),  ["equipment 1", "equipment 2"]
     ) 
     // const project3ReminderDate = await projectsApi.setReminderDate(project3._id)
 
@@ -48,10 +48,12 @@ const main = async () => {
         ]
     )
 
-    await projectsApi.sendReminderEmail(project1._id, contractor1._id)
+    // await projectsApi.sendReminderEmail(project1._id, contractor1._id)
     // Create users
     // Need to create createUsers function
 
+    //updateEquipmentDelivered function testing
+    await projectsApi.updateEquipmentDelivered(project1._id, ["equipment 1"])
   console.log("Database has been seeded!")
    
 }

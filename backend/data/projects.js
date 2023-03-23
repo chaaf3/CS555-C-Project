@@ -4,12 +4,17 @@ const projects = mongoCollections.projects;
 const contractorData = require("./contractors");
 var nodemailer = require('nodemailer');
 
-const createProject = async (dueDate) => {
+const createProject = async (dueDate, equipmentNeeded) => {
   const projectCollection = await projects();
   let newProject = {
     dueDate: dueDate,
     reminderDate: null,
-    reminderSent: false
+    reminderSent: false, 
+    equipmentNeeded: equipmentNeeded,
+    equipmentDelivered: [], 
+    equipmentNotDelivered:equipmentNeeded
+
+
   }
   const insertInfo = await projectCollection.insertOne(newProject);
   if (insertInfo.insertedCount === 0) {
@@ -116,6 +121,23 @@ confirmEmailSent =  async(projectId, error, info) => {
 // each item in items is part of equipmentNeeded for the project
 const updateEquipmentDelivered = async (projectId, items) => 
 {
+  projectCollection = await projects();
+  let currentProject = await projectCollection.findOne({_id: new ObjectId(projectId)})
+  if (!currentProject) {
+    throw `Project with ID ${projectId} not found`;
+  }
+  currentProject.equipmentDelivered.push(...items);
+
+  // Determine the difference between equipmentNeeded and equipmentDelivered
+  let equipmentNotDelivered = currentProject.equipmentNeeded.filter((equipment) => !currentProject.equipmentDelivered.includes(equipment));
+
+  // Update the project with the new equipmentDelivered and equipmentNotDelivered arrays
+  await projectCollection.updateOne({_id: new ObjectId(projectId)}, {
+    $set: {
+      equipmentDelivered: currentProject.equipmentDelivered,
+      equipmentNotDelivered: equipmentNotDelivered
+    }
+  });
 
 }
 
@@ -124,5 +146,6 @@ module.exports = {
   createProject,
   getProject,
   setReminderDate,
-  sendReminderEmail
+  sendReminderEmail,
+  updateEquipmentDelivered
 };
