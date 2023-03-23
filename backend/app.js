@@ -9,7 +9,8 @@ const data = require("./data");
 let temp;
 async function tempTasks() {
   try {
-    temp = await data.contractors.getContractor("640b8215c2b3f81ee477599e");
+    temp = await data.projects.getContract("641c97db016c19fd06cb48a7");
+    temp = await data.projects.approveContract("641c97db016c19fd06cb48a7");
     console.log(temp);}
   catch(e){
     console.log(e);

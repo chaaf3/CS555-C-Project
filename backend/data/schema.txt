@@ -1,4 +1,4 @@
-Users:
+Customer:
 {
     id: lksdjfkiuhiasurhgojasdufh (ObjectId),
     name: James something (String),
@@ -8,7 +8,7 @@ Users:
     status: [{projectId: most recent step completed}]
 }
 
-Contractors:
+Contractor:
 {
     id: lksdjfkiuhiasurhgojasdufh (ObjectId),
     name: James Something (String),
@@ -19,11 +19,16 @@ Contractors:
     bankPayment: [{projectId: kajsdhfgiubiea, approved: true}],
 }
 
-Projects:
+Project:
 {
     _id: sgwsjhsgwjsgwjhsg (ObjectId),
     title: "Install solar panels" (String),
     description: "Need to install 10 solar panels for this client" (String),
+    contract: {
+        _id: abcdefghijklmnop (ObjectId),
+        approved: true or false (boolean)
+        dateApproved: Date
+        }
     notes: ["This is a note", "Note number two"],
     equipmentRequired: ["solar panels", "screwdriver", "hammer"],
     deliveredEquipment: ["solar panels", "screwdriver"],

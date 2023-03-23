@@ -34,21 +34,26 @@ const createProject = async (title, description, dueDate) => {
     dueDate: dueDate,
     reminderDate: null,
     reminderSent: false,
+    contract: {
+      _id: new ObjectId(),
+      approved: false,
+      dateApproved: null
+    }
   };
   const insertInfo = await projectCollection.insertOne(newProject);
   if (insertInfo.insertedCount === 0) {
     throw "Could not add project";
   }
-  const newId = insertInfo.insertedId.toString();
-  const project = await getProject(newId);
+  let newProjectId = insertInfo.insertedId.toString();
+  const project = await getProject(newProjectId);
   return project;
 };
 
-const getProject = async (id) => {
-  validation.checkId(id);
+const getProject = async (projectId) => {
+  validation.checkId(projectId);
 
   const projectCollection = await projects();
-  const project = await projectCollection.findOne({ _id: new ObjectId(id) });
+  const project = await projectCollection.findOne({ _id: new ObjectId(projectId) });
   if (project === null) {
     throw "No project with that id found!";
   }
@@ -67,8 +72,44 @@ const getTasks = async (projectId) => {
 
 const setReminderDate = async (id) => {
   validation.checkId(id);
+const getContract = async (projectId) => {
+  validation.checkId(projectId);
 
-  let currentProject = await getProject(id);
+  let currentProject = await getProject(projectId);
+  if (!currentProject.contract) {
+    throw "No contract found for this project";
+  }
+  const contract = currentProject.contract;
+  contract._id = contract._id.toString();
+  return contract;
+}
+
+const approveContract = async (projectId) => {
+  validation.checkId(projectId);
+
+  const projectCollection = await projects();
+  const project = await projectCollection.findOne({ _id: new ObjectId(projectId) });
+  if (project === null) {
+    throw "No project with that id found!";
+  }
+  if (!project.contract) {
+    throw "No contract found for this project";
+  }
+  project.contract.approved = true;
+  project.contract.dateApproved = new Date();
+  
+  const updatedInfo = await projectCollection.updateOne({ _id: new ObjectId(projectId) }, { $set: project });
+  
+  if (updatedInfo.modifiedCount !== 1) {
+    throw "Could not successfully approve contract";
+  }
+  return await getContract(projectId);
+}
+
+const setReminderDate = async (projectId) => {
+  validation.checkId(projectId);
+
+  let currentProject = await getProject(projectId);
   let projectDueDate = new Date(currentProject.dueDate);
   reminderTime = projectDueDate.setDate(projectDueDate.getDate() - 2);
   reminderTime = new Date(reminderTime);
@@ -79,7 +120,7 @@ const setReminderDate = async (id) => {
 
   const projectCollection = await projects();
   const updatedInfo = await projectCollection.updateOne(
-    { _id: new ObjectId(id) },
+    { _id: new ObjectId(projectId) },
     { $set: setReminder }
   );
 
@@ -147,6 +188,8 @@ const confirmEmailSent = async (projectId, error, info) => {
 module.exports = {
   createProject,
   getProject,
+  getContract,
+  approveContract,
   setReminderDate,
   sendReminderEmail,
 };
