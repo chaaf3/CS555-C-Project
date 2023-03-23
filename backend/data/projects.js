@@ -70,6 +70,18 @@ const getTasks = async (projectId) => {
   return tasksToDo;
 }
 
+const getContract = async (projectId) => {
+  validation.checkId(projectId);
+
+  let currentProject = await getProject(projectId);
+  if (!currentProject.contract) {
+    throw "No contract found for this project";
+  }
+  const contract = currentProject.contract;
+  contract._id = contract._id.toString();
+  return contract;
+}
+
 const approveContract = async (projectId) => {
   validation.checkId(projectId);
 
