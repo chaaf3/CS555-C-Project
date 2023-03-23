@@ -13,13 +13,14 @@ const seeding = async () => {
   await db.dropDatabase();
 
   // Create projects
-  const project1 = await projectsApi.createProject(new Date(2024, 1, 1));
-  // const project1ReminderDate = await projectsApi.setReminderDate(project1._id)
+  try {
+    const project1 = await projectsApi.createProject("Install solar panels", "Solar panels will be installed on the roof of the house", new Date(2024, 1, 1));
+    const project1ReminderDate = await projectsApi.setReminderDate(project1._id)
 
-  const project2 = await projectsApi.createProject(new Date(2023, 6, 2));
-  // const project2ReminderDate = await projectsApi.setReminderDate(project2._id)
+    const project2 = await projectsApi.createProject("Add additional solar panels", "Add 4 more solar panels to the roof", new Date(2023, 6, 2));
+    const project2ReminderDate = await projectsApi.setReminderDate(project2._id)
 
-  const project3 = await projectsApi.createProject(new Date(2023, 11, 15));
+  // const project3 = await projectsApi.createProject(new Date(2023, 11, 15));
   // const project3ReminderDate = await projectsApi.setReminderDate(project3._id)
 
   // Create contractors
@@ -49,6 +50,9 @@ const seeding = async () => {
   // Need to create createUsers function
 
   console.log("Database has been seeded!");
+} catch (e) {
+  console.log(e);
+  }
 };
 
 const main = async () => {

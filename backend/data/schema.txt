@@ -28,6 +28,7 @@ Projects:
     equipmentRequired: ["solar panels", "screwdriver", "hammer"],
     deliveredEquipment: ["solar panels", "screwdriver"],
     neededEquipment: ["hammer"],
+    tasksToDo: ["This is a task in text", 'this is another text task'],
     status: [{"in progress": most recent task completed}],
     expectedCompletionDate: DateTimeObject,
     dueDate: DateTimeObject,
