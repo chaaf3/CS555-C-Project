@@ -34,6 +34,9 @@ const createProject = async (title, description, dueDate) => {
     dueDate: dueDate,
     reminderDate: null,
     reminderSent: false,
+    equipmentRequired: [],
+    deliveredEquipment: [],
+    neededEquipment: [],
     contract: {
       _id: new ObjectId(),
       bankApproval: false,
@@ -342,30 +345,14 @@ const confirmEmailSent = async (projectId, error, info) => {
 
 
 const addEquipment = async (projectId, items) => {
-  // Get the project with the given projectID
   projectCollection = await projects();
   let currentProject = await projectCollection.findOne({_id: new ObjectId(projectId)});
-  if (!currentProject) {
+  if (!currentProject) 
+  {
     throw new Error(`Project with ID ${projectId} not found`);
   }
-
-  // Create equipmentRequired, deliveredEquipment, and neededEquipment arrays if they don't exist
-  if (!currentProject.equipmentRequired) {
-    currentProject.equipmentRequired = [];
-  }
-  if (!currentProject.deliveredEquipment) {
-    currentProject.deliveredEquipment = [];
-  }
-  if (!currentProject.neededEquipment) {
-    currentProject.neededEquipment = [];
-  }
-
   // Add the items array to equipmentRequired
   currentProject.equipmentRequired.push(...items);
-
-  // Set deliveredEquipment to an empty array
-  currentProject.deliveredEquipment = [];
-
   // Set neededEquipment to the same array as equipmentRequired
   currentProject.neededEquipment = currentProject.equipmentRequired;
 
@@ -380,7 +367,7 @@ const addEquipment = async (projectId, items) => {
 }
 
 
-const updateEquipmentDelivered = async (projectId, items) => {
+const updateEquipmentDelivered = async (projectId, deliveredItems ) => {
   // Get the project with the given projectID
   projectCollection = await projects();
   let currentProject = await projectCollection.findOne({_id: new ObjectId(projectId)});
@@ -389,7 +376,7 @@ const updateEquipmentDelivered = async (projectId, items) => {
   }
 
   // Append the elements of items array into deliveredEquipment array
-  currentProject.deliveredEquipment.push(...items);
+  currentProject.deliveredEquipment.push(...deliveredItems);
 
   // Determine the difference between equipmentRequired and deliveredEquipment
   let neededEquipment = currentProject.equipmentRequired.filter((equipment) => !currentProject.deliveredEquipment.includes(equipment));
