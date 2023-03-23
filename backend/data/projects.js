@@ -340,6 +340,70 @@ const confirmEmailSent = async (projectId, error, info) => {
   }
 };
 
+
+const addEquipment = async (projectId, items) => {
+  // Get the project with the given projectID
+  projectCollection = await projects();
+  let currentProject = await projectCollection.findOne({_id: new ObjectId(projectId)});
+  if (!currentProject) {
+    throw new Error(`Project with ID ${projectId} not found`);
+  }
+
+  // Create equipmentRequired, deliveredEquipment, and neededEquipment arrays if they don't exist
+  if (!currentProject.equipmentRequired) {
+    currentProject.equipmentRequired = [];
+  }
+  if (!currentProject.deliveredEquipment) {
+    currentProject.deliveredEquipment = [];
+  }
+  if (!currentProject.neededEquipment) {
+    currentProject.neededEquipment = [];
+  }
+
+  // Add the items array to equipmentRequired
+  currentProject.equipmentRequired.push(...items);
+
+  // Set deliveredEquipment to an empty array
+  currentProject.deliveredEquipment = [];
+
+  // Set neededEquipment to the same array as equipmentRequired
+  currentProject.neededEquipment = currentProject.equipmentRequired;
+
+  // Update the project with the new equipmentRequired, deliveredEquipment, and neededEquipment arrays
+  await projectCollection.updateOne({_id: new ObjectId(projectId)}, {
+    $set: {
+      equipmentRequired: currentProject.equipmentRequired,
+      deliveredEquipment: currentProject.deliveredEquipment,
+      neededEquipment: currentProject.neededEquipment
+    }
+  });
+}
+
+
+const updateEquipmentDelivered = async (projectId, items) => {
+  // Get the project with the given projectID
+  projectCollection = await projects();
+  let currentProject = await projectCollection.findOne({_id: new ObjectId(projectId)});
+  if (!currentProject) {
+    throw new Error(`Project with ID ${projectId} not found`);
+  }
+
+  // Append the elements of items array into deliveredEquipment array
+  currentProject.deliveredEquipment.push(...items);
+
+  // Determine the difference between equipmentRequired and deliveredEquipment
+  let neededEquipment = currentProject.equipmentRequired.filter((equipment) => !currentProject.deliveredEquipment.includes(equipment));
+
+  // Update the project with the new deliveredEquipment and neededEquipment arrays
+  await projectCollection.updateOne({_id: new ObjectId(projectId)}, {
+    $set: {
+      deliveredEquipment: currentProject.deliveredEquipment,
+      neededEquipment: neededEquipment
+    }
+  });
+}
+
+
 module.exports = {
   createProject,
   getProject,
@@ -354,4 +418,6 @@ module.exports = {
   setReminderDate,
   sendReminderEmail,
   createNotes,
+  updateEquipmentDelivered,
+  addEquipment,
 };
