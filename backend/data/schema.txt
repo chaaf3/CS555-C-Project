@@ -16,7 +16,6 @@ Contractor:
     messages: [{from: (sender uuid), text: "this is a message from a friend"}],
     todo: [{projectId: alslksdjfoidifjpiuahjse, tasks:["This is a task in text", 'this is another text task']}],
     calendar: [{projectId: kajsdhfgiubiea, projectDeadline: DateTimeObject}],
-    bankPayment: [{projectId: kajsdhfgiubiea, approved: true}],
 }
 
 Project:
@@ -26,9 +25,13 @@ Project:
     description: "Need to install 10 solar panels for this client" (String),
     contract: {
         _id: abcdefghijklmnop (ObjectId),
-        approved: true or false (boolean)
-        dateApproved: Date
-        }
+        bankApproval: boolean,
+        dateBankApproval: DateTimeObject,
+        utilityApproval: boolean,
+        dateUtilityApproval: DateTimeObject,
+        approved: true or false (boolean),
+        dateApproved: DateTimeObject,
+    }
     notes: ["This is a note", "Note number two"],
     equipmentRequired: ["solar panels", "screwdriver", "hammer"],
     deliveredEquipment: ["solar panels", "screwdriver"],
