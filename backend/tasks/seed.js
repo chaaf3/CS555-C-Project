@@ -6,9 +6,7 @@ const contractorsApi = data.contractors;
 const projectsApi = data.projects;
 const usersApi = data.users;
 
-// const contractorsDb = mongoCollections.contractors
-// const projectsDb = mongoCollections.projects
-// const usersDb = mongoCollections.users
+// TODO: test contractors code
 
 const seeding = async () => {
   const db = await mongoConnection.connectToDb();

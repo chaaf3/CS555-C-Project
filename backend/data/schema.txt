@@ -4,8 +4,8 @@ Users:
     name: James something (String),
     email: jamesSomething@gmail.com (String),
     messages: [{from: (sender uuid), text: "this is a message from a friend"}],
-    calender: [{projectId: kajsdhfgiubiea, projectDeadline: DateTimeObjectInstance}],
-    implementation: [{projectId: most recent step completed}]
+    calendar: [{projectId: kajsdhfgiubiea, projectDeadline: DateTimeObjectInstance}],
+    status: [{projectId: most recent step completed}]
 }
 
 Contractors:
@@ -15,13 +15,21 @@ Contractors:
     email: jamesSomething@gmail.com (String),
     messages: [{from: (sender uuid), text: "this is a message from a friend"}],
     todo: [{projectId: alslksdjfoidifjpiuahjse, tasks:["This is a task in text", 'this is another text task']}],
-    calender: [{projectId: kajsdhfgiubiea, projectDeadline: DateTimeObject}],
+    calendar: [{projectId: kajsdhfgiubiea, projectDeadline: DateTimeObject}],
     bankPayment: [{projectId: kajsdhfgiubiea, approved: true}],
 }
 
 Projects:
 {
     _id: sgwsjhsgwjsgwjhsg (ObjectId),
+    title: "Install solar panels" (String),
+    description: "Need to install 10 solar panels for this client" (String),
+    notes: ["This is a note", "Note number two"],
+    equipmentRequired: ["solar panels", "screwdriver", "hammer"],
+    deliveredEquipment: ["solar panels", "screwdriver"],
+    neededEquipment: ["hammer"],
+    status: [{"in progress": most recent task completed}],
+    expectedCompletionDate: DateTimeObject,
     dueDate: DateTimeObject,
     reminderTime: DateTimeObject (2-3 days before dueDate),
     reminderSent: false (boolean),

@@ -8,7 +8,14 @@ const data = require("./data");
 
 let temp;
 async function tempTasks() {
-  // temp = await data.contractors.getContractor("6408026590a4c9ac56a9947e");
+  try {
+    temp = await data.contractors.getContractor("640b8215c2b3f81ee477599e");
+    console.log(temp);}
+  catch(e){
+    console.log(e);
+    return;
+  }
+  
   // let tasks = data.contractors.getTasks(temp);
   // console.log(tasks);
   // console.log(await projects.sendReminderEmail("6408026590a4c9ac56a9947e"));
@@ -18,12 +25,13 @@ async function tempTasks() {
   //   "640ba5e63966bfa8e9e27291",
   //   "640ba5e63966bfa8e9e2728f"
   // );
-  let test2 = await data.contractors.updateApproval(
-    "640ba5e63966bfa8e9e27291",
-    "640ba5e53966bfa8e9e2728e"
-  );
+  
+  // // let test2 = await data.contractors.updateApproval(
+  // //   "640ba5e63966bfa8e9e27291",
+  // //   "640ba5e53966bfa8e9e2728e"
+  // // );
 
-  console.log(test2);
+  // console.log(test2);
 }
 tempTasks();
 
