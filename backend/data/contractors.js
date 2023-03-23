@@ -163,39 +163,6 @@ const addToInQueue = async (contractorId, task) => {
   return true;
 };
 
-async function isApproved(contractor_id, project_id) {
-  validation.checkId(contractor_id);
-  validation.checkId(project_id);
-
-  let contractor = await getContractor(contractor_id);
-
-  for (let i = 0; i < contractor.bankPayment.length; i++) {
-    if (project_id === contractor.bankPayment[i].projectId) {
-      if (contractor.bankPayment[i].approved) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
-  throw "Project id not found";
-}
-
-function bankRequest(contractor_id, project_id) {
-  validation.checkId(contractor_id);
-  validation.checkId(project_id);
-
-  console.log("I am requesting bank approval for my project.");
-  const randomNum = Math.random();
-  if (randomNum === 0) {
-    console.log("The bank has not approved this project.");
-    return false;
-  } else {
-    console.log("The bank approves this request!");
-    return true;
-  }
-}
-
 async function updateApproval(contractor_id, project_id) {
   validation.checkId(contractor_id);
   validation.checkId(project_id);
@@ -231,7 +198,5 @@ module.exports = {
   getTasks,
   getMessages,
   createContractor,
-  isApproved,
   updateApproval,
-  bankRequest,
 };

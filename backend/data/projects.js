@@ -80,7 +80,6 @@ const updateTaskStatus = async (projectId) => {
 
   let inProgress = null;
   tasks = await getTasks(projectId);
-  console.log(tasks)
   if (tasks) {
     inProgress = tasks.shift()
   } else {
@@ -102,12 +101,17 @@ const updateTaskStatus = async (projectId) => {
   }
 }
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
 const bankRequest = function bankRequest(projectId) {
   validation.checkId(projectId);
 
   console.log("I am requesting bank approval for my project.");
-  const randomNum = Math.random();
-  if (randomNum === 0) {
+  const randomNum = getRandomInt(2);
+  console.log(randomNum)
+  if (randomNum == 0) {
     console.log("The bank has not approved this project.");
     return false;
   } else {
@@ -121,22 +125,24 @@ const bankApproval = async function bankApproval(projectId) {
 
   const projectCollection = await projects();
   const project = await getProject(projectId);
+  if (!project) {
+    throw "No project found with that id";
+  }
   if (!project.contract) {
     throw "No contract found for this project";
   }
 
   const contract = project.contract;
-  const bankApproval = bankRequest(projectId);
-  contract.bankApproval = bankApproval;
-  contract.dateBankApproval = new Date();
-
-  updatedBankApproval = {
-    contract: contract
+  contract.bankApproval = bankRequest(projectId);
+  if (contract.bankApproval) {
+    contract.dateBankApproval = new Date();
+  } else {
+    return ;
   }
 
   const updatedInfo = await projectCollection.updateOne(
     { _id: new ObjectId(projectId) },
-    { $set: contract}
+    { $set: {contract: contract}}
   );
 
   if (updatedInfo.modifiedCount !== 1) {
@@ -148,8 +154,9 @@ const utilityRequest = function utilityRequest(projectId) {
   validation.checkId(projectId);
   
   console.log("I am requesting utility approval for my project.");
-  const randomNum = Math.random();
-  if (randomNum === 0) {
+  const randomNum = getRandomInt(2);
+  console.log(randomNum)
+  if (randomNum == 0) {
     console.log("The utility company has not approved this project.");
     return false;
   } else {
@@ -163,22 +170,25 @@ const utilityApproval = async function utilityApproval(projectId) {
   
   const projectCollection = await projects();
   const project = await getProject(projectId);
+  if (!project) {
+    throw "No project found with that id";
+  }
   if (!project.contract) {
     throw "No contract found for this project";
   }
 
   const contract = project.contract;
-  const utilityApproval = utilityRequest(projectId);
-  contract.utilityApproval = utilityApproval;
-  contract.dateUtilityApproval = new Date();
+  contract.utilityApproval = utilityRequest(projectId);
 
-  updatedUtilityApproval = {
-    contract: contract
+  if (contract.utilityApproval) {
+    contract.dateUtilityApproval = new Date();
+  } else {
+    return ;
   }
 
   const updatedInfo = await projectCollection.updateOne(
     { _id: new ObjectId(projectId) },
-    { $set: contract}
+    { $set: {contract: contract}}
   );
   
   if (updatedInfo.modifiedCount !== 1) {
