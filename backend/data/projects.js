@@ -29,13 +29,17 @@ const createProject = async (title, description, dueDate) => {
     title: title,
     description: description,
     tasksToDo: stages,
-    inProgress: "",
+    inProgress: null,
     notes: [],
     dueDate: dueDate,
     reminderDate: null,
     reminderSent: false,
     contract: {
       _id: new ObjectId(),
+      bankApproval: false,
+      dateBankApproval: null,
+      utilityApproval: false,
+      dateUtilityApproval: null,
       approved: false,
       dateApproved: null,
     },
@@ -98,6 +102,90 @@ const updateTaskStatus = async (projectId) => {
   }
 }
 
+const bankRequest = function bankRequest(projectId) {
+  validation.checkId(projectId);
+
+  console.log("I am requesting bank approval for my project.");
+  const randomNum = Math.random();
+  if (randomNum === 0) {
+    console.log("The bank has not approved this project.");
+    return false;
+  } else {
+    console.log("The bank approves this request!");
+    return true;
+  }
+}
+
+const bankApproval = async function bankApproval(projectId) {
+  validation.checkId(projectId);
+
+  const projectCollection = await projects();
+  const project = await getProject(projectId);
+  if (!project.contract) {
+    throw "No contract found for this project";
+  }
+
+  const contract = project.contract;
+  const bankApproval = bankRequest(projectId);
+  contract.bankApproval = bankApproval;
+  contract.dateBankApproval = new Date();
+
+  updatedBankApproval = {
+    contract: contract
+  }
+
+  const updatedInfo = await projectCollection.updateOne(
+    { _id: new ObjectId(projectId) },
+    { $set: contract}
+  );
+
+  if (updatedInfo.modifiedCount !== 1) {
+    throw "Could not successfully update bank approval";
+  }
+};
+
+const utilityRequest = function utilityRequest(projectId) {
+  validation.checkId(projectId);
+  
+  console.log("I am requesting utility approval for my project.");
+  const randomNum = Math.random();
+  if (randomNum === 0) {
+    console.log("The utility company has not approved this project.");
+    return false;
+  } else {
+    console.log("The utility company approves this request!");
+    return true;
+  }
+}
+
+const utilityApproval = async function utilityApproval(projectId) {
+  validation.checkId(projectId);
+  
+  const projectCollection = await projects();
+  const project = await getProject(projectId);
+  if (!project.contract) {
+    throw "No contract found for this project";
+  }
+
+  const contract = project.contract;
+  const utilityApproval = utilityRequest(projectId);
+  contract.utilityApproval = utilityApproval;
+  contract.dateUtilityApproval = new Date();
+
+  updatedUtilityApproval = {
+    contract: contract
+  }
+
+  const updatedInfo = await projectCollection.updateOne(
+    { _id: new ObjectId(projectId) },
+    { $set: contract}
+  );
+  
+  if (updatedInfo.modifiedCount !== 1) {
+    throw "Could not successfully update utility approval";
+  }
+};
+
 const getContract = async (projectId) => {
   validation.checkId(projectId);
 
@@ -123,8 +211,13 @@ const approveContract = async (projectId) => {
   if (!project.contract) {
     throw "No contract found for this project";
   }
-  project.contract.approved = true;
-  project.contract.dateApproved = new Date();
+
+  if (project.contract.bankApproval && project.contract.utilityApproval) {
+    project.contract.approved = true;
+    project.contract.dateApproved = new Date();
+  } else {
+    throw "Cannot approve contract until all approvals are received";
+  }
 
   const updatedInfo = await projectCollection.updateOne(
     { _id: new ObjectId(projectId) },
@@ -155,13 +248,12 @@ const setReminderDate = async (projectId) => {
     { $set: setReminder }
   );
 
-  // TODO: error check if update was successful
-  // if (updatedInfo.lastErrorObject.n === 0) {
-  //   throw 'Could not successfully set reminder date';
-  // }
+  if (updatedInfo.modifiedCount !== 1) {
+    throw "Could not successfully set reminder date";
+  }
 };
 
-const setNotes = async (projectId, notes) => {
+const createNotes = async (projectId, notes) => {
   validation.checkId(projectId);
   validation.checkTextValue(notes);
 
@@ -178,10 +270,9 @@ const setNotes = async (projectId, notes) => {
     { $set: setNotes }
   );
 
-  // TODO: error check if update was successful
-  // if (updatedInfo.lastErrorObject.n === 0) {
-  //   throw 'Could not successfully set reminder date';
-  // }
+  if (updatedInfo.modifiedCount !== 1) {
+    throw "Could not successfully create notes";
+  }
 };
 
 // team23pass@gmail.com
@@ -244,9 +335,13 @@ module.exports = {
   getProject,
   getTasks,
   updateTaskStatus,
+  bankRequest,
+  bankApproval,
+  utilityRequest,
+  utilityApproval,
   getContract,
   approveContract,
   setReminderDate,
   sendReminderEmail,
-  setNotes,
+  createNotes,
 };
