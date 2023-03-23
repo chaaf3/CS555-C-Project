@@ -70,8 +70,6 @@ const getTasks = async (projectId) => {
   return tasksToDo;
 }
 
-const setReminderDate = async (id) => {
-  validation.checkId(id);
 const getContract = async (projectId) => {
   validation.checkId(projectId);
 
