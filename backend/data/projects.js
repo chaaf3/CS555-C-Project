@@ -5,11 +5,32 @@ const contractorData = require("./contractors");
 var nodemailer = require("nodemailer");
 const validation = require("../validation");
 
-const createProject = async (dueDate) => {
+let stages = {
+  1: "Create contract",
+  2: "Send contract",
+  3: "Receive contract approval",
+  4: "Create bank request",
+  5: "Send bank request",
+  6: "Receive bank approval",
+  7: "Initial site visit",
+  8: "Ordering materials",
+  9: "Receiving materials",
+  10: "Installation",
+  11: "Inspection",
+}
+
+const createProject = async (title, description, dueDate) => {
+  validation.checkForValue(title);
+  validation.checkForValue(description);
   validation.checkForValue(dueDate);
   
+  tasksToDo = Object.values(stages);
+
   const projectCollection = await projects();
   let newProject = {
+    title: title,
+    description: description,
+    tasksToDo: tasksToDo,
     dueDate: dueDate,
     reminderDate: null,
     reminderSent: false,
@@ -40,6 +61,17 @@ const getProject = async (projectId) => {
   return project;
 };
 
+const getTasks = async (projectId) => {
+  validation.checkId(projectId);
+
+  let currentProject = await getProject(projectId);
+  let tasksToDo = currentProject.todo;
+  
+  return tasksToDo;
+}
+
+const setReminderDate = async (id) => {
+  validation.checkId(id);
 const getContract = async (projectId) => {
   validation.checkId(projectId);
 
