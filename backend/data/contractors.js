@@ -26,7 +26,6 @@ async function getContractor(id) {
   return contractor;
 }
 
-// Refactored -> removed 
 async function getTasks(contractor) {
   validation.checkForValue(contractor);
 

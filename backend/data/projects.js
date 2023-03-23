@@ -5,32 +5,31 @@ const contractorData = require("./contractors");
 var nodemailer = require("nodemailer");
 const validation = require("../validation");
 
-let stages = {
-  1: "Create contract",
-  2: "Send contract",
-  3: "Receive contract approval",
-  4: "Create bank request",
-  5: "Send bank request",
-  6: "Receive bank approval",
-  7: "Initial site visit",
-  8: "Ordering materials",
-  9: "Receiving materials",
-  10: "Installation",
-  11: "Inspection",
-}
+let stages = [
+  "Create contract",
+  "Send contract",
+  "Receive contract approval",
+  "Create bank request",
+  "Send bank request",
+  "Receive bank approval",
+  "Initial site visit",
+  "Ordering materials",
+  "Receiving materials",
+  "Installation",
+  "Inspection"
+]
 
 const createProject = async (title, description, dueDate) => {
   validation.checkForValue(title);
   validation.checkForValue(description);
   validation.checkForValue(dueDate);
-  
-  tasksToDo = Object.values(stages);
 
   const projectCollection = await projects();
   let newProject = {
     title: title,
     description: description,
-    tasksToDo: tasksToDo,
+    tasksToDo: stages,
+    inProgress: "",
     dueDate: dueDate,
     reminderDate: null,
     reminderSent: false,
@@ -65,9 +64,35 @@ const getTasks = async (projectId) => {
   validation.checkId(projectId);
 
   let currentProject = await getProject(projectId);
-  let tasksToDo = currentProject.todo;
-  
+  let tasksToDo = currentProject.tasksToDo;
   return tasksToDo;
+}
+
+const updateTaskStatus = async (projectId) => {
+  validation.checkId(projectId);
+
+  let inProgress = null;
+  tasks = await getTasks(projectId);
+  console.log(tasks)
+  if (tasks) {
+    inProgress = tasks.shift()
+  } else {
+    console.log("There are no more tasks to do. The project has been completed!")
+  }
+  const projectCollection = await projects();
+
+  tasksUpdated = {
+    tasksToDo: tasks,
+    inProgress: inProgress
+  }
+
+  const updatedInfo = await projectCollection.updateOne(
+    {_id: new ObjectId(projectId)}, 
+    {$set: tasksUpdated});
+
+  if (updatedInfo.modifiedCount !== 1) {
+    throw "Could not successfully update task status";
+  }
 }
 
 const getContract = async (projectId) => {
@@ -186,6 +211,8 @@ const confirmEmailSent = async (projectId, error, info) => {
 module.exports = {
   createProject,
   getProject,
+  getTasks,
+  updateTaskStatus,
   getContract,
   approveContract,
   setReminderDate,
