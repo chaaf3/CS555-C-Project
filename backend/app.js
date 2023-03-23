@@ -9,14 +9,20 @@ const data = require("./data");
 let temp;
 async function tempTasks() {
   try {
-    temp = await data.projects.getContract("641c97db016c19fd06cb48a7");
-    temp = await data.projects.approveContract("641c97db016c19fd06cb48a7");
-    console.log(temp);}
-  catch(e){
+    temp = await data.projects.getContract("641cabad1eb8428252b50441");
+    temp = await data.projects.approveContract("641cabad1eb8428252b50441");
+    await data.projects.setNotes(
+      "641cabad1eb8428252b50441",
+      "Let user add their choice of roof side for solar pannel"
+    );
+    temp = await data.projects.getProject("641cabad1eb8428252b50441");
+    temp = temp.notes;
+    console.log(temp);
+  } catch (e) {
     console.log(e);
     return;
   }
-  
+
   // let tasks = data.contractors.getTasks(temp);
   // console.log(tasks);
   // console.log(await projects.sendReminderEmail("6408026590a4c9ac56a9947e"));
@@ -26,7 +32,7 @@ async function tempTasks() {
   //   "640ba5e63966bfa8e9e27291",
   //   "640ba5e63966bfa8e9e2728f"
   // );
-  
+
   // // let test2 = await data.contractors.updateApproval(
   // //   "640ba5e63966bfa8e9e27291",
   // //   "640ba5e53966bfa8e9e2728e"
