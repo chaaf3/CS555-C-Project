@@ -5,19 +5,22 @@ const contractorData = require("./contractors");
 var nodemailer = require("nodemailer");
 const validation = require("../validation");
 
-let stages = [
-  "Create contract",
-  "Send contract",
-  "Receive contract approval",
-  "Create bank request",
-  "Send bank request",
-  "Receive bank approval",
-  "Initial site visit",
-  "Ordering materials",
-  "Receiving materials",
-  "Installation",
-  "Inspection"
-]
+let stages = {
+  InitialSiteVisit: 5,
+  CreateBankRequest: 2,
+  SendBankRequest: 1,
+  ReceiveBankApproval: 5,
+  CreateUtilityRequest: 2,
+  SendUtilityRequest: 1,
+  ReceiveUtilityApproval: 5,
+  CreateContract: 3,
+  SendContract: 1,
+  ReceiveContractApproval: 5,
+  OrderingMaterials: 3,
+  ReceivingMaterials: 14,
+  Installation: 5,
+  Inspection: 2,
+}
 
 const createProject = async (title, description, dueDate) => {
   validation.checkForValue(title);
