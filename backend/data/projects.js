@@ -5,19 +5,22 @@ const contractorData = require("./contractors");
 var nodemailer = require("nodemailer");
 const validation = require("../validation");
 
-let stages = [
-  "Create contract",
-  "Send contract",
-  "Receive contract approval",
-  "Create bank request",
-  "Send bank request",
-  "Receive bank approval",
-  "Initial site visit",
-  "Ordering materials",
-  "Receiving materials",
-  "Installation",
-  "Inspection"
-]
+let stages = {
+  InitialSiteVisit: 5,
+  CreateBankRequest: 2,
+  SendBankRequest: 1,
+  ReceiveBankApproval: 5,
+  CreateUtilityRequest: 2,
+  SendUtilityRequest: 1,
+  ReceiveUtilityApproval: 5,
+  CreateContract: 3,
+  SendContract: 1,
+  ReceiveContractApproval: 5,
+  OrderingMaterials: 3,
+  ReceivingMaterials: 14,
+  Installation: 5,
+  Inspection: 2,
+}
 
 const createProject = async (title, description, dueDate) => {
   validation.checkForValue(title);
@@ -28,7 +31,7 @@ const createProject = async (title, description, dueDate) => {
   let newProject = {
     title: title,
     description: description,
-    tasksToDo: stages,
+    tasksToDo: Object.keys(stages),
     inProgress: null,
     notes: [],
     dueDate: dueDate,
@@ -343,7 +346,6 @@ const confirmEmailSent = async (projectId, error, info) => {
   }
 };
 
-
 const addEquipment = async (projectId, items) => {
   projectCollection = await projects();
   let currentProject = await projectCollection.findOne({_id: new ObjectId(projectId)});
@@ -351,12 +353,10 @@ const addEquipment = async (projectId, items) => {
   {
     throw new Error(`Project with ID ${projectId} not found`);
   }
-  // Add the items array to equipmentRequired
+ 
   currentProject.equipmentRequired.push(...items);
-  // Set neededEquipment to the same array as equipmentRequired
   currentProject.neededEquipment = currentProject.equipmentRequired;
 
-  // Update the project with the new equipmentRequired, deliveredEquipment, and neededEquipment arrays
   await projectCollection.updateOne({_id: new ObjectId(projectId)}, {
     $set: {
       equipmentRequired: currentProject.equipmentRequired,
@@ -366,22 +366,16 @@ const addEquipment = async (projectId, items) => {
   });
 }
 
-
 const updateEquipmentDelivered = async (projectId, deliveredItems ) => {
-  // Get the project with the given projectID
   projectCollection = await projects();
   let currentProject = await projectCollection.findOne({_id: new ObjectId(projectId)});
   if (!currentProject) {
     throw new Error(`Project with ID ${projectId} not found`);
   }
 
-  // Append the elements of items array into deliveredEquipment array
   currentProject.deliveredEquipment.push(...deliveredItems);
-
-  // Determine the difference between equipmentRequired and deliveredEquipment
   let neededEquipment = currentProject.equipmentRequired.filter((equipment) => !currentProject.deliveredEquipment.includes(equipment));
 
-  // Update the project with the new deliveredEquipment and neededEquipment arrays
   await projectCollection.updateOne({_id: new ObjectId(projectId)}, {
     $set: {
       deliveredEquipment: currentProject.deliveredEquipment,
@@ -390,6 +384,19 @@ const updateEquipmentDelivered = async (projectId, deliveredItems ) => {
   });
 }
 
+const expectedProjectCompletionTime = async (projectId) => {
+  validation.checkId(projectId);
+
+  totalDays = 0
+  let currentProject = await getProject(projectId);
+  remainingTasks = currentProject.tasksToDo
+  for (let i = 0; i < remainingTasks.length; i++) {
+    totalDays += stages[remainingTasks[i]]
+  }
+
+  console.log("Expected Project Completion Time: " + totalDays + " days")
+  return totalDays
+}
 
 module.exports = {
   createProject,
@@ -405,6 +412,7 @@ module.exports = {
   setReminderDate,
   sendReminderEmail,
   createNotes,
-  updateEquipmentDelivered,
   addEquipment,
+  updateEquipmentDelivered,
+  expectedProjectCompletionTime
 };
