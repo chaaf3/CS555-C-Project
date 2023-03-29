@@ -1,9 +1,9 @@
-import './App.css';
-import Calendar from './Calendar.js';
+import "./App.css";
+import Calendar from "./Calendar.js";
+import Project from "./components/Project.js";
 
 function App() {
   return (
-
     <div className="App">
       <div className="topnav">
         <a href="home">Home</a>
@@ -11,13 +11,12 @@ function App() {
         <a href="contact-us">Contact Us</a>
       </div>
 
-      <div className="header">
-        Reserve an Appointment
-      </div>
+      <div className="header">Reserve an Appointment</div>
 
       <div className="content">
         Appointment Date & Time:
-        <Calendar/>
+        <Calendar />
+        <Project />
       </div>
     </div>
   );
