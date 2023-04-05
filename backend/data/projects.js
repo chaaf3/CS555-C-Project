@@ -21,6 +21,23 @@ let stages = {
   Installation: 5,
   Inspection: 2,
 }
+let task_obj = 
+{
+  1: "InitialSiteVisit",
+  2: "CreateBankRequest",
+  3: "SendBankRequest",
+  4: "ReceiveBankApproval",
+  5: "CreateUtilityRequest",
+  6: "SendUtilityRequest",
+  7: "ReceiveUtilityApproval",
+  8: "CreateContract",
+  9: "SendContract",
+  10: "ReceiveContractApproval",
+  11: "OrderingMaterials",
+  12: "ReceivingMaterials",
+  13: "Installation",
+  14: "Inspection"
+}
 
 const createProject = async (title, description, dueDate) => {
   validation.checkForValue(title);
