@@ -52,7 +52,7 @@ const createUser = async function createUser(name, email, password) {
     return {_id: insertInfo.insertedId, name: name, email: email, messages: [], calendar: [], status: []};
 }
 
-const checkUser = async function checkUser(email, password) {
+const checkUser = async function getUser(email, password) {
     // Input validation
     validation.checkNumOfArgs(arguments, 2, 2);
     validation.checkIsProper(email, 'string', 'email');
