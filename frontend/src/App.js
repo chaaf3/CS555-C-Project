@@ -8,7 +8,7 @@ import SignUp from "./Components/SignUp";
 const App = () => {
   return (
     <div>
-      <SignUp />;
+      <SignIn />;
     </div>
   );
 };
