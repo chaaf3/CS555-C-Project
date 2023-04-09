@@ -60,7 +60,7 @@ const createUser = async function createUser(name, email, password) {
   };
 };
 
-const checkUser = async function checkUserAccount(email, password) {
+const checkUserAccount = async function checkUserAccount(email, password) {
   // Input validation
   validation.checkNumOfArgs(arguments, 2, 2);
   validation.checkIsProper(email, "string", "email");
