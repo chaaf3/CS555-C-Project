@@ -94,8 +94,58 @@ const getUser = async (id) => {
     return user;
 }
 
+
+
+
+
 const addMessage = async (userId, message) => {
+
+    // validation.checkNumOfArgs(arguments, 2, 2);
+    // validation.checkIsProper(message, 'string', 'message');
+    // validation.checkId(userId);
+
+    // Trim whitespace
+    //userId = userId.trim();
+    //message = message.trim();
+
+    const userCollection = await users();
+    if(!userCollection) throw `Error: Could not find userCollection.`;
+
+    const user = await userCollection.findOne({ _id: new ObjectId(userId)});
+    if (user === null) {
+        throw "No user with that id found";
+    }
+
+    await userCollection.updateOne({_id: new ObjectId(userId)}, {$push: {messages: message}});
+
+    return user;
+
 }
+
+const updateStatus = async (userId, projectId) => {
+    
+    // validation.checkNumOfArgs(arguments, 2, 2);
+    // validation.checkId(userId);
+    // validation.checkId(projectId);
+
+
+    const projectCollection = await projects();
+    if(!projectCollection) throw `Error: Could not find projectCollection.`;
+
+    const project = await projectCollection.findOne({ _id: new ObjectId(projectId)});
+    if (project === null) {
+        throw "No project with that id found";
+    }
+
+    const userCollection = await users();
+    if(!userCollection) throw `Error: Could not find userCollection.`;
+
+    await userCollection.updateOne({_id: new ObjectId(userId)}, {$push: {status: project.inProgress}});
+
+    return project;
+}
+
+
 
 // Messages and calendar code can be reused from contractors.js
 
@@ -103,6 +153,7 @@ module.exports = {
     createUser,
     checkUser,
     getUser,
+    updateStatus,
     addMessage
 }
 
