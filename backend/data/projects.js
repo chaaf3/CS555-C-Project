@@ -21,6 +21,7 @@ let stages = {
   Installation: 5,
   Inspection: 2,
 }
+
 let task_obj = 
 {
   1: "InitialSiteVisit",
@@ -38,6 +39,7 @@ let task_obj =
   13: "Installation",
   14: "Inspection"
 }
+
 const createComment = async (projectId, taskNum, comment) =>
 {
   let currentProject = await getProject(projectId)
@@ -67,7 +69,6 @@ const createComment = async (projectId, taskNum, comment) =>
 const getComments = async (projectId) => 
 {
   let currentProject = await getProject(projectId)
-
   return currentProject.comments
 }
 
