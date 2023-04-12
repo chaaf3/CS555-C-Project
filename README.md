@@ -4,6 +4,66 @@ Hello and welcome to our project!
 
 The goal of this project is to create a communication platform for solar panel installations for both the customer and all parties involved in the installation process. The platform will provide an easy to use interface for customers to schedule installations and receive updates on the status of their project, as well as for installers to communicate with each other. For example, the platform will allow for communication between sales representatives, project managers, and installation teams, allowing them to collaborate to ensure timely and successful installations. The overall goal of the project is to reduce any resistance toward the customer experience or the internal work flow.
 
+### Sprint 3 Review
+
+*Comparing Planned Features to Actual Features*:
+
+Taking inspiration from Sprint 2, we were able to hold onto our development practices and finish all of our planned features in time. We also were able to implement the practice of frequently switching hats between developing and refactoring to develop pretty clean code. Our features were entirely finished, though Easter plans drove a little bit of a conflict into our process because we usually take the second weekend to do peer review on the latest merge requests. Also, some features bled past the Friday recommendation as people were exploring new tools and technologies in order to complete their tasks and push them to GitHub.
+
+*New features as user stories*:
+
+We have developed a pretty comprehensive application at this point, and are naturally tying together the components that we have built out so far. We don't believe we need to incorporate new user stories as we have been building out intuitive additions to the requirements stated in our user stories.
+
+*Reflection on sprint*:
+
+We continue to learn a lot from the lectures, and similar to the Crystal methodology are able to pick and choose the principals that best fit our team dynamic to create a smooth product. We have been performing consistent, iterative progress, and have been able to build upon our previous code without breaking or disrupting other aspects of the codebase. We have been implementing side by side programming a lot this sprint since it enables us to complete our tasks while being available to help others on their tasks.
+
+### Sprint 3 Retrospective
+
+*Reflection on Progress*:
+
+Now that we are at the end of sprint 3, we have completed over 80% of the user stories and are looking to be in good shape to complete all 100% of the user stories by the end of sprint 4, allowing us time to spend refactoring the codebase further than we have been doing incrementally. Although we made an effort to communicate more on Slack, iMessage is simply much more convenient for us so we naturally tend to do the bulk of our communication there. We experienced a little bit of trouble with other courses' workloads, Easter, and familiarizing ourselves with some new technology, but were able to overcome it to produce a pretty good sprint result.
+
+*Planning for next sprint*:
+
+For the final sprint, we have divvied up the remaining user stories based on what we feel we can accomplish, and plan to fill in any gaps we find along the way to ensure our product is functionally robust. We have high spirits to get the final sprint done and create a good final product.
+
+*Improve the process*:
+
+The biggest thing that we need to improve is our testing prior to merging. We were very unfamiliar with the testing library Jest and it had additional caveats for asynchronous code that we were not initially aware of. We were able to create a more uniform way to test it now as well as grow the number of test cases we have to cover more functionality, and we look to ensure the entire team is able to add their own test cases for their functionalities in the fourth sprint. We also slipped a little bit with starting the sprint early, as we are entering a period of higher workload since we are getting closer to finals periods and had difficulties with travelling for Easter.
+
+### Sprint 2 Review
+
+*Comparing Planned Features to Actual Features*:
+
+This sprint we were much more proactive in our development, taking into consideration the things we have learned from Sprint 1 to complete and continuously integrate our user stories.   We took our responsibilities head on immediately which allowed us to finish our tasks with plenty of time to spare. This further allowed us to delve deeply into refactoring our codebase to improve its modularity and cleanliness. Our features were entirely finished and we had enough time to put in more hours into modifying and improving our previous features.
+
+*New Features as User Stories*:
+
+We've accomplished a good portion more of our total work load, and we still do not see the need to add new features to our user stories. We have naturally filled in the gaps from one user story to another, and believe we can continue to do so. However, if we run into a portion of our project where we see fit to add a new User Story to tackle it, we won't hesitate to add it.
+
+*Reflection on Sprint*:
+
+We have learned a lot from the lectures that have improved our workflow, and we've taken into consideration a lot of the pitfalls we may have had last sprint to reinforce the idea of continuously pushing to the repository, having others review our code to ensure we are not pushing any mistakes or uncaught garbage to the main pipeline, and overall ensure we are working consistently. This has led to an improved codebase where different features work more seamlessly than we had at the end of Sprint 1. We feel the product is on good pace to completion.
+
+
+
+### Sprint 2 Retrospective
+
+*Reflection on Progress*:
+
+This sprint, we were able to expect the unexpected and had a much better group workflow throughout the sprint. We exercised pair programming frequently, and asked each other for help on topics where we felt less familiar. We still mainly use iMessage group chats out of convenience, but have been able to use Slack for announcements and reminders. The group has gotten into a better flow with the Sprint mindset, have been able to coordinate times to meet and work together, and have been providing really useful feedback to others when pushing code.
+
+*Planning for next Sprint*:
+
+We've done much better organizing and managing the codebase. We want to continue the process of developing code while communicating with the team, and then submitting our code for review by two team members before adding it to the main pipeline. This way we know that we have our team members looking at our code even when we're programming alone, which adds a little bit of peer pressure that helps us stick to coding standards and keep our code readable. We have a pretty solid flow going into the next sprint now, so we can focus on helping each other stay in flow and make sure we are continually working on our features throughout the entire project. Because we did a lot of refactoring this sprint in between adding our features, next sprint we can follow the "frequently switching hats" process better by repeatedly adding a feature, refactoring, then adding a new feature without spilling one's role into the other.
+
+*Improve the process*:
+
+This sprint we've learned our weaknesses and strengths and got much better at working in pairs. Going forward, we want to make sure the pair programming switching will be happening across computers so that everyone has a portion they can push themselves to count toward the commits. We will continue to learn in class about Agile principles and use them to the best of our ability moving forwards.
+
+
+
 ### Sprint 1 Review
 
 *Comparing Planned Features to Actual Features*:

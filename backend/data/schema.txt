@@ -1,29 +1,44 @@
-Users:
+Customer:
 {
     id: lksdjfkiuhiasurhgojasdufh (ObjectId),
     name: James something (String),
     email: jamesSomething@gmail.com (String),
     messages: [{from: (sender uuid), text: "this is a message from a friend"}],
-    calender: [{projectId: kajsdhfgiubiea, projectDeadline: DateTimeObjectInstance}],
-    implementation: [{projectId: most recent step completed}]
+    calendar: [{projectId: kajsdhfgiubiea, projectDeadline: DateTimeObjectInstance}],
+    status: [{projectId: most recent step completed}]
 }
 
-Contractors:
+Contractor:
 {
     id: lksdjfkiuhiasurhgojasdufh (ObjectId),
     name: James Something (String),
     email: jamesSomething@gmail.com (String),
     messages: [{from: (sender uuid), text: "this is a message from a friend"}],
     todo: [{projectId: alslksdjfoidifjpiuahjse, tasks:["This is a task in text", 'this is another text task']}],
-    calender: [{projectId: kajsdhfgiubiea, projectDeadline: DateTimeObject}],
-    bankPayment: [{projectId: kajsdhfgiubiea, approved: true}],
+    calendar: [{projectId: kajsdhfgiubiea, projectDeadline: DateTimeObject}],
 }
 
-Projects:
+Project:
 {
     _id: sgwsjhsgwjsgwjhsg (ObjectId),
-    appointmentTime: DateTimeObject,
-    stage: String/Enum
+    title: "Install solar panels" (String),
+    description: "Need to install 10 solar panels for this client" (String),
+    contract: {
+        _id: abcdefghijklmnop (ObjectId),
+        bankApproval: boolean,
+        dateBankApproval: DateTimeObject,
+        utilityApproval: boolean,
+        dateUtilityApproval: DateTimeObject,
+        approved: true or false (boolean),
+        dateApproved: DateTimeObject,
+    }
+    notes: ["This is a note", "Note number two"],
+    equipmentRequired: ["solar panels", "screwdriver", "hammer"],
+    deliveredEquipment: ["solar panels", "screwdriver"],
+    neededEquipment: ["hammer"],
+    tasksToDo: ["This is a task in text", 'this is another text task'],
+    status: [{"in progress": most recent task completed}],
+    expectedCompletionDate: DateTimeObject,
     dueDate: DateTimeObject,
     reminderTime: DateTimeObject (2-3 days before dueDate),
     reminderSent: false (boolean),

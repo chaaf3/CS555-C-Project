@@ -6,22 +6,29 @@ const contractorsApi = data.contractors;
 const projectsApi = data.projects;
 const usersApi = data.users;
 
-// const contractorsDb = mongoCollections.contractors
-// const projectsDb = mongoCollections.projects
-// const usersDb = mongoCollections.users
+// TODO: test contractors code
 
 const seeding = async () => {
   const db = await mongoConnection.connectToDb();
   await db.dropDatabase();
 
   // Create projects
-  const project1 = await projectsApi.createProject(new Date(2024, 1, 1));
-  // const project1ReminderDate = await projectsApi.setReminderDate(project1._id)
+  try {
+    const project1 = await projectsApi.createProject("Install solar panels", "Solar panels will be installed on the roof of the house", new Date(2024, 1, 1));
+    const project1ReminderDate = await projectsApi.setReminderDate(project1._id)
+    const nextTask1 = await projectsApi.updateTaskStatus(project1._id)
 
-  const project2 = await projectsApi.createProject(new Date(2023, 6, 2));
-  // const project2ReminderDate = await projectsApi.setReminderDate(project2._id)
+    const project2 = await projectsApi.createProject("Add additional solar panels", "Add 4 more solar panels to the roof", new Date(2023, 6, 2));
+    const project2ReminderDate = await projectsApi.setReminderDate(project2._id)
+    const nextTask2 = await projectsApi.updateTaskStatus(project2._id)
+    const nextTask3 = await projectsApi.updateTaskStatus(project2._id)
+    const estimatedCompletion = await projectsApi.expectedProjectCompletionTime(project2._id)
+    // const bankApproval2 = await projectsApi.bankApproval(project2._id)
+    // const utilityApproval = await projectsApi.utilityApproval(project2._id)
+    // const contractApproval = await projectsApi.approveContract(project2._id)
 
-  const project3 = await projectsApi.createProject(new Date(2023, 11, 15));
+
+  // const project3 = await projectsApi.createProject(new Date(2023, 11, 15));
   // const project3ReminderDate = await projectsApi.setReminderDate(project3._id)
 
   // Create contractors
@@ -51,6 +58,9 @@ const seeding = async () => {
   // Need to create createUsers function
 
   console.log("Database has been seeded!");
+} catch (e) {
+  console.log(e);
+  }
 };
 
 const main = async () => {
