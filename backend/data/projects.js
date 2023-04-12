@@ -394,7 +394,13 @@ const expectedProjectCompletionTime = async (projectId) => {
     totalDays += stages[remainingTasks[i]]
   }
 
-  console.log("Expected Project Completion Time: " + totalDays + " days")
+  if (totalDays == 0) {
+    console.log("Project status: Completed")
+  } else {
+    console.log("Project status: In Progress")
+    console.log("Expected Project Completion Time: " + totalDays + " days")
+  }
+  
   return totalDays
 }
 
