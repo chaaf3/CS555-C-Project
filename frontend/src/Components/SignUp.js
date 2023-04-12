@@ -16,7 +16,7 @@ const SignUp = () => {
   if (!local) {
     return (
       <div>
-        <h1>Please enter your cridentials</h1>
+        <h1>Please enter your credentials</h1>
         <form
           onSubmit={async (e) => {
             e.preventDefault();

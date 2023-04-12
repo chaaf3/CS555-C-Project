@@ -7,7 +7,7 @@ router.post("/signIn", async (req, res) => {
   try {
     let inputs = req.body.values;
     console.log(inputs);
-    let signIn = await userData.checkUser(inputs.email, inputs.password);
+    let signIn = await userData.checkUserAccount(inputs.email, inputs.password);
     res.send(signIn);
   } catch (e) {
     console.log(e.error);
