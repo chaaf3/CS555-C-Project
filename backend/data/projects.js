@@ -21,6 +21,55 @@ let stages = {
   Installation: 5,
   Inspection: 2,
 }
+let task_obj = 
+{
+  1: "InitialSiteVisit",
+  2: "CreateBankRequest",
+  3: "SendBankRequest",
+  4: "ReceiveBankApproval",
+  5: "CreateUtilityRequest",
+  6: "SendUtilityRequest",
+  7: "ReceiveUtilityApproval",
+  8: "CreateContract",
+  9: "SendContract",
+  10: "ReceiveContractApproval",
+  11: "OrderingMaterials",
+  12: "ReceivingMaterials",
+  13: "Installation",
+  14: "Inspection"
+}
+const createComment = async (projectId, taskNum, comment) =>
+{
+  let currentProject = await getProject(projectId)
+  // console.log(currentProject);
+  if (taskNum > 14 || taskNum < 1)
+  {
+    throw `Error: taskNum must be between 1 and 14`
+  }
+  if (typeof comment !== 'string' || comment.trim().length === 0)
+  {
+    throw `Error: comment must be a non empty string`
+  }
+  comment.trim()
+  let task_name = task_obj[taskNum]
+  let fullComment = `${task_name}: ${comment}`
+  currentProject.comments.push(fullComment)
+
+
+  const projectCollection = await projects();
+  const updatedInfo = await projectCollection.updateOne(
+    {_id: new ObjectId(projectId)}, 
+    {$set: {comments: currentProject.comments}}
+  );
+  return updatedInfo;
+}
+
+const getComments = async (projectId) => 
+{
+  let currentProject = await getProject(projectId)
+
+  return currentProject.comments
+}
 
 const createProject = async (title, description, dueDate) => {
   validation.checkForValue(title);
@@ -34,6 +83,7 @@ const createProject = async (title, description, dueDate) => {
     tasksToDo: Object.keys(stages),
     inProgress: null,
     notes: [],
+    comments: [],
     dueDate: dueDate,
     reminderDate: null,
     reminderSent: false,
@@ -420,5 +470,7 @@ module.exports = {
   createNotes,
   addEquipment,
   updateEquipmentDelivered,
-  expectedProjectCompletionTime
+  createComment,
+  expectedProjectCompletionTime,
+  getComments
 };
