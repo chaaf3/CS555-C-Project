@@ -100,7 +100,6 @@ const getUser = async (id) => {
 
 const addMessage = async (userId, message) => {
     
-    // validation.checkNumOfArgs(arguments, 2, 2);
      validation.checkIsProper(message, 'string', 'message');
      validation.checkId(userId.toString());
 
@@ -123,7 +122,6 @@ const addMessage = async (userId, message) => {
 }
 
 const updateStatus = async (userId, projectId) => {
-    //validation.checkNumOfArgs(arguments, 2, 2);
     validation.checkId(userId.toString());
     validation.checkId(projectId.toString());
 
