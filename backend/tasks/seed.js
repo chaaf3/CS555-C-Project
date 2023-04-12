@@ -23,9 +23,9 @@ const seeding = async () => {
     const nextTask2 = await projectsApi.updateTaskStatus(project2._id)
     const nextTask3 = await projectsApi.updateTaskStatus(project2._id)
     const estimatedCompletion = await projectsApi.expectedProjectCompletionTime(project2._id)
-    const bankApproval2 = await projectsApi.bankApproval(project2._id)
-    const utilityApproval = await projectsApi.utilityApproval(project2._id)
-    const contractApproval = await projectsApi.approveContract(project2._id)
+    // const bankApproval2 = await projectsApi.bankApproval(project2._id)
+    // const utilityApproval = await projectsApi.utilityApproval(project2._id)
+    // const contractApproval = await projectsApi.approveContract(project2._id)
 
 
   // const project3 = await projectsApi.createProject(new Date(2023, 11, 15));

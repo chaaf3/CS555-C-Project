@@ -124,6 +124,7 @@ const updateTaskStatus = async (projectId) => {
   if (updatedInfo.modifiedCount !== 1) {
     throw "Could not successfully update task status";
   }
+  return tasksUpdated;
 }
 
 function getRandomInt(max) {
@@ -162,7 +163,7 @@ const bankApproval = async function bankApproval(projectId) {
   if (contract.bankApproval) {
     contract.dateBankApproval = new Date();
   } else {
-    return ;
+    return;
   }
 
   const updatedInfo = await projectCollection.updateOne(
@@ -286,6 +287,7 @@ const setReminderDate = async (projectId) => {
   if (updatedInfo.modifiedCount !== 1) {
     throw "Could not successfully set reminder date";
   }
+  return reminderTime;
 };
 
 const createNotes = async (projectId, notes) => {
