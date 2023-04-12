@@ -99,14 +99,14 @@ const getUser = async (id) => {
 
 
 const addMessage = async (userId, message) => {
-
+    
     // validation.checkNumOfArgs(arguments, 2, 2);
-    // validation.checkIsProper(message, 'string', 'message');
-    // validation.checkId(userId);
+     validation.checkIsProper(message, 'string', 'message');
+     validation.checkId(userId.toString());
 
     // Trim whitespace
-    //userId = userId.trim();
-    //message = message.trim();
+    userId = userId.toString().trim();
+    message = message.trim();
 
     const userCollection = await users();
     if(!userCollection) throw `Error: Could not find userCollection.`;
@@ -123,10 +123,13 @@ const addMessage = async (userId, message) => {
 }
 
 const updateStatus = async (userId, projectId) => {
-    
-    // validation.checkNumOfArgs(arguments, 2, 2);
-    // validation.checkId(userId);
-    // validation.checkId(projectId);
+    //validation.checkNumOfArgs(arguments, 2, 2);
+    validation.checkId(userId.toString());
+    validation.checkId(projectId.toString());
+
+    // Trim whitespace
+    userId = userId.toString().trim();
+    projectId = projectId.toString().trim()
 
 
     const projectCollection = await projects();
