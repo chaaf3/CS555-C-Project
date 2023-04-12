@@ -115,7 +115,7 @@ const addMessage = async (userId, message) => {};
 
 module.exports = {
   createUser,
-  checkUser,
+  checkUserAccount,
   getUser,
   addMessage,
 };

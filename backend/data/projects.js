@@ -40,38 +40,6 @@ let task_obj =
   14: "Inspection"
 }
 
-const createComment = async (projectId, taskNum, comment) =>
-{
-  let currentProject = await getProject(projectId)
-  // console.log(currentProject);
-  if (taskNum > 14 || taskNum < 1)
-  {
-    throw `Error: taskNum must be between 1 and 14`
-  }
-  if (typeof comment !== 'string' || comment.trim().length === 0)
-  {
-    throw `Error: comment must be a non empty string`
-  }
-  comment.trim()
-  let task_name = task_obj[taskNum]
-  let fullComment = `${task_name}: ${comment}`
-  currentProject.comments.push(fullComment)
-
-
-  const projectCollection = await projects();
-  const updatedInfo = await projectCollection.updateOne(
-    {_id: new ObjectId(projectId)}, 
-    {$set: {comments: currentProject.comments}}
-  );
-  return updatedInfo;
-}
-
-const getComments = async (projectId) => 
-{
-  let currentProject = await getProject(projectId)
-  return currentProject.comments
-}
-
 const createProject = async (title, description, dueDate) => {
   validation.checkForValue(title);
   validation.checkForValue(description);
@@ -342,6 +310,23 @@ const createNotes = async (projectId, notes) => {
   }
 };
 
+const getNotes = async (projectId) => {
+  validation.checkId(projectId);
+
+  let currentProject = await getProject(projectId);
+  if (!currentProject.notes) {
+    throw "No notes found for this project";
+  }
+
+  const notes = currentProject.notes;
+
+  let counter = 0
+  for (let i = notes.length - 1; i >= 0; i--) {
+    console.log(counter + ": " + notes[i]);
+    counter++;
+  }
+};
+
 // team23pass@gmail.com
 // Team23Pass!
 const sendReminderEmail = async (projectId, contractorId) => {
@@ -455,6 +440,38 @@ const expectedProjectCompletionTime = async (projectId) => {
   return totalDays
 }
 
+const createComment = async (projectId, taskNum, comment) =>
+{
+  let currentProject = await getProject(projectId)
+  // console.log(currentProject);
+  if (taskNum > 14 || taskNum < 1)
+  {
+    throw `Error: taskNum must be between 1 and 14`
+  }
+  if (typeof comment !== 'string' || comment.trim().length === 0)
+  {
+    throw `Error: comment must be a non empty string`
+  }
+  comment.trim()
+  let task_name = task_obj[taskNum]
+  let fullComment = `${task_name}: ${comment}`
+  currentProject.comments.push(fullComment)
+
+
+  const projectCollection = await projects();
+  const updatedInfo = await projectCollection.updateOne(
+    {_id: new ObjectId(projectId)}, 
+    {$set: {comments: currentProject.comments}}
+  );
+  return updatedInfo;
+}
+
+const getComments = async (projectId) => 
+{
+  let currentProject = await getProject(projectId)
+  return currentProject.comments
+}
+
 module.exports = {
   createProject,
   getProject,
@@ -469,6 +486,7 @@ module.exports = {
   setReminderDate,
   sendReminderEmail,
   createNotes,
+  getNotes,
   addEquipment,
   updateEquipmentDelivered,
   createComment,
