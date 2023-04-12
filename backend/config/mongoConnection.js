@@ -14,7 +14,7 @@ module.exports = {
 
     return _db;
   },
-  closeConnection: () => {
-    _connection.close();
+  closeConnection: async () => {
+    await _connection.close();
   },
 };
