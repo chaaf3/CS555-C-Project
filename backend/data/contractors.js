@@ -4,7 +4,8 @@ const contractors = mongoCollections.contractors;
 const { ObjectId } = require("mongodb");
 const validation = require("../validation");
 
-const createContractor = async (name, email, messages, todo, calendar, bankPayment) => {
+const createContractor = async function (name, email, messages, todo, calendar, bankPayment) {
+  // console.log(arguments.length)
   validation.checkNumOfArgs(arguments, 6);
   validation.checkIsProper(name, "string", "name");
   validation.checkIsProper(email, "string", "email");
@@ -33,7 +34,7 @@ const createContractor = async (name, email, messages, todo, calendar, bankPayme
   return newContractor;
 }
 
-const getContractor = async (contractorId) => {
+const getContractor = async function (contractorId) {
   validation.checkNumOfArgs(arguments, 1);
   validation.checkIsProper(contractorId, "string", "contractorId");
   validation.checkId(contractorId);
@@ -48,7 +49,7 @@ const getContractor = async (contractorId) => {
   return contractor;
 }
 
-const getMessages = async (contractorId) => {
+const getMessages = async function (contractorId) {
   validation.checkNumOfArgs(arguments, 1);
   validation.checkIsProper(contractorId, "string", "contractorId");
   validation.checkId(contractorId);
@@ -57,16 +58,16 @@ const getMessages = async (contractorId) => {
   return contractor.messages;
 }
 
-const getQueue = async (contractorId) => {
+const getToDo = async function (contractorId) {
   validation.checkNumOfArgs(arguments, 1);
   validation.checkIsProper(contractorId, "string", "contractorId");
   validation.checkId(contractorId);
 
   const contractor = await getContractor(contractorId);
-  return contractor.queue;
+  return contractor.todo;
 };
 
-const getInProgress = async (contractorId) => {
+const getInProgress = async function (contractorId) {
   validation.checkNumOfArgs(arguments, 1);
   validation.checkIsProper(contractorId, "string", "contractorId");
   validation.checkId(contractorId);
@@ -75,7 +76,7 @@ const getInProgress = async (contractorId) => {
   return contractor.inProgress;
 };
 
-const startNextTaskInQueue = async (contractorId, projectId) => {
+const startNextTaskInQueue = async function (contractorId, projectId) {
   validation.checkNumOfArgs(arguments, 2);
   validation.checkIsProper(contractorId, "string", "contractorId");
   validation.checkId(contractorId);
@@ -121,7 +122,7 @@ const startNextTaskInQueue = async (contractorId, projectId) => {
   return await getContractor(contractorId);
 };
 
-const addTaskToQueue = async (contractorId, projectId, task) => {
+const addTaskToQueue = async function (contractorId, projectId, task) {
   validation.checkNumOfArgs(arguments, 3);
   validation.checkIsProper(contractorId, "string", "contractorId");
   validation.checkId(contractorId);
@@ -140,9 +141,6 @@ const addTaskToQueue = async (contractorId, projectId, task) => {
   }
   if (!target) {
     throw `Error: No project found with the given id ${projectId}.`;
-  }
-  if (target.tasks.length == 0) {
-    throw "Error: No more tasks in queue.";
   }
 
   target.tasks.push(task);
@@ -168,7 +166,7 @@ module.exports = {
   createContractor,
   getContractor,
   getMessages,
-  getQueue,
+  getToDo,
   getInProgress,
   startNextTaskInQueue,
   addTaskToQueue

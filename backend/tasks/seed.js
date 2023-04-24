@@ -22,7 +22,8 @@ const seeding = async () => {
     const project2ReminderDate = await projectsApi.setReminderDate(project2._id)
     const nextTask2 = await projectsApi.updateTaskStatus(project2._id)
     const nextTask3 = await projectsApi.updateTaskStatus(project2._id)
-    const estimatedCompletion = await projectsApi.expectedProjectCompletionTime(project2._id)
+    
+    // const estimatedCompletion = await projectsApi.expectedProjectCompletionTime(project2._id)
     // const bankApproval2 = await projectsApi.bankApproval(project2._id)
     // const utilityApproval = await projectsApi.utilityApproval(project2._id)
     // const contractApproval = await projectsApi.approveContract(project2._id)
@@ -32,26 +33,34 @@ const seeding = async () => {
   // const project3ReminderDate = await projectsApi.setReminderDate(project3._id)
 
   // Create contractors
-  const contractor1 = await contractorsApi.createContractor(
-    "Venkat Anna",
-    "vanna@stevens.edu", // WHEN TESTING, INPUT YOUR EMAIL
-    [
-      { from: "SenderId1", text: "Hello World!" },
-      { from: "SenderId2", text: "Please repsond back asap!" },
-    ],
-    [
-      { projectId: project1._id, tasks: ["task 1", "task2, task3"] },
-      { projectId: project2._id, tasks: ["task 2.1", "task2.2, task2.3"] },
-    ],
-    [
-      { projectId: project1._id, date: project1.dueDate },
-      { projectId: project2._id, date: project2.dueDate },
-    ],
-    [
-      { projectId: project1._id, approved: true },
-      { projectId: project2._id, approved: false },
-    ]
-  );
+  // const contractor1 = await contractorsApi.createContractor(
+  //   "Venkat Anna",
+  //   "vanna@stevens.edu", // WHEN TESTING, INPUT YOUR EMAIL
+  //   [
+  //     { from: "SenderId1", text: "Hello World!" },
+  //     { from: "SenderId2", text: "Please repsond back asap!" },
+  //   ],
+  //   [
+  //     { projectId: project1._id, tasks: ["task 1", "task2, task3"] },
+  //     { projectId: project2._id, tasks: ["task 2.1", "task2.2, task2.3"] },
+  //   ],
+  //   [
+  //     { projectId: project1._id, date: project1.dueDate },
+  //     { projectId: project2._id, date: project2.dueDate },
+  //   ],
+  //   [
+  //     { projectId: project1._id, approved: true },
+  //     { projectId: project2._id, approved: false },
+  //   ]
+  // );
+    
+    const contractor1 = await contractorsApi.createContractor("Audie Breslin", "abreslin@stevens.edu", [], [project1._id, project2._id], [], []);
+    console.log("here")
+    // const todo1 = await contractorsApi.addTaskToQueue(contractor1._id.toString(), project1._id, "task 1");
+    // const todo2 = await contractorsApi.addTaskToQueue(contractor1._id.toString(), project1._id, "task 2");
+    // const todo3 = await contractorsApi.addTaskToQueue(contractor1._id.toString(), project1._id, "task 3");
+    // const getToDo = await contractorsApi.getToDoList(contractor1._id.toString());
+    console.log(getToDo);
 
   //  await projectsApi.sendReminderEmail(project1._id, contractor1._id);
   // Create users
