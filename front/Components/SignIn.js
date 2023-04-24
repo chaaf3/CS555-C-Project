@@ -22,7 +22,6 @@ const SignIn = () => {
               );
               console.log(localStorage.getItem("user"));
               localStorage.setItem("user", temp.data._id);
-              localStorage.setItem("role", temp.data.role);
               setLocal(temp.data._id);
             } catch (e) {
               setError(e.response.data.error);

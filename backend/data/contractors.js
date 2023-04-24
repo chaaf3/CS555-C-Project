@@ -76,6 +76,23 @@ const getQueue = async (contractorId) => {
     throw e;
   }
 };
+const addImage = async (contractorId, image) => {
+  console.log("made it here");
+  try {
+    let contractorCollection = await contractors();
+    let updatedContractor = await contractorCollection.updateOne(
+      { _id: new ObjectId(contractorId) },
+      { $set: { image: image } }
+    );
+    if (!updatedContractor.matchedCount && !updatedContractor.modifiedCount) {
+      throw "Update failed";
+    }
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+  return true;
+};
 
 const getInProgress = async (contractorId) => {
   try {
@@ -85,8 +102,6 @@ const getInProgress = async (contractorId) => {
     const contractor = await contractorCollection.findOne({
       _id: new ObjectId(contractorId),
     });
-
-    if (!contractor) throw "Contractor not found";
 
     if (Object.keys(contractor.inProgress).length == 0)
       console.log("In Progress: ", "No task");
@@ -146,4 +161,5 @@ module.exports = {
   getContractor,
   getMessages,
   createContractor,
+  addImage,
 };

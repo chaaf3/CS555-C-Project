@@ -7,6 +7,7 @@ const data = require(".");
 const validation = require("../validation");
 const bcrypt = require("bcrypt");
 const saltRounds = 16;
+const session = require("express-session");
 
 const createUser = async function createUser(name, email, password) {
   // Input validation
