@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const data = require("../data");
-const jwt = require("jsonwebtoken");
 const userData = data.users;
 // const validation = require("../validation");
 router.post("/signIn", async (req, res) => {
@@ -9,14 +8,6 @@ router.post("/signIn", async (req, res) => {
     let inputs = req.body.values;
     console.log(inputs);
     let signIn = await userData.checkUser(inputs.email, inputs.password);
-    req.session.user = inputs.username;
-    req.session.token = jwt.sign(
-      {
-        exp: Math.floor(Date.now() / 1000) + 60 * 60,
-        data: "foobar",
-      },
-      "This is the secret key to make all secret things secret"
-    );
     res.send(signIn);
   } catch (e) {
     console.log(e.error);
@@ -32,13 +23,6 @@ router.post("/signUp", async (req, res) => {
       inputs.name,
       inputs.email,
       inputs.password
-    );
-    req.session.token = jwt.sign(
-      {
-        exp: Math.floor(Date.now() / 1000) + 60 * 60,
-        data: "foobar",
-      },
-      "This is the secret key to make all secret things secret"
     );
     console.log("here");
     console.log(signUp);
