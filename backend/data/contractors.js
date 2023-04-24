@@ -95,7 +95,7 @@ const startNextTaskInQueue = async (contractorId, projectId) => {
     throw `Error: No project found with the given id ${projectId}.`;
   }
   if (target.tasks.length == 0) {
-    throw "Error: No more tasks in queue.";
+    throw "No more tasks in queue.";
   }
 
   const task = target.tasks[0];
