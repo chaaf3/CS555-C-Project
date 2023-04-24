@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Input, InputLabel, FormControl } from "@mui/material";
 import axios from "axios";
 const SignUp = () => {
   const [email, setEmail] = useState({ email: undefined });
@@ -11,7 +10,8 @@ const SignUp = () => {
   if (!local) {
     return (
       <div>
-        <FormControl
+        <h1>Please enter your cridentials</h1>
+        <form
           onSubmit={async (e) => {
             e.preventDefault();
             try {
@@ -30,8 +30,8 @@ const SignUp = () => {
             }
           }}
         >
-          <InputLabel>User Name:</InputLabel>
-          <Input
+          <label>User Name:</label>
+          <input
             onChange={(e) => {
               setName(e.target.value);
               console.log(name);
@@ -41,8 +41,8 @@ const SignUp = () => {
             value={name.name}
           />
 
-          <InputLabel>email:</InputLabel>
-          <Input
+          <label>email:</label>
+          <input
             onChange={(e) => {
               setEmail(e.target.value);
               console.log(email);
@@ -51,8 +51,8 @@ const SignUp = () => {
             placeholder="email"
             value={email.email}
           />
-          <InputLabel>password:</InputLabel>
-          <Input
+          <label>password:</label>
+          <input
             onChange={(e) => {
               setPassword(e.target.value);
               console.log(password);
@@ -62,8 +62,8 @@ const SignUp = () => {
             value={password.password}
           />
 
-          <Input type="submit" />
-        </FormControl>
+          <input type="submit" />
+        </form>
         {error && <p>{error}</p>}
       </div>
     );

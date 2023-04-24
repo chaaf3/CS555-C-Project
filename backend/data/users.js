@@ -61,7 +61,7 @@ const createUser = async function createUser(name, email, password) {
   };
 };
 
-const checkUser = async function checkUserAccount(email, password) {
+const checkUserAccount = async function checkUserAccount(email, password) {
   // Input validation
   validation.checkNumOfArgs(arguments, 2, 2);
   validation.checkIsProper(email, "string", "email");
@@ -99,24 +99,80 @@ const checkUser = async function checkUserAccount(email, password) {
 };
 
 const getUser = async (id) => {
-  validation.checkId(id);
 
-  const userCollection = await users();
-  const user = await userCollection.findOne({ _id: new ObjectId(id) });
-  if (user === null) {
-    throw "No user with that id found";
-  }
-  user._id = user._id.toString();
-  return user;
-};
+    validation.checkId(id);
+    
+    const userCollection = await users();
+    const user = await userCollection.findOne({ _id: new ObjectId(id)});
+    if (user === null) {
+        throw "No user with that id found";
+    }
+    user._id = user._id.toString();
+    return user;
+}
 
-const addMessage = async (userId, message) => {};
+
+
+
+
+const addMessage = async (userId, message) => {
+    
+     validation.checkIsProper(message, 'string', 'message');
+     validation.checkId(userId.toString());
+
+    // Trim whitespace
+    userId = userId.toString().trim();
+    message = message.trim();
+
+    const userCollection = await users();
+    if(!userCollection) throw `Error: Could not find userCollection.`;
+
+    const user = await userCollection.findOne({ _id: new ObjectId(userId)});
+    if (user === null) {
+        throw "No user with that id found";
+    }
+
+    await userCollection.updateOne({_id: new ObjectId(userId)}, {$push: {messages: message}});
+
+    return user;
+
+}
+
+const updateStatus = async (userId, projectId) => {
+    validation.checkId(userId.toString());
+    validation.checkId(projectId.toString());
+
+    // Trim whitespace
+    userId = userId.toString().trim();
+    projectId = projectId.toString().trim()
+
+
+    const projectCollection = await projects();
+    if(!projectCollection) throw `Error: Could not find projectCollection.`;
+
+    const project = await projectCollection.findOne({ _id: new ObjectId(projectId)});
+    if (project === null) {
+        throw "No project with that id found";
+    }
+
+    const userCollection = await users();
+    if(!userCollection) throw `Error: Could not find userCollection.`;
+
+    await userCollection.updateOne({_id: new ObjectId(userId)}, {$push: {status: project.inProgress}});
+
+    return project;
+}
+
+
 
 // Messages and calendar code can be reused from contractors.js
 
-module.exports = {
-  createUser,
-  checkUser,
-  getUser,
-  addMessage,
-};
+module.exports = { 
+    createUser,
+    checkUser,
+    getUser,
+    updateStatus,
+    addMessage
+}
+
+

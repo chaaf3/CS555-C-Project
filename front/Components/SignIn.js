@@ -6,10 +6,17 @@ const SignIn = () => {
   const [name, setName] = useState({ name: undefined });
   const [local, setLocal] = useState(null);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      setLocal(localStorage.getItem("user"));
+    }
+  }, []);
+
   if (!local) {
     return (
       <div>
-        <h1>Please enter your cridentials</h1>
+        <h1>Please enter your credentials</h1>
         <form
           onSubmit={async (e) => {
             e.preventDefault();
