@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div>
       <Link href="ImageHandler">images</Link>
-      <Calendar />
+      <Link href="Auth">Auth</Link>
     </div>
   );
 }
