@@ -5,7 +5,9 @@ const contractorData = data.contractors;
 // const validation = require("../validation");
 router.post("/images", async (req, res) => {
   try {
-    let image = req.body.values.images;
+    console.log("break");
+
+    let image = req.body;
     console.log(image);
     let res = await contractorData.addImage("6423ab71b18ce2f0289517a0", image);
     req.session.user = res.username;

@@ -27,16 +27,17 @@ const ImageHandler = () => {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          let temp = await axios.get(
+          let temp = await axios.post(
             "http://localhost:3001/contractors/images",
             {
               values: { images: image },
             }
           );
+
+          let holder = await pleaseWork();
           let makeImage = new Image();
-          makeImage.src = temp.data;
-          console.log(makeImage.src);
-          setDisplay(makeImage.src);
+          makeImage.src = holder.data;
+          setImage(makeImage.src);
           setLoading(false);
         }}
       >
