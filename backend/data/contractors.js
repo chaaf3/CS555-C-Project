@@ -37,42 +37,54 @@ const getContractor = async (contractorId) => {
   validation.checkNumOfArgs(arguments, 1);
   validation.checkIsProper(contractorId, "string", "contractorId");
   validation.checkId(contractorId);
+  try {
+    const contractorCollection = await contractors();
+    const contractor = await contractorCollection.findOne({
+      _id: new ObjectId(contractorId),
+    });
 
-  const contractorCollection = await contractors();
-  const contractor = await contractorCollection.findOne({
-    _id: new ObjectId(contractorId),
-  });
-  if (!contractor) {
-    throw "No contractor found with the given id";
+    if (!contractor) throw "Contractor not found";
+
+    console.log("Queue: ", contractor.queue);
+    return contractor.queue;
+  } catch (e) {
+    throw e;
   }
-  return contractor;
-}
-
-const getMessages = async (contractorId) => {
-  validation.checkNumOfArgs(arguments, 1);
-  validation.checkIsProper(contractorId, "string", "contractorId");
-  validation.checkId(contractorId);
-
-  const contractor = await getContractor(contractorId);
-  return contractor.messages;
-}
-
-const getQueue = async (contractorId) => {
-  validation.checkNumOfArgs(arguments, 1);
-  validation.checkIsProper(contractorId, "string", "contractorId");
-  validation.checkId(contractorId);
-
-  const contractor = await getContractor(contractorId);
-  return contractor.queue;
+};
+const addImage = async (contractorId, image) => {
+  console.log("made it here");
+  try {
+    let contractorCollection = await contractors();
+    let updatedContractor = await contractorCollection.updateOne(
+      { _id: new ObjectId(contractorId) },
+      { $set: { image: image } }
+    );
+    if (!updatedContractor.matchedCount && !updatedContractor.modifiedCount) {
+      throw "Update failed";
+    }
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+  return true;
 };
 
 const getInProgress = async (contractorId) => {
-  validation.checkNumOfArgs(arguments, 1);
-  validation.checkIsProper(contractorId, "string", "contractorId");
-  validation.checkId(contractorId);
+  try {
+    validation.checkId(contractorId);
 
-  const contractor = await getContractor(contractorId);
-  return contractor.inProgress;
+    const contractorCollection = await contractors();
+    const contractor = await contractorCollection.findOne({
+      _id: new ObjectId(contractorId),
+    });
+
+    if (Object.keys(contractor.inProgress).length == 0)
+      console.log("In Progress: ", "No task");
+    else console.log("In Progress: ", contractor.inProgress);
+    return contractor.inProgress;
+  } catch (e) {
+    throw e;
+  }
 };
 
 const startNextTaskInQueue = async (contractorId, projectId) => {
@@ -167,9 +179,6 @@ const addTaskToQueue = async (contractorId, projectId, task) => {
 module.exports = {
   createContractor,
   getContractor,
-  getMessages,
-  getQueue,
-  getInProgress,
-  startNextTaskInQueue,
-  addTaskToQueue
+  createContractor,
+  addImage,
 };

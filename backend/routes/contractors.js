@@ -3,6 +3,29 @@ const router = express.Router();
 const data = require("../data");
 const contractorData = data.contractors;
 // const validation = require("../validation");
+router.post("/images", async (req, res) => {
+  try {
+    let image = req.body.values.images;
+    console.log(image);
+    let res = await contractorData.addImage("6423ab71b18ce2f0289517a0", image);
+    req.session.user = res.username;
+
+    res.send("this worked");
+  } catch (e) {
+    res.status(404).json({ error: e });
+  }
+});
+
+router.get("/images", async (req, res) => {
+  try {
+    let something = await contractorData.getContractor(
+      "6423ab71b18ce2f0289517a0"
+    );
+    res.send(something.image);
+  } catch (e) {
+    res.status(404).json({ error: e });
+  }
+});
 
 router.get("/queue/:contractorId", async (req, res) => {
   try {

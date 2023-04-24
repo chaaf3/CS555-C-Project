@@ -4,8 +4,10 @@ const projects = require("./data/projects");
 const data = require("./data");
 const app = express();
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
-app.use(express.json());
+app.use(bodyParser.json({ limit: "50mb" }));
+// app.use(express.bodyParser.json({ limit: "50mb" }));
 app.use(cors());
 
 let temp;

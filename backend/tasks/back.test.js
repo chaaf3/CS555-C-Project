@@ -137,19 +137,17 @@ describe("Project Tests", () => {
 
   it("Verify get contractor messages", async () => {
     const messages = await contractorsApi.getMessages(contractor1._id);
-    expect(contractor1.messages).toEqual([{from: "SenderId1", text: "Hello World!"},
-    {from: "SenderId2", text: "Please repsond back asap!"}]);
+    expect(messages).toEqual(contractor1.messages);
   });
 
   it("Verify get contractor queue", async () => {
     const queue = await contractorsApi.getQueue(contractor1._id);
-    expect(contractor1.todo).toEqual([{projectId: project1._id, tasks: ["task 1", "task2", "task3"]},
-                                      {projectId: project2._id, tasks: ["task 2.1", "task2.2", "task2.3"]}]);
+    expect(queue).toEqual(contractor1.queue);
   });
 
   it("Verify get contractor in Progress task", async () => {
     const inProgress = await contractorsApi.getInProgress(contractor1._id);
-    expect(contractor1.inProgress).toEqual("No task");
+    expect(inProgress).toEqual(contractor1.inProgress);
   });
 
   it("Verify start next task", async () => {
