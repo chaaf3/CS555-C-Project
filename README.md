@@ -8,7 +8,7 @@ The goal of this project is to create a communication platform for solar panel i
 
 *Comparing Planned Features to Actual Features*
 
-We were able to complete most of our features this sprint, keeping in tune with our work ethic from the previous sprints. However, finals period is here and most of our group members are swarmed with work from all of our classes. Furthermore, it became harder to avoid dependencies during the final features, as there were a limited options of features to spread around.
+We were able to complete most of our features this sprint, keeping in tune with our work ethic from the previous sprints. However, finals period is here and most of our group members are swarmed with work from all of our classes. Furthermore, it became harder to avoid dependencies during the final features, as there were limited options of features to spread around.
 
 *New features as user stories*
 
