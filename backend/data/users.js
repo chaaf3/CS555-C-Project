@@ -2,7 +2,6 @@ const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
 const projects = mongoCollections.projects;
 const contractors = mongoCollections.contractors;
-const projectsApi = require("./projects");
 const { ObjectId } = require("mongodb");
 const data = require(".");
 const validation = require("../validation");
@@ -52,7 +51,10 @@ const createUser = async function createUser(name, email, password, balance) {
   if (!insertInfo.acknowledged || !insertInfo.insertedId)
     throw `Error: Could not add new user with email ${email}.`;
 
-  // Return new user sans password
+  // let newUserId = insertInfo.insertedId.toString();
+  // const currentNewUser = await getUser(newUserId);
+  // return currentNewUser
+ 
   return {
     _id: insertInfo.insertedId,
     name: name,
@@ -159,15 +161,31 @@ const updateStatus = async (userId, projectId) => {
     return project;
 }
 
+const getBalance = async (userId) => {
+    const userCollection = await users();
+
+    const user = await userCollection.findOne({ _id: new ObjectId(userId)});
+    if (user === null) {
+        throw "No user with that id found";
+    }
+
+    return user.balance;
+}
+
 const payBill = async (userId, projectId) => {
-    currentProject = projectsApi.getProject(projectId);
+    const projectCollection = await projects();
+    currentProject = await projectCollection.findOne({ _id: new ObjectId(projectId)});
     projectBalance = currentProject.balance;
 
-    user = getUser(userId);
+    user = await getUser(userId);
     userBalance = user.balance;
 
     if (projectBalance > userBalance) {
         throw "Error: User does not have enough money to pay for this project";
+    }
+    if (projectBalance <= 0) {
+      console.log("There is no balance that needs to be paid! Your account is up to date!")
+      return;
     }
 
     userBalance -= projectBalance;
@@ -178,7 +196,6 @@ const payBill = async (userId, projectId) => {
       throw "Error: Could not update user balance successfully";
     }
 
-    const projectCollection = await projects();
     const updateProjectBalance = await projectCollection.updateOne({_id: new ObjectId(projectId)}, {$set: {balance: 0}});
     if (updateProjectBalance.modifiedCount !== 1) {
       throw "Error: Could not update project balance successfully";
@@ -189,7 +206,7 @@ const payBill = async (userId, projectId) => {
 
 const depositMoney = async (userId, amount) => {
     const userCollection = await users();
-    user = getUser(userId);
+    user = await getUser(userId);
     userBalance = user.balance;
 
     userBalance += amount;
@@ -199,6 +216,7 @@ const depositMoney = async (userId, amount) => {
       throw "Error: Could not update user balance successfully";
     }
 }   
+
 // Messages and calendar code can be reused from contractors.js
 
 module.exports = { 
@@ -207,6 +225,7 @@ module.exports = {
     getUser,
     updateStatus,
     addMessage,
+    getBalance,
     payBill, 
     depositMoney
 }
