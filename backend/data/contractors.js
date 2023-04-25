@@ -41,8 +41,6 @@ const createContractor = async function (name, email, password) {
     messages: [],
     todo: [],
     inProgress: "No task",
-    calendar: [],
-    bankPayment: [],
     image: ""
   };
 
@@ -80,9 +78,7 @@ const checkContractor = async function (email, password) {
     email: contractor.email,
     messages: contractor.messages,
     todo: contractor.todo,
-    inProgress: contractor.inProgress,
-    calendar: contractor.calendar,
-    bankPayment: contractor.bankPayment
+    inProgress: contractor.inProgress
   };
 }
 
@@ -118,7 +114,7 @@ const addMessage = async function (contractorId, messageInfo) {
 
   const contractorCollection = await contractors();
   if (!contractorCollection) throw "Error: Could not find contractorCollection.";
-  console.log(messageInfo)
+
   const updatedInfo = await contractorCollection.updateOne(
     {_id: new ObjectId(contractorId)},
     {$push: {messages: messageInfo}}
@@ -151,7 +147,7 @@ const addProjectToDo = async function (contractorId, projectId) {
   const contractorCollection = await contractors();
   if (!contractorCollection) throw "Error: Could not find contractorCollection.";
 
-  const contractor = await contractorCollection.findOne({ _id: contractorId });
+  const contractor = await contractorCollection.findOne({ _id: new ObjectId(contractorId)});
   if (!contractor) throw "Error: Contractor not found.";
 
   const updatedContractor = await contractorCollection.updateOne(
@@ -173,11 +169,15 @@ const getTaskInProgress = async function (contractorId, projectId) {
   validation.checkId(contractorId);
   validation.checkId(projectId);
 
+  const contractorCollection = await contractors();
+  if (!contractorCollection) throw "Error: Could not find contractorCollection.";
   const contractor = await getContractor(contractorId);
+  if (!contractor) throw "Error: Contractor not found.";
 
   for (i = 0; i < contractor.todo.length; i++) {
     if (contractor.todo[i] == projectId) {
-     const currentProject = await getProject(projectId);
+     const currentProject = await projectApi.getProject(projectId);
+     await contractorCollection.updateOne( { _id: new ObjectId(contractorId) }, { $set: { inProgress: currentProject.inProgress } } );
      return currentProject.inProgress;
     }
     else {
@@ -197,8 +197,8 @@ const startNextTaskInQueue = async function (contractorId, projectId) {
 
   for (i = 0; i < contractor.todo.length; i++) {
     if (contractor.todo[i] == projectId) {
-     projectApi.updateTaskStatus(projectId);
-     return;
+     await projectApi.updateTaskStatus(projectId);
+     return contractor;
     }
     else {
       throw "Contractor is not working on this project.";

@@ -6,7 +6,7 @@ const { ObjectId } = require("mongodb");
 const data = require(".");
 const validation = require("../validation");
 const bcrypt = require("bcrypt");
-const saltRounds = 16;
+const saltRounds = 12;
 const session = require("express-session");
 
 const createUser = async function createUser(name, email, password, balance) {
@@ -56,14 +56,7 @@ const createUser = async function createUser(name, email, password, balance) {
   // const currentNewUser = await getUser(newUserId);
   // return currentNewUser
  
-  return {
-    _id: insertInfo.insertedId,
-    name: name,
-    email: email,
-    messages: [],
-    calendar: [],
-    status: [],
-  };
+  return newUser;
 };
 
 const checkUserAccount = async function checkUserAccount(email, password) {

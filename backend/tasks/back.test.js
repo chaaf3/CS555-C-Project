@@ -45,7 +45,6 @@ const main = async () => {
   
   nextTask1 = await projectsApi.updateTaskStatus(project1._id);
   nextTask2 = await projectsApi.updateTaskStatus(project1._id);
-  nextTask3 = await projectsApi.updateTaskStatus(project1._id);
 
   estimatedCompletion = await projectsApi.expectedProjectCompletionTime(project2._id);
 
@@ -53,34 +52,55 @@ const main = async () => {
   
   contractor1 = await contractorsApi.createContractor(
     "Venkat Anna",
-    "vanna@stevens.edu", // WHEN TESTING, INPUT YOUR EMAIL
-    "Password1-",
-    [
-      { from: "SenderId1", text: "Hello World!" },
-      { from: "SenderId2", text: "Please repsond back asap!" },
-    ],
-    [
-      { projectId: project1._id, tasks: ["task 1", "task2", "task3"] },
-      { projectId: project2._id, tasks: ["task 2.1", "task2.2", "task2.3"] },
-    ],
-    [
-      { projectId: project1._id, date: project1.dueDate },
-      { projectId: project2._id, date: project2.dueDate },
-    ],
-    [
-      { projectId: project1._id, approved: true },
-      { projectId: project2._id, approved: false },
-    ]
+    "vanna@stevens.edu",
+    "Password1-"
   );
   contractor1._id = contractor1._id.toString();
+  console.log(contractor1)
+  let message1 = {from: "SenderId1", text: "Hello World!"}
+  let message2 = {from: "SenderId2", text: "Goodbye now!"}
+  await contractorsApi.addMessage(contractor1._id, message1);
+  await contractorsApi.addMessage(contractor1._id, message2);
+  contractor1.messages = await contractorsApi.getMessages(contractor1._id);
 
-  user1 = await usersApi.createUser("audie", "abreslin@stevens.edu", "Password1-");
+  await contractorsApi.addProjectToDo(contractor1._id, project1._id);
+  await contractorsApi.addProjectToDo(contractor1._id, project2._id);
+  contractor1.todo = await contractorsApi.getProjectsToDo(contractor1._id);
+
+  // [
+  //   { from: "SenderId1", text: "Hello World!" },
+  //   { from: "SenderId2", text: "Please repsond back asap!" },
+  // ],
+  // [
+  //   { projectId: project1._id, tasks: ["task 1", "task2", "task3"] },
+  //   { projectId: project2._id, tasks: ["task 2.1", "task2.2", "task2.3"] },
+  // ],
+  // [
+  //   { projectId: project1._id, date: project1.dueDate },
+  //   { projectId: project2._id, date: project2.dueDate },
+  // ],
+  // [
+  //   { projectId: project1._id, approved: true },
+  //   { projectId: project2._id, approved: false },
+  // ]
+
+  user1 = await usersApi.createUser("Connor Haaf", "chaaf@stevens.edu", "Password123!", 757.27);
+  console.log("made it past user")
+  // const billPay = await usersApi.payBill(user1._id.toString(), project1._id)
+  // const userBalance = await usersApi.getBalance(user1._id.toString())
+  // console.log("User Balance: " + userBalance)
+  // const depositMoney = await usersApi.depositMoney(user1._id.toString(), 500)
+  // const userBalance2 = await usersApi.getBalance(user1._id.toString())
+  // console.log("User Balance: " + userBalance2)
 };
 
 describe("Project Tests", () => {
   beforeAll(async () => {
     await mongoConnection.connectToDb();
     await main();
+    setTimeout(() => {
+      console.log("Waiting for database to update...");
+    }, 60000);
   });
   afterAll(async () => {
     await mongoConnection.closeConnection();
@@ -113,22 +133,11 @@ describe("Project Tests", () => {
   // Contractor tests
   it("Verify create contractor messages", async () => {
     expect(contractor1.messages).toEqual([{from: "SenderId1", text: "Hello World!"},
-    {from: "SenderId2", text: "Please repsond back asap!"}]);
+    {from: "SenderId2", text: "Goodbye now!"}]);
   });
 
   it("Verify create contractor todo", async () => {
-    expect(contractor1.todo).toEqual([{projectId: project1._id, tasks: ["task 1", "task2", "task3"]},
-                                      {projectId: project2._id, tasks: ["task 2.1", "task2.2", "task2.3"]}]);
-  });
-
-  it("Verify create contractor calendar", async () => {
-    expect(contractor1.calendar).toEqual([{projectId: project1._id, date: project1.dueDate},
-    {projectId: project2._id, date: project2.dueDate}]);
-  });
-
-  it("Verify create contractor bankPayment", async () => {
-    expect(contractor1.bankPayment).toEqual([{projectId: project1._id, approved: true},
-    {projectId: project2._id, approved: false}]);
+    expect(contractor1.todo).toEqual([project1._id, project2._id]);
   });
 
   it("Verify get contractor", async () => {
@@ -141,32 +150,24 @@ describe("Project Tests", () => {
     expect(messages).toEqual(contractor1.messages);
   });
 
-  it("Verify get contractor queue", async () => {
-    const queue = await contractorsApi.getQueue(contractor1._id);
-    expect(queue).toEqual(contractor1.queue);
-  });
-
   it("Verify get contractor in Progress task", async () => {
-    const inProgress = await contractorsApi.getInProgress(contractor1._id);
+    const inProgress = await contractorsApi.getTaskInProgress(contractor1._id, project1._id);
+    contractor1 = await contractorsApi.getContractor(contractor1._id);
     expect(inProgress).toEqual(contractor1.inProgress);
   });
 
   it("Verify start next task", async () => {
     const nextTask = await contractorsApi.startNextTaskInQueue(contractor1._id, project1._id);
-    expect(nextTask.todo).toEqual([{"projectId": project1._id, "tasks": ["task2", "task3"]}, {"projectId": project2._id, "tasks": ["task 2.1", "task2.2", "task2.3"]}]);
-  });
-
-  it("Verify add task to queue", async () => {
-    const addTask = await contractorsApi.addTaskToQueue(contractor1._id, project1._id, "task 4");
-    expect(addTask.todo).toEqual([{"projectId": project1._id, "tasks": ["task2", "task3", "task 4"]}, {"projectId": project2._id, "tasks": ["task 2.1", "task2.2", "task2.3"]}]);
+    project1 = await projectsApi.getProject(project1._id);
+    expect(nextTask.todo).toEqual([project1._id, project2._id]);
   });
 
   it("Verify user name", async () => {
-    expect(user1.name).toBe("audie");
+    expect(user1.name).toBe("Connor Haaf");
   });
 
   it("Verify user email", async () => {
-    expect(user1.email).toBe("abreslin@stevens.edu");
+    expect(user1.email).toBe("chaaf@stevens.edu");
   });
 
   it("Verify get project", async () => {
@@ -181,6 +182,8 @@ describe("Project Tests", () => {
 
   it("Verify tasks", async () => {
     const project = await projectsApi.getProject(project1._id);
-    expect(project.tasksToDo).toEqual(nextTask3.tasksToDo);
+    console.log(project.tasksToDo)
+    console.log(nextTask2.tasksToDo)
+    expect(project.tasksToDo).toEqual(nextTask2.tasksToDo);
   });
 });
