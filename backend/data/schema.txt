@@ -14,8 +14,8 @@ Contractor:
     name: James Something (String),
     email: jamesSomething@gmail.com (String),
     messages: [{from: (sender uuid), text: "this is a message from a friend"}],
-    todo: [{projectId: alslksdjfoidifjpiuahjse, tasks:["This is a task in text", 'this is another text task']}],
-    calendar: [{projectId: kajsdhfgiubiea, projectDeadline: DateTimeObject}],
+    todo: [{projectId: alslksdjfoidifjpiuahjse, jfdaklsjlkfsj, jkjadjfalkj}],
+    calendar: [{projectId: kajsdhfgiubiea, projectDeadline: DateTimeObject}], 
 }
 
 Project:

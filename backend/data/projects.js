@@ -5,6 +5,8 @@ const contractorData = require("./contractors");
 var nodemailer = require("nodemailer");
 const validation = require("../validation");
 
+// TODO: need to write project balance field/methods
+
 let stages = {
   InitialSiteVisit: 5,
   CreateBankRequest: 2,
@@ -49,6 +51,7 @@ const createProject = async (title, description, dueDate) => {
   let newProject = {
     title: title,
     description: description,
+    balance: 250,
     tasksToDo: Object.keys(stages),
     inProgress: null,
     notes: [],
