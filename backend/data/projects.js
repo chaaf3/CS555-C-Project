@@ -145,7 +145,6 @@ const bankRequest = function bankRequest(projectId) {
 
   console.log("I am requesting bank approval for my project.");
   const randomNum = getRandomInt(2);
-  console.log(randomNum)
   if (randomNum == 0) {
     console.log("The bank has not approved this project.");
     return false;
@@ -190,7 +189,6 @@ const utilityRequest = function utilityRequest(projectId) {
   
   console.log("I am requesting utility approval for my project.");
   const randomNum = getRandomInt(2);
-  console.log(randomNum)
   if (randomNum == 0) {
     console.log("The utility company has not approved this project.");
     return false;
@@ -261,7 +259,8 @@ const approveContract = async (projectId) => {
     project.contract.approved = true;
     project.contract.dateApproved = new Date();
   } else {
-    throw "Cannot approve contract until all approvals are received";
+    console.log("Cannot approve contract until all approvals are received");
+    return;
   }
 
   const updatedInfo = await projectCollection.updateOne(
