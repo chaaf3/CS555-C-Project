@@ -53,6 +53,8 @@ const seeding = async () => {
   //     { projectId: project2._id, approved: false },
   //   ]
   // );
+
+  
     
     const contractor1 = await contractorsApi.createContractor("Audie Breslin", "abreslin@stevens.edu", [], [project1._id, project2._id], [], []);
     const projectsToDo = await contractorsApi.getProjectsToDo(contractor1._id.toString());
@@ -65,6 +67,15 @@ const seeding = async () => {
     const nextTask = await contractorsApi.startNextTaskInQueue(contractor1._id.toString(), project1._id);
     const getToDo2 = await contractorsApi.getTaskInProgress(contractor1._id.toString(), project1._id);
     console.log(getToDo2);
+
+    const user1 = await usersApi.createUser("Connor Haaf", "chaaf@stevens.edu", "Password123!", 757.27)
+    console.log("here")
+    const billPay = await usersApi.payBill(user1._id.toString(), project1._id)
+    const userBalance = await usersApi.getBalance(user1._id.toString())
+    console.log("User Balance: " + userBalance)
+    const depositMoney = await usersApi.depositMoney(user1._id.toString(), 500)
+    const userBalance2 = await usersApi.getBalance(user1._id.toString())
+    console.log("User Balance: " + userBalance2)
 
   //  await projectsApi.sendReminderEmail(project1._id, contractor1._id);
   // Create users
