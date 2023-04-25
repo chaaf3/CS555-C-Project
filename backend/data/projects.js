@@ -5,7 +5,8 @@ const contractorData = require("./contractors");
 var nodemailer = require("nodemailer");
 const validation = require("../validation");
 
-// TODO: need to write project balance field/methods
+// TODO (refactoring): make sure that all functions error check for proper arguments
+// TODO (refactoring): figure out how to incorporate bank request and approval for project payment
 
 let stages = {
   InitialSiteVisit: 5,
@@ -47,15 +48,20 @@ const createProject = async (title, description, dueDate) => {
   validation.checkForValue(description);
   validation.checkForValue(dueDate);
 
+  maxProjectCost = 7500
+  minProjectCost = 2500
+
+  balance = Number((Math.random() * (maxProjectCost - minProjectCost + 1) + minProjectCost).toFixed(2));
+
   const projectCollection = await projects();
   let newProject = {
     title: title,
     description: description,
-    balance: 250,
+    balance: balance,
     tasksToDo: Object.keys(stages),
     inProgress: null,
-    notes: [],
-    comments: [],
+    notes: [], // general notes for the project overall
+    comments: [], // for specific tasks
     dueDate: dueDate,
     reminderDate: null,
     reminderSent: false,
@@ -474,6 +480,12 @@ const createComment = async (projectId, taskNum, comment) =>
 const getComments = async (projectId) => {
   let currentProject = await getProject(projectId)
   return currentProject.comments
+}
+
+const generateBill = async (projectId) => {
+  //balance
+  //dueDate
+  //notes section
 }
 
 module.exports = {
