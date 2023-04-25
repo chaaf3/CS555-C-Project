@@ -163,12 +163,27 @@ const updateStatus = async (userId, projectId) => {
   return project;
 };
 
+const getBalance = async (id) =>{
+  validation.checkId(id);
+  let balance = null  
+  const userCollection = await users();
+  const user = await userCollection.findOne({ _id: new ObjectId(id)});
+  if (user === null) {
+      throw "No user with that id found";
+  }
+  //balance = user.balance
+  balance = 235.32
+  return balance
+}
 // Messages and calendar code can be reused from contractors.js
 
-module.exports = {
-  createUser,
-  checkUserAccount,
-  getUser,
-  updateStatus,
-  addMessage
-};
+module.exports = { 
+    createUser,
+    checkUserAccount,
+    getUser,
+    updateStatus,
+    addMessage,
+    getBalance
+}
+
+

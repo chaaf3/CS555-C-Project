@@ -1,6 +1,8 @@
 const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
 const contractors = mongoCollections.contractors;
+const projects = mongoCollections.projects;
+const projectApi = require("./projects");
 const { ObjectId } = require("mongodb");
 const validation = require("../validation");
 const bcrypt = require("bcrypt");
@@ -83,12 +85,11 @@ const checkContractor = async function (email, password) {
   };
 }
 
-const addTaskToTodo = async function (contractorId, task) {
-  validation.checkNumOfArgs(arguments, 2, 2);
+const getMessages = async function (contractorId) {
+  validation.checkNumOfArgs(arguments, 1);
   validation.checkIsProper(contractorId, "string", "contractorId");
   validation.checkIsProper(task, "string", "task");
   validation.checkId(contractorId);
-
 
 }
 
@@ -147,7 +148,36 @@ const getInProgress = async (contractorId) => {
   }
 };
 
-const startNextTaskInQueue = async (contractorId, projectId) => {
+const getProjectsToDo = async function (contractorId) {
+  validation.checkNumOfArgs(arguments, 1);
+  validation.checkIsProper(contractorId, "string", "contractorId");
+  validation.checkId(contractorId);
+
+  const contractor = await getContractor(contractorId);
+  return contractor.todo;
+};
+
+const getTaskInProgress = async function (contractorId, projectId) {
+  validation.checkNumOfArgs(arguments, 2);
+  validation.checkIsProper(contractorId, "string", "contractorId");
+  validation.checkIsProper(projectId, "string", "projectId");
+  validation.checkId(contractorId);
+  validation.checkId(projectId);
+
+  const contractor = await getContractor(contractorId);
+
+  for (i = 0; i < contractor.todo.length; i++) {
+    if (contractor.todo[i] == projectId) {
+     const currentProject = await getProject(projectId);
+     return currentProject.inProgress;
+    }
+    else {
+      throw "Contractor is not working on this project.";
+    }
+  }
+};
+
+const startNextTaskInQueue = async function (contractorId, projectId) {
   validation.checkNumOfArgs(arguments, 2);
   validation.checkIsProper(contractorId, "string", "contractorId");
   validation.checkId(contractorId);
@@ -156,88 +186,22 @@ const startNextTaskInQueue = async (contractorId, projectId) => {
 
   const contractor = await getContractor(contractorId);
 
-  const todo = contractor.todo;
-  let target;
-  for (let project of todo) {
-    if (project.projectId == projectId) {
-      target = project;
+  for (i = 0; i < contractor.todo.length; i++) {
+    if (contractor.todo[i] == projectId) {
+     projectApi.updateTaskStatus(projectId);
+     return;
+    }
+    else {
+      throw "Contractor is not working on this project.";
     }
   }
-  if (!target) {
-    throw `Error: No project found with the given id ${projectId}.`;
-  }
-  if (target.tasks.length == 0) {
-    throw "Error: No more tasks in queue.";
-  }
-
-  const task = target.tasks[0];
-  target.tasks = target.tasks.slice(1);
-
-  for (let i = 0; i < todo.length; i++) {
-    if (todo[i].projectId == projectId) {
-      todo[i] = target;
-    }
-  }
-
-  const contractorCollection = await contractors();
-  const updated = await contractorCollection.updateOne(
-    { _id: new ObjectId(contractorId) },
-    { $set: {todo: todo, inProgress: task } }
-  );
-  if (!updated.acknowledged) {
-    throw "Mongo Error: Could not set next task.";
-  }
-
-  const newContractor = await getContractor(contractorId);
-
-  return await getContractor(contractorId);
-};
-
-const addTaskToQueue = async (contractorId, projectId, task) => {
-  validation.checkNumOfArgs(arguments, 3);
-  validation.checkIsProper(contractorId, "string", "contractorId");
-  validation.checkId(contractorId);
-  validation.checkIsProper(projectId, "string", "projectId");
-  validation.checkId(projectId);
-  validation.checkForValue(task);
-
-  const contractor = await getContractor(contractorId);
-
-  const todo = contractor.todo;
-  let target;
-  for (let project of todo) {
-    if (project.projectId == projectId) {
-      target = project;
-    }
-  }
-  if (!target) {
-    throw `Error: No project found with the given id ${projectId}.`;
-  }
-  if (target.tasks.length == 0) {
-    throw "Error: No more tasks in queue.";
-  }
-
-  target.tasks.push(task);
-
-  for (let i = 0; i < todo.length; i++) {
-    if (todo[i].projectId == projectId) {
-      todo[i] = target;
-    }
-  }
-
-  const contractorCollection = await contractors();
-  const updated = await contractorCollection.updateOne(
-    { _id: new ObjectId(contractorId) },
-    { $set: {todo: todo} }
-  );
-  if (!updated.acknowledged) {
-    throw "Mongo Error: Could not add task to queue.";
-  }
-  return await getContractor(contractorId);
 };
 
 module.exports = {
   createContractor,
   getContractor,
-  addImage,
+  getMessages,
+  getProjectsToDo,
+  getTaskInProgress,
+  startNextTaskInQueue,
 };
