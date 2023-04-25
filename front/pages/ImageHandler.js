@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Button from "react-bootstrap/Button";
+import Link from "next/link";
+
 const ImageHandler = () => {
   const [image, setImage] = useState(null);
   const [display, setDisplay] = useState(false);
@@ -23,7 +24,12 @@ const ImageHandler = () => {
   return (
     <div>
       {!loading && <img src={display} />}
-      <h1>Please enter your image</h1>
+      <header>Please enter your image</header>
+      <nav class='nav-bar'>
+        <Link href="Auth" class='page-link'>Sign In</Link>
+        <Link href="Calendar" class='page-link'>Calendar</Link>
+        <Link href="ImageHandler" class='page-link'>Upload Image</Link>
+      </nav>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -56,7 +62,7 @@ const ImageHandler = () => {
             console.log(image);
           }}
         />
-        <Button type="submit">Submit</Button>
+        <input type="submit" value="Submit"/>
       </form>
     </div>
   );

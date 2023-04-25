@@ -23,7 +23,7 @@ export default function Auth() {
             setAlreadyHave(!alreadyHave);
           }}
         >
-          Don't have an account? sign up
+          Don't have an account? Sign up
         </button>
       </div>
     );

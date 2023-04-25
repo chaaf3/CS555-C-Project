@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
+
 const SignUp = () => {
   const [email, setEmail] = useState({ email: undefined });
   const [password, setPassword] = useState({ password: undefined });
@@ -10,7 +12,7 @@ const SignUp = () => {
   if (!local) {
     return (
       <div>
-        <h1>Please enter your cridentials</h1>
+        <header>Sign Up</header>
         <form
           onSubmit={async (e) => {
             e.preventDefault();
@@ -41,7 +43,7 @@ const SignUp = () => {
             value={name.name}
           />
 
-          <label>email:</label>
+          <label>Email:</label>
           <input
             onChange={(e) => {
               setEmail(e.target.value);
@@ -51,7 +53,7 @@ const SignUp = () => {
             placeholder="email"
             value={email.email}
           />
-          <label>password:</label>
+          <label>Password:</label>
           <input
             onChange={(e) => {
               setPassword(e.target.value);
@@ -70,8 +72,13 @@ const SignUp = () => {
   } else {
     return (
       <div>
+        <nav class='nav-bar'>
+          <Link href="Auth" class='page-link'>Sign In</Link>
+          <Link href="Calendar" class='page-link'>Calendar</Link>
+          <Link href="ImageHandler" class='page-link'>Upload Image</Link>
+        </nav>
         <h1>
-          user with id: {localStorage.getItem("user")} is created and logged in
+          User with ID: {localStorage.getItem("user")} is created and logged in
         </h1>
         <button
           onClick={() => {
@@ -80,7 +87,7 @@ const SignUp = () => {
             setError(null);
           }}
         >
-          logOut
+          Log Out
         </button>
       </div>
     );
