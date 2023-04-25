@@ -62,6 +62,9 @@ const seeding = async () => {
     // const todo3 = await contractorsApi.addTaskToQueue(contractor1._id.toString(), project1._id, "task 3");
     const getToDo = await contractorsApi.getTaskInProgress(contractor1._id.toString(), project1._id);
     console.log(getToDo);
+    const nextTask = await contractorsApi.startNextTaskInQueue(contractor1._id.toString(), project1._id);
+    const getToDo2 = await contractorsApi.getTaskInProgress(contractor1._id.toString(), project1._id);
+    console.log(getToDo2);
 
   //  await projectsApi.sendReminderEmail(project1._id, contractor1._id);
   // Create users
