@@ -413,7 +413,7 @@ const addEquipment = async (projectId, items) => {
   });
 }
 
-const updateEquipmentDelivered = async (projectId, deliveredItems ) => {
+const updateEquipmentDelivered = async (projectId, deliveredItems) => {
   projectCollection = await projects();
   let currentProject = await projectCollection.findOne({_id: new ObjectId(projectId)});
   if (!currentProject) {
