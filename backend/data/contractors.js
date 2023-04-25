@@ -3,27 +3,44 @@ const users = mongoCollections.users;
 const contractors = mongoCollections.contractors;
 const { ObjectId } = require("mongodb");
 const validation = require("../validation");
+const bcrypt = require("bcrypt");
+const saltRounds = 16;
 
-const createContractor = async (name, email, messages, todo, calendar, bankPayment) => {
-  validation.checkNumOfArgs(arguments, 6);
+const createContractor = async function (name, email, password) {
+  // Input validation
+  validation.checkNumOfArgs(arguments, 3, 3);
   validation.checkIsProper(name, "string", "name");
   validation.checkIsProper(email, "string", "email");
-  validation.checkIsProper(messages, "object", "messages");
-  validation.checkIsProper(todo, "object", "todo");
-  validation.checkIsProper(calendar, "object", "calendar");
-  validation.checkIsProper(bankPayment, "object", "bankPayment");
+  validation.checkIsProper(password, "string", "password");
+  validation.checkPassword(password);
 
+  // Trim whitespace
+  name = name.trim();
+  email = email.trim();
+
+  // Get database
   const contractorCollection = await contractors();
+  if (!contractorCollection) throw "Error: Could not find contractorCollection.";
 
+  // Check if contractor already exists
+  const contractor = await contractorCollection.findOne({ email: email });
+  if (contractor) throw `Error: Contractor already exists with email ${email}.`;
+
+  // Hash password
+  const hash = await bcrypt.hash(password, saltRounds);
+  if (!hash) throw `Error: Could not hash password.`;
+
+  // Create entry
   let newContractor = {
     _id: new ObjectId(),
     name: name,
     email: email,
-    messages: messages,
-    todo: todo,
+    password: hash,
+    messages: [],
+    todo: [],
     inProgress: "No task",
-    calendar: calendar,
-    bankPayment: bankPayment,
+    calendar: [],
+    bankPayment: []
   };
 
   const insertInfo = await contractorCollection.insertOne(newContractor);
@@ -31,6 +48,48 @@ const createContractor = async (name, email, messages, todo, calendar, bankPayme
     throw "Could not add contractor";
   }
   return newContractor;
+}
+
+const checkContractor = async function (email, password) {
+  validation.checkNumOfArgs(arguments, 2, 2);
+  validation.checkIsProper(email, "string", "email");
+  validation.checkIsProper(password, "string", "password");
+
+  // Trim whitespace
+  email = email.trim();
+  password = password.trim();
+
+  const contractorCollection = await contractors();
+  if (!contractorCollection) throw "Error: Could not find contractorCollection.";
+  const contractor = await contractorCollection.findOne({ email: email });
+
+  if (!contractor) throw "Either the email or password is invalid.";
+
+  const match = await bcrypt.compare(password, contractor.password);
+
+  if (!match) throw "Either the email or password is invalid.";
+
+  contractor._id = contractor._id.toString();
+
+  return {
+    _id: contractor._id,
+    name: contractor.name,
+    email: contractor.email,
+    messages: contractor.messages,
+    todo: contractor.todo,
+    inProgress: contractor.inProgress,
+    calendar: contractor.calendar,
+    bankPayment: contractor.bankPayment
+  };
+}
+
+const addTaskToTodo = async function (contractorId, task) {
+  validation.checkNumOfArgs(arguments, 2, 2);
+  validation.checkIsProper(contractorId, "string", "contractorId");
+  validation.checkIsProper(task, "string", "task");
+  validation.checkId(contractorId);
+
+
 }
 
 const getContractor = async (contractorId) => {
@@ -180,6 +239,5 @@ const addTaskToQueue = async (contractorId, projectId, task) => {
 module.exports = {
   createContractor,
   getContractor,
-  createContractor,
   addImage,
 };

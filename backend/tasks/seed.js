@@ -35,6 +35,7 @@ const seeding = async () => {
   const contractor1 = await contractorsApi.createContractor(
     "Venkat Anna",
     "vanna@stevens.edu", // WHEN TESTING, INPUT YOUR EMAIL
+    "Password1-",
     [
       { from: "SenderId1", text: "Hello World!" },
       { from: "SenderId2", text: "Please repsond back asap!" },

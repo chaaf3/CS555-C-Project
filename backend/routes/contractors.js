@@ -58,20 +58,10 @@ router.get("/start_next_task/:contractorId", async (req, res) => {
     res.status(404).json({ error: e });
   }
 });
-router.post("/signIn", async (req, res) => {
-  try {
-    let inputs = req.body.values;
-    console.log(inputs);
-    let signIn = await userData.checkUserAccount(inputs.email, inputs.password);
-    res.send(signIn);
-  } catch (e) {
-    console.log(e.error);
-    res.status(404).json({ error: e });
-  }
-});
+
 router.post("/signUp", async (req, res) => {
   try {
-    console.log("break");
+    console.log("signup");
     let inputs = req.body.values;
     console.log(inputs.name, inputs.email, inputs.password);
     let signUp = await userData.createUser(
@@ -87,5 +77,18 @@ router.post("/signUp", async (req, res) => {
     res.status(404).json({ error: e });
   }
 });
+
+router.post("/signIn", async (req, res) => {
+  try {
+    let inputs = req.body.values;
+    console.log(inputs);
+    let signIn = await userData.checkUserAccount(inputs.email, inputs.password);
+    res.send(signIn);
+  } catch (e) {
+    console.log(e.error);
+    res.status(404).json({ error: e });
+  }
+});
+
 
 module.exports = router;
