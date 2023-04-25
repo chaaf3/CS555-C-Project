@@ -161,7 +161,47 @@ const updateStatus = async (userId, projectId) => {
     return project;
 }
 
+const getBalance = async (userId) => {
+  const userCollection = await users();
+  const user = await userCollection.findOne({ _id: new ObjectId(userId)});
+  if (user === null) {
+      throw "No user with that id found";
+  }
 
+  return user.balance;
+}
+
+const payBill = async (userId, projectId) => {
+  const projectCollection = await projects();
+  currentProject = await projectCollection.findOne({ _id: new ObjectId(projectId)});
+  projectBalance = currentProject.balance;
+
+  user = await getUser(userId);
+  userBalance = user.balance;
+
+  if (projectBalance > userBalance) {
+      throw "Error: User does not have enough money to pay for this project";
+  }
+  if (projectBalance <= 0) {
+    console.log("There is no balance that needs to be paid! Your account is up to date!")
+    return;
+  }
+
+  userBalance -= projectBalance;
+
+  const userCollection = await users();
+  const updateUserBalance = await userCollection.updateOne({_id: new ObjectId(userId)}, {$set: {balance: userBalance}});
+  if (updateUserBalance.modifiedCount !== 1) {
+    throw "Error: Could not update user balance successfully";
+  }
+
+  const updateProjectBalance = await projectCollection.updateOne({_id: new ObjectId(projectId)}, {$set: {balance: 0}});
+  if (updateProjectBalance.modifiedCount !== 1) {
+    throw "Error: Could not update project balance successfully";
+  }
+
+  console.log("The bill was successfully paid! The remaining user balance is: " + userBalance)
+}
 
 const depositMoney = async (userId, amount) => {
     const userCollection = await users();
