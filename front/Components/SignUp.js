@@ -119,17 +119,20 @@ const SignUp = () => {
           <input type="submit" />
         </form>
         {error && <p>{error}</p>}
+        
       </div>
     );
   } else {
     return (
       <div>
+        <header>Home Page</header>
+
         <nav class="nav-bar">
           <Link
             href="Auth"
             class="page-link"
           >
-            Sign In
+            Home
           </Link>
           <Link
             href="Calendar"

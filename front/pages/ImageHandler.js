@@ -35,7 +35,7 @@ const ImageHandler = () => {
           href="Auth"
           class="page-link"
         >
-          Sign In
+          Home
         </Link>
         <Link
           href="Calendar"
