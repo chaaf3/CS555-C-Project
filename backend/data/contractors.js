@@ -85,14 +85,6 @@ const checkContractor = async function (email, password) {
   };
 }
 
-const getMessages = async function (contractorId) {
-  validation.checkNumOfArgs(arguments, 1);
-  validation.checkIsProper(contractorId, "string", "contractorId");
-  validation.checkIsProper(task, "string", "task");
-  validation.checkId(contractorId);
-
-}
-
 const getContractor = async (contractorId) => {
   validation.checkNumOfArgs(arguments, 1);
   validation.checkIsProper(contractorId, "string", "contractorId");
@@ -111,6 +103,16 @@ const getContractor = async (contractorId) => {
     throw e;
   }
 };
+
+const getMessages = async function (contractorId) {
+  validation.checkNumOfArgs(arguments, 1);
+  validation.checkIsProper(contractorId, "string", "contractorId");
+  validation.checkId(contractorId);
+
+  const contractor = await getContractor(contractorId);
+  return contractor.messages;
+}
+
 const addImage = async (contractorId, image) => {
   console.log("made it here");
   try {
