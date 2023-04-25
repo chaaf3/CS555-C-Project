@@ -42,7 +42,8 @@ const createContractor = async function (name, email, password) {
     todo: [],
     inProgress: "No task",
     calendar: [],
-    bankPayment: []
+    bankPayment: [],
+    image: ""
   };
 
   const insertInfo = await contractorCollection.insertOne(newContractor);
@@ -89,19 +90,15 @@ const getContractor = async (contractorId) => {
   validation.checkNumOfArgs(arguments, 1);
   validation.checkIsProper(contractorId, "string", "contractorId");
   validation.checkId(contractorId);
-  try {
-    const contractorCollection = await contractors();
-    const contractor = await contractorCollection.findOne({
-      _id: new ObjectId(contractorId),
-    });
 
-    if (!contractor) throw "Contractor not found";
+  const contractorCollection = await contractors();
+  if (!contractorCollection) throw "Error: Could not find contractorCollection.";
 
-    console.log("Queue: ", contractor.queue);
-    return contractor.queue;
-  } catch (e) {
-    throw e;
-  }
+  const contractor = await contractorCollection.findOne({ _id: new ObjectId(contractorId) });
+  if (!contractor) throw "Error: Contractor not found.";
+
+  contractor._id = contractor._id.toString();
+  return contractor;
 };
 
 const getMessages = async function (contractorId) {
@@ -113,42 +110,27 @@ const getMessages = async function (contractorId) {
   return contractor.messages;
 }
 
-const addImage = async (contractorId, image) => {
-  console.log("made it here");
-  try {
-    let contractorCollection = await contractors();
-    let updatedContractor = await contractorCollection.updateOne(
-      { _id: new ObjectId(contractorId) },
-      { $set: { image: image } }
-    );
+const addMessage = async function (contractorId, messageInfo) {
+  validation.checkNumOfArgs(arguments, 2);
+  validation.checkIsProper(contractorId, "string", "contractorId");
+  validation.checkIsProper(messageInfo, "object", "message");
+  validation.checkId(contractorId);
 
-    if (!updatedContractor.matchedCount && !updatedContractor.modifiedCount) {
-      throw "Update failed";
-    }
-  } catch (e) {
-    console.log(e);
-    throw e;
-  }
-  return image;
-};
+  const contractorCollection = await contractors();
+  if (!contractorCollection) throw "Error: Could not find contractorCollection.";
+  console.log(messageInfo)
+  const updatedInfo = await contractorCollection.updateOne(
+    {_id: new ObjectId(contractorId)},
+    {$push: {messages: messageInfo}}
+  );
+  
+  if (!updatedInfo.matchedCount && !updatedInfo.modifiedCount)
+    throw "Error: Could not add message.";
 
-const getInProgress = async (contractorId) => {
-  try {
-    validation.checkId(contractorId);
+  return await getMessages(contractorId);
+}
 
-    const contractorCollection = await contractors();
-    const contractor = await contractorCollection.findOne({
-      _id: new ObjectId(contractorId),
-    });
 
-    if (Object.keys(contractor.inProgress).length == 0)
-      console.log("In Progress: ", "No task");
-    else console.log("In Progress: ", contractor.inProgress);
-    return contractor.inProgress;
-  } catch (e) {
-    throw e;
-  }
-};
 
 const getProjectsToDo = async function (contractorId) {
   validation.checkNumOfArgs(arguments, 1);
@@ -157,6 +139,31 @@ const getProjectsToDo = async function (contractorId) {
 
   const contractor = await getContractor(contractorId);
   return contractor.todo;
+};
+
+const addProjectToDo = async function (contractorId, projectId) {
+  validation.checkNumOfArgs(arguments, 2);
+  validation.checkIsProper(contractorId, "string", "contractorId");
+  validation.checkIsProper(projectId, "string", "projectId");
+  validation.checkId(contractorId);
+  validation.checkId(projectId);
+
+  const contractorCollection = await contractors();
+  if (!contractorCollection) throw "Error: Could not find contractorCollection.";
+
+  const contractor = await contractorCollection.findOne({ _id: contractorId });
+  if (!contractor) throw "Error: Contractor not found.";
+
+  const updatedContractor = await contractorCollection.updateOne(
+    { _id: new ObjectId(contractorId) },
+    { $push: { todo: projectId } }
+  );
+
+  if (!updatedContractor.matchedCount && !updatedContractor.modifiedCount) {
+    throw "Update failed";
+  }
+
+  return await getContractor(contractorId);
 };
 
 const getTaskInProgress = async function (contractorId, projectId) {
@@ -199,11 +206,34 @@ const startNextTaskInQueue = async function (contractorId, projectId) {
   }
 };
 
+const addImage = async (contractorId, image) => {
+  console.log("made it here");
+  try {
+    let contractorCollection = await contractors();
+    let updatedContractor = await contractorCollection.updateOne(
+      { _id: new ObjectId(contractorId) },
+      { $set: { image: image } }
+    );
+
+    if (!updatedContractor.matchedCount && !updatedContractor.modifiedCount) {
+      throw "Update failed";
+    }
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+  return image;
+};
+
 module.exports = {
   createContractor,
+  checkContractor,
   getContractor,
   getMessages,
+  addMessage,
   getProjectsToDo,
+  addProjectToDo,
   getTaskInProgress,
   startNextTaskInQueue,
+  addImage
 };
