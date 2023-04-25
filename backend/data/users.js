@@ -8,14 +8,15 @@ const validation = require("../validation");
 const bcrypt = require("bcrypt");
 const saltRounds = 16;
 
-const createUser = async function createUser(name, email, password) {
+const createUser = async function createUser(name, email, password, balance) {
   // Input validation
   console.log(name, email, password);
-  validation.checkNumOfArgs(arguments, 3, 3);
+  validation.checkNumOfArgs(arguments, 4, 4);
   validation.checkIsProper(name, "string", "name");
   validation.checkIsProper(email, "string", "email");
   validation.checkIsProper(password, "string", "password");
   validation.checkPassword(password);
+  validation.checkIsProper(balance, "number", "balance")
 
   // Trim whitespace
   name = name.trim();
@@ -39,6 +40,7 @@ const createUser = async function createUser(name, email, password) {
     name: name,
     email: email,
     password: hash,
+    balance: balance,
     messages: [],
     calendar: [],
     status: [],
