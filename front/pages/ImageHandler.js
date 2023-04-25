@@ -6,6 +6,11 @@ const ImageHandler = () => {
   const [display, setDisplay] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    if (!localStorage.getItem("user")) {
+      window.location.href = "/Auth";
+    }
+  }, []);
   async function pleaseWork() {
     try {
       let temp = await axios.get("http://localhost:3001/contractors/images", {
@@ -14,7 +19,7 @@ const ImageHandler = () => {
         },
       });
       setLoading(false);
-      console.log(temp);
+      return temp.data.values.images;
     } catch (e) {
       console.log("error");
       console.log(e);
@@ -22,11 +27,15 @@ const ImageHandler = () => {
   }
   return (
     <div>
-      {!loading && <img src={display} />}
+      {!loading && <img src={image} />}
       <h1>Please enter your image</h1>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
+          if (image == null) {
+            alert("Please enter an image");
+            return;
+          }
           let temp = await axios.post(
             "http://localhost:3001/contractors/images",
             {
@@ -36,7 +45,9 @@ const ImageHandler = () => {
 
           let holder = await pleaseWork();
           let makeImage = new Image();
-          makeImage.src = holder.data;
+          //console.log(holder);
+          makeImage.src = holder;
+          //console.log(holder.images);
           setImage(makeImage.src);
           setLoading(false);
         }}
@@ -47,13 +58,18 @@ const ImageHandler = () => {
           name="image"
           type="file"
           onChange={async (e) => {
-            setLoading(true);
-            let fileReader = new FileReader();
-            await fileReader.readAsDataURL(e.target.files[0]);
-            fileReader.onload = () => {
-              setImage(fileReader.result);
-            };
-            console.log(image);
+            try {
+              setLoading(true);
+              let fileReader = new FileReader();
+              await fileReader.readAsDataURL(e.target.files[0]);
+              fileReader.onload = () => {
+                setImage(fileReader.result);
+              };
+            } catch (e) {
+              console.log(e);
+            }
+
+            //console.log(image);
           }}
         />
         <Button type="submit">Submit</Button>

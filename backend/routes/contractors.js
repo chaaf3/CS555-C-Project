@@ -9,10 +9,12 @@ router.post("/images", async (req, res) => {
 
     let image = req.body;
     console.log(image);
-    let res = await contractorData.addImage("6423ab71b18ce2f0289517a0", image);
-    req.session.user = res.username;
+    let answer = await contractorData.addImage(
+      "6423ab71b18ce2f0289517a0",
+      image
+    );
 
-    res.send("this worked");
+    res.send(answer);
   } catch (e) {
     res.status(404).json({ error: e });
   }

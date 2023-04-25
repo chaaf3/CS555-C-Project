@@ -84,6 +84,7 @@ const addImage = async (contractorId, image) => {
       { _id: new ObjectId(contractorId) },
       { $set: { image: image } }
     );
+
     if (!updatedContractor.matchedCount && !updatedContractor.modifiedCount) {
       throw "Update failed";
     }
@@ -91,7 +92,7 @@ const addImage = async (contractorId, image) => {
     console.log(e);
     throw e;
   }
-  return true;
+  return image;
 };
 
 const getInProgress = async (contractorId) => {
