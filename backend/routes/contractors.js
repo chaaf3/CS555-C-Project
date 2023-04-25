@@ -82,7 +82,7 @@ router.post("/signIn", async (req, res) => {
   try {
     let inputs = req.body.values;
     console.log(inputs);
-    let signIn = await contractorData.checkContractorAccount(inputs.email, inputs.password);
+    let signIn = await contractorData.checkContractor(inputs.email, inputs.password);
     res.send(signIn);
   } catch (e) {
     console.log(e.error);
