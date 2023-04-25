@@ -4,6 +4,34 @@ Hello and welcome to our project!
 
 The goal of this project is to create a communication platform for solar panel installations for both the customer and all parties involved in the installation process. The platform will provide an easy to use interface for customers to schedule installations and receive updates on the status of their project, as well as for installers to communicate with each other. For example, the platform will allow for communication between sales representatives, project managers, and installation teams, allowing them to collaborate to ensure timely and successful installations. The overall goal of the project is to reduce any resistance toward the customer experience or the internal work flow.
 
+### Sprint 4 Review
+
+*Comparing Planned Features to Actual Features*
+
+We were able to complete most of our features this sprint, keeping in tune with our work ethic from the previous sprints. However, finals period is here and most of our group members are swarmed with work from all of our classes. Furthermore, it became harder to avoid dependencies during the final features, as there were a limited options of features to spread around.
+
+*New features as user stories*
+
+This is the final sprint, so there is no ability to add new features as user stories.
+
+*Reflection on Sprint*
+
+While we were able to complete the features, one of the biggest problems we ran into this sprint is realizing the difference between completing our features and completing the project. User stories are great for outlining the project's functionality, but lack the big picture descriptiveness to encapsulate the project. So while we were able to create the components of a website with functionality like the ability for a contractor to upload images of their work, and a user to view their project's current tasks, it becomes increasingly difficult to link all of these features together in an easily accessible manner. On top of the overall complexity of the project since the very beginning, the members of our group take on challenging course sets and additional roles and responsibilities in clubs and extracurricular activities. 
+
+### Sprint 4 Retrospective
+
+*Reflection on Progress*
+
+While percentage wise we were in very good shape, user stories are misleading in the sense that completing functionality does not translate to how close the project is to completion. While we have been doing our best to work concurrently, this has lead to us working on separate features that would require more features before they needed to interact with one another. However, as we finished off the functionality, we filled in the gaps of interaction and thus opened up unexpected issues. Because of the combination of dependencies and final integrations mixed with our already heavy workloads, we still ended up feeling very stressed and anxious about the completion of our project.
+
+*Planning for next sprint*
+
+This is our last sprint so we have not planned for a future sprint.
+
+*Improve the process*
+
+This is our last sprint, but if we were to improve our process for the future, we would want to focus on more rigorous communication with the customer at the very beginning so that we could refine our project strategy now that we have gathered a solid foundation of agile methodologies. 
+
 ### Sprint 3 Review
 
 *Comparing Planned Features to Actual Features*:
