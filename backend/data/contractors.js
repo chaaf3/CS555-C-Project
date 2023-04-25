@@ -1,8 +1,10 @@
 const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
 const contractors = mongoCollections.contractors;
+const projects = mongoCollections.projects;
 const { ObjectId } = require("mongodb");
 const validation = require("../validation");
+const { getProject } = require("./projects");
 
 const createContractor = async function (name, email, messages, todo, calendar, bankPayment) {
   // console.log(arguments.length)
@@ -58,7 +60,7 @@ const getMessages = async function (contractorId) {
   return contractor.messages;
 }
 
-const getToDo = async function (contractorId) {
+const getProjectsToDo = async function (contractorId) {
   validation.checkNumOfArgs(arguments, 1);
   validation.checkIsProper(contractorId, "string", "contractorId");
   validation.checkId(contractorId);
@@ -67,13 +69,24 @@ const getToDo = async function (contractorId) {
   return contractor.todo;
 };
 
-const getInProgress = async function (contractorId) {
-  validation.checkNumOfArgs(arguments, 1);
+const getTaskInProgress = async function (contractorId, projectId) {
+  validation.checkNumOfArgs(arguments, 2);
   validation.checkIsProper(contractorId, "string", "contractorId");
+  validation.checkIsProper(projectId, "string", "projectId");
   validation.checkId(contractorId);
+  validation.checkId(projectId);
 
   const contractor = await getContractor(contractorId);
-  return contractor.inProgress;
+
+  for (i = 0; i < contractor.todo.length; i++) {
+    if (contractor.todo[i] == projectId) {
+     const currentProject = await getProject(projectId);
+     return currentProject.inProgress;
+    }
+    else {
+      throw "Contractor is not working on this project.";
+    }
+  }
 };
 
 const startNextTaskInQueue = async function (contractorId, projectId) {
@@ -166,8 +179,8 @@ module.exports = {
   createContractor,
   getContractor,
   getMessages,
-  getToDo,
-  getInProgress,
+  getProjectsToDo,
+  getTaskInProgress,
   startNextTaskInQueue,
   addTaskToQueue
 };
