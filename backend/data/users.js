@@ -168,7 +168,7 @@ const updateStatus = async (userId, projectId) => {
 
 module.exports = { 
     createUser,
-    checkUser,
+    checkUserAccount,
     getUser,
     updateStatus,
     addMessage

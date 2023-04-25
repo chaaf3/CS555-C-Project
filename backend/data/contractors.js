@@ -1,44 +1,21 @@
 const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
 const contractors = mongoCollections.contractors;
+const projects = mongoCollections.projects;
+const projectApi = require("./projects");
 const { ObjectId } = require("mongodb");
 const validation = require("../validation");
-const { ConnectionCheckedInEvent, StreamDescription } = require("mongodb");
+const { getProject } = require("./projects");
 
-async function getContractor(id) {
-  validation.checkId(id);
-
-  const contractorCollection = await contractors();
-  const contractor = await contractorCollection.findOne({
-    _id: new ObjectId(id),
-  });
-  if (!contractor) {
-    throw "No contractor found with the given id";
-  }
-  return contractor;
-}
-
-async function getMessages(contractor) {
-  validation.checkForValue(contractor);
-
-  let messages = contractor.messages;
-  let builder = [];
-  for (let i = 0; i < messages.length; i++) {
-    builder.push(messages[i].text);
-  }
-  return builder;
-}
-
-async function createContractor(
-  name,
-  email,
-  messages,
-  todo,
-  calendar,
-  bankPayment
-) {
-  validation.checkForValue(name);
-  validation.checkForValue(email);
+const createContractor = async function (name, email, messages, todo, calendar, bankPayment) {
+  // console.log(arguments.length)
+  validation.checkNumOfArgs(arguments, 6);
+  validation.checkIsProper(name, "string", "name");
+  validation.checkIsProper(email, "string", "email");
+  validation.checkIsProper(messages, "object", "messages");
+  validation.checkIsProper(todo, "object", "todo");
+  validation.checkIsProper(calendar, "object", "calendar");
+  validation.checkIsProper(bankPayment, "object", "bankPayment");
 
   const contractorCollection = await contractors();
 
@@ -59,91 +36,84 @@ async function createContractor(
   return newContractor;
 }
 
-const getQueue = async (contractorId) => {
-  try {
-    validation.checkId(contractorId);
-
-    const contractorCollection = await contractors();
-    const contractor = await contractorCollection.findOne({
-      _id: new ObjectId(contractorId),
-    });
-
-    if (!contractor) throw "Contractor not found";
-
-    console.log("Queue: ", contractor.queue);
-    return contractor.queue;
-  } catch (e) {
-    throw e;
-  }
-};
-
-const getInProgress = async (contractorId) => {
-  try {
-    validation.checkId(contractorId);
-
-    const contractorCollection = await contractors();
-    const contractor = await contractorCollection.findOne({
-      _id: new ObjectId(contractorId),
-    });
-
-    if (!contractor) throw "Contractor not found";
-
-    if (Object.keys(contractor.inProgress).length == 0)
-      console.log("In Progress: ", "No task");
-    else console.log("In Progress: ", contractor.inProgress);
-    return contractor.inProgress;
-  } catch (e) {
-    throw e;
-  }
-};
-
-const startNextTaskInQueue = async (contractorId) => {
+const getContractor = async function (contractorId) {
+  validation.checkNumOfArgs(arguments, 1);
+  validation.checkIsProper(contractorId, "string", "contractorId");
   validation.checkId(contractorId);
 
   const contractorCollection = await contractors();
   const contractor = await contractorCollection.findOne({
     _id: new ObjectId(contractorId),
   });
-
-  const queue = contractor.queue;
-  if (queue.length == 0) {
-    console.log("Empty queue!");
-    throw "Empty queue!";
+  if (!contractor) {
+    throw "No contractor found with the given id";
   }
+  return contractor;
+}
 
-  const task = contractor.queue[0];
-  await contractorCollection.updateOne(
-    { _id: new ObjectId(contractorId) },
-    { $pop: { queue: -1 } }
-  );
-  await contractorCollection.updateOne(
-    { _id: new ObjectId(contractorId) },
-    { $set: { inProgress: task } }
-  );
+const getMessages = async function (contractorId) {
+  validation.checkNumOfArgs(arguments, 1);
+  validation.checkIsProper(contractorId, "string", "contractorId");
+  validation.checkId(contractorId);
 
-  const newContractor = await contractorCollection.findOne({
-    _id: new ObjectId(contractorId),
-  });
+  const contractor = await getContractor(contractorId);
+  return contractor.messages;
+}
 
-  console.log("In Progress: ", newContractor.inProgress);
-  console.log("Queue: ", newContractor.queue);
-  return true;
+const getProjectsToDo = async function (contractorId) {
+  validation.checkNumOfArgs(arguments, 1);
+  validation.checkIsProper(contractorId, "string", "contractorId");
+  validation.checkId(contractorId);
+
+  const contractor = await getContractor(contractorId);
+  return contractor.todo;
 };
 
-const addToInQueue = async (contractorId, task) => {
+const getTaskInProgress = async function (contractorId, projectId) {
+  validation.checkNumOfArgs(arguments, 2);
+  validation.checkIsProper(contractorId, "string", "contractorId");
+  validation.checkIsProper(projectId, "string", "projectId");
   validation.checkId(contractorId);
-  validation.checkForValue(task);
+  validation.checkId(projectId);
 
-  const contractorCollection = await contractors();
-  await contractorCollection.updateOne(
-    { _id: ObjectId(contractorId) },
-    { $push: { queue: task } }
-  );
-  return true;
+  const contractor = await getContractor(contractorId);
+
+  for (i = 0; i < contractor.todo.length; i++) {
+    if (contractor.todo[i] == projectId) {
+     const currentProject = await getProject(projectId);
+     return currentProject.inProgress;
+    }
+    else {
+      throw "Contractor is not working on this project.";
+    }
+  }
+};
+
+const startNextTaskInQueue = async function (contractorId, projectId) {
+  validation.checkNumOfArgs(arguments, 2);
+  validation.checkIsProper(contractorId, "string", "contractorId");
+  validation.checkId(contractorId);
+  validation.checkIsProper(projectId, "string", "projectId");
+  validation.checkId(projectId);
+
+  const contractor = await getContractor(contractorId);
+
+  for (i = 0; i < contractor.todo.length; i++) {
+    if (contractor.todo[i] == projectId) {
+     projectApi.updateTaskStatus(projectId);
+     return;
+    }
+    else {
+      throw "Contractor is not working on this project.";
+    }
+  }
 };
 
 module.exports = {
+  createContractor,
   getContractor,
   getMessages,
-  createContractor,
+  getProjectsToDo,
+  getTaskInProgress,
+  startNextTaskInQueue,
 };

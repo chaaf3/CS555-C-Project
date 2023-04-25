@@ -468,8 +468,7 @@ const createComment = async (projectId, taskNum, comment) =>
   return updatedInfo;
 }
 
-const getComments = async (projectId) => 
-{
+const getComments = async (projectId) => {
   let currentProject = await getProject(projectId)
   return currentProject.comments
 }

@@ -11,11 +11,13 @@ app.use(cors());
 let temp;
 async function tempTasks() {
   try {
+    let contractor = await data.contractors.getContractor('64361527b1dffa1323bd8e88');
+    console.log(contractor);
     // await data.projects.createNotes("641df29e45e0bf37635280e4", "Let user add their choice of roof side for solar pannel")
     // console.log("Notes created")
     // await data.projects.createNotes("641df29e45e0bf37635280e4", "Need new solars panels for left side of the roof")
     // console.log("Notes created")
-    notes = await data.projects.getNotes("641df29e45e0bf37635280e4")
+    // notes = await data.projects.getNotes("641df29e45e0bf37635280e4")
   } catch (e) {
     console.log(e)
   }
