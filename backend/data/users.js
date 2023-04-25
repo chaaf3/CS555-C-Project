@@ -2,6 +2,7 @@ const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
 const projects = mongoCollections.projects;
 const contractors = mongoCollections.contractors;
+const projectsApi = require("./projects");
 const { ObjectId } = require("mongodb");
 const data = require(".");
 const validation = require("../validation");
@@ -112,10 +113,6 @@ const getUser = async (id) => {
     return user;
 }
 
-
-
-
-
 const addMessage = async (userId, message) => {
     
      validation.checkIsProper(message, 'string', 'message');
@@ -136,7 +133,6 @@ const addMessage = async (userId, message) => {
     await userCollection.updateOne({_id: new ObjectId(userId)}, {$push: {messages: message}});
 
     return user;
-
 }
 
 const updateStatus = async (userId, projectId) => {
@@ -146,7 +142,6 @@ const updateStatus = async (userId, projectId) => {
     // Trim whitespace
     userId = userId.toString().trim();
     projectId = projectId.toString().trim()
-
 
     const projectCollection = await projects();
     if(!projectCollection) throw `Error: Could not find projectCollection.`;
@@ -164,8 +159,35 @@ const updateStatus = async (userId, projectId) => {
     return project;
 }
 
+const payBill = async (userId, projectId) => {
+    currentProject = projectsApi.getProject(projectId);
+    projectBalance = currentProject.balance;
 
+    user = getUser(userId);
+    userBalance = user.balance;
 
+    if (projectBalance > userBalance) {
+        throw "Error: User does not have enough money to pay for this project";
+    }
+
+    userBalance -= projectBalance;
+  
+    const userCollection = await users();
+    const updateUserBalance = await userCollection.updateOne({_id: new ObjectId(userId)}, {$set: {balance: userBalance}});
+    if (updateUserBalance.modifiedCount !== 1) {
+      throw "Error: Could not update user balance successfully";
+    }
+
+    const projectCollection = await projects();
+    const updateProjectBalance = await projectCollection.updateOne({_id: new ObjectId(projectId)}, {$set: {balance: 0}});
+    if (updateProjectBalance.modifiedCount !== 1) {
+      throw "Error: Could not update project balance successfully";
+    }
+
+    console.log("The bill was successfully paid! The remaining user balance is: " + userBalance)
+  }
+
+  
 // Messages and calendar code can be reused from contractors.js
 
 module.exports = { 
@@ -173,7 +195,8 @@ module.exports = {
     checkUserAccount,
     getUser,
     updateStatus,
-    addMessage
+    addMessage,
+    payBill
 }
 
 
