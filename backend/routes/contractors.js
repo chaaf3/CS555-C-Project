@@ -64,7 +64,7 @@ router.post("/signUp", async (req, res) => {
     console.log("signup");
     let inputs = req.body.values;
     console.log(inputs.name, inputs.email, inputs.password);
-    let signUp = await userData.createUser(
+    let signUp = await contractorData.createContractor(
       inputs.name,
       inputs.email,
       inputs.password
@@ -82,7 +82,7 @@ router.post("/signIn", async (req, res) => {
   try {
     let inputs = req.body.values;
     console.log(inputs);
-    let signIn = await userData.checkUserAccount(inputs.email, inputs.password);
+    let signIn = await contractorData.checkContractorAccount(inputs.email, inputs.password);
     res.send(signIn);
   } catch (e) {
     console.log(e.error);
