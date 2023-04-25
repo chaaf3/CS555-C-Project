@@ -22,7 +22,8 @@ router.post("/signUp", async (req, res) => {
     let signUp = await userData.createUser(
       inputs.name,
       inputs.email,
-      inputs.password
+      inputs.password,
+      0
     );
     console.log("here");
     console.log(signUp);

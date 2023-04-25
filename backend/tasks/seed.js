@@ -33,6 +33,24 @@ const seeding = async () => {
   // const project3ReminderDate = await projectsApi.setReminderDate(project3._id)
 
   // Create contractors
+  const contractor1 = await contractorsApi.createContractor(
+    "Venkat Anna",
+    "vanna@stevens.edu", // WHEN TESTING, INPUT YOUR EMAIL
+    "Password1-",
+    [
+      { from: "SenderId1", text: "Hello World!" },
+      { from: "SenderId2", text: "Please repsond back asap!" },
+    ],
+    [project1._id, project2._id],
+    [
+      { projectId: project1._id, date: project1.dueDate },
+      { projectId: project2._id, date: project2.dueDate },
+    ],
+    [
+      { projectId: project1._id, approved: true },
+      { projectId: project2._id, approved: false },
+    ]
+  );
   // const contractor1 = await contractorsApi.createContractor(
   //   "Venkat Anna",
   //   "vanna@stevens.edu", // WHEN TESTING, INPUT YOUR EMAIL
@@ -56,7 +74,6 @@ const seeding = async () => {
 
   
     
-    const contractor1 = await contractorsApi.createContractor("Audie Breslin", "abreslin@stevens.edu", [], [project1._id, project2._id], [], []);
     const projectsToDo = await contractorsApi.getProjectsToDo(contractor1._id.toString());
     console.log(projectsToDo);
     // const todo1 = await contractorsApi.addTaskToQueue(contractor1._id.toString(), project1._id, "task 1");
