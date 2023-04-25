@@ -22,7 +22,8 @@ const createContractor = async function (name, email, password) {
 
   // Get database
   const contractorCollection = await contractors();
-  if (!contractorCollection) throw "Error: Could not find contractorCollection.";
+  if (!contractorCollection)
+    throw "Error: Could not find contractorCollection.";
 
   // Check if contractor already exists
   const contractor = await contractorCollection.findOne({ email: email });
@@ -41,7 +42,7 @@ const createContractor = async function (name, email, password) {
     messages: [],
     todo: [],
     inProgress: "No task",
-    image: ""
+    image: "",
   };
 
   const insertInfo = await contractorCollection.insertOne(newContractor);
@@ -49,7 +50,7 @@ const createContractor = async function (name, email, password) {
     throw "Could not add contractor";
   }
   return newContractor;
-}
+};
 
 const checkContractor = async function (email, password) {
   validation.checkNumOfArgs(arguments, 2, 2);
@@ -61,7 +62,8 @@ const checkContractor = async function (email, password) {
   password = password.trim();
 
   const contractorCollection = await contractors();
-  if (!contractorCollection) throw "Error: Could not find contractorCollection.";
+  if (!contractorCollection)
+    throw "Error: Could not find contractorCollection.";
   const contractor = await contractorCollection.findOne({ email: email });
 
   if (!contractor) throw "Either the email or password is invalid.";
@@ -78,9 +80,9 @@ const checkContractor = async function (email, password) {
     email: contractor.email,
     messages: contractor.messages,
     todo: contractor.todo,
-    inProgress: contractor.inProgress
+    inProgress: contractor.inProgress,
   };
-}
+};
 
 const getContractor = async (contractorId) => {
   validation.checkNumOfArgs(arguments, 1);
@@ -88,9 +90,12 @@ const getContractor = async (contractorId) => {
   validation.checkId(contractorId);
 
   const contractorCollection = await contractors();
-  if (!contractorCollection) throw "Error: Could not find contractorCollection.";
+  if (!contractorCollection)
+    throw "Error: Could not find contractorCollection.";
 
-  const contractor = await contractorCollection.findOne({ _id: new ObjectId(contractorId) });
+  const contractor = await contractorCollection.findOne({
+    _id: new ObjectId(contractorId),
+  });
   if (!contractor) throw "Error: Contractor not found.";
 
   contractor._id = contractor._id.toString();
@@ -104,7 +109,7 @@ const getMessages = async function (contractorId) {
 
   const contractor = await getContractor(contractorId);
   return contractor.messages;
-}
+};
 
 const addMessage = async function (contractorId, messageInfo) {
   validation.checkNumOfArgs(arguments, 2);
@@ -113,20 +118,19 @@ const addMessage = async function (contractorId, messageInfo) {
   validation.checkId(contractorId);
 
   const contractorCollection = await contractors();
-  if (!contractorCollection) throw "Error: Could not find contractorCollection.";
+  if (!contractorCollection)
+    throw "Error: Could not find contractorCollection.";
 
   const updatedInfo = await contractorCollection.updateOne(
-    {_id: new ObjectId(contractorId)},
-    {$push: {messages: messageInfo}}
+    { _id: new ObjectId(contractorId) },
+    { $push: { messages: messageInfo } }
   );
-  
+
   if (!updatedInfo.matchedCount && !updatedInfo.modifiedCount)
     throw "Error: Could not add message.";
 
   return await getMessages(contractorId);
-}
-
-
+};
 
 const getProjectsToDo = async function (contractorId) {
   validation.checkNumOfArgs(arguments, 1);
@@ -145,9 +149,12 @@ const addProjectToDo = async function (contractorId, projectId) {
   validation.checkId(projectId);
 
   const contractorCollection = await contractors();
-  if (!contractorCollection) throw "Error: Could not find contractorCollection.";
+  if (!contractorCollection)
+    throw "Error: Could not find contractorCollection.";
 
-  const contractor = await contractorCollection.findOne({ _id: new ObjectId(contractorId)});
+  const contractor = await contractorCollection.findOne({
+    _id: new ObjectId(contractorId),
+  });
   if (!contractor) throw "Error: Contractor not found.";
 
   const updatedContractor = await contractorCollection.updateOne(
@@ -170,17 +177,20 @@ const getTaskInProgress = async function (contractorId, projectId) {
   validation.checkId(projectId);
 
   const contractorCollection = await contractors();
-  if (!contractorCollection) throw "Error: Could not find contractorCollection.";
+  if (!contractorCollection)
+    throw "Error: Could not find contractorCollection.";
   const contractor = await getContractor(contractorId);
   if (!contractor) throw "Error: Contractor not found.";
 
   for (i = 0; i < contractor.todo.length; i++) {
     if (contractor.todo[i] == projectId) {
-     const currentProject = await projectApi.getProject(projectId);
-     await contractorCollection.updateOne( { _id: new ObjectId(contractorId) }, { $set: { inProgress: currentProject.inProgress } } );
-     return currentProject.inProgress;
-    }
-    else {
+      const currentProject = await projectApi.getProject(projectId);
+      await contractorCollection.updateOne(
+        { _id: new ObjectId(contractorId) },
+        { $set: { inProgress: currentProject.inProgress } }
+      );
+      return currentProject.inProgress;
+    } else {
       throw "Contractor is not working on this project.";
     }
   }
@@ -197,10 +207,9 @@ const startNextTaskInQueue = async function (contractorId, projectId) {
 
   for (i = 0; i < contractor.todo.length; i++) {
     if (contractor.todo[i] == projectId) {
-     await projectApi.updateTaskStatus(projectId);
-     return contractor;
-    }
-    else {
+      await projectApi.updateTaskStatus(projectId);
+      return contractor;
+    } else {
       throw "Contractor is not working on this project.";
     }
   }
@@ -235,5 +244,5 @@ module.exports = {
   addProjectToDo,
   getTaskInProgress,
   startNextTaskInQueue,
-  addImage
+  addImage,
 };
