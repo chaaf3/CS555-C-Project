@@ -185,9 +185,20 @@ const payBill = async (userId, projectId) => {
     }
 
     console.log("The bill was successfully paid! The remaining user balance is: " + userBalance)
-  }
+}
 
-  
+const depositMoney = async (userId, amount) => {
+    const userCollection = await users();
+    user = getUser(userId);
+    userBalance = user.balance;
+
+    userBalance += amount;
+
+    const updateUserBalance = await userCollection.updateOne({_id: new ObjectId(userId)}, {$set: {balance: userBalance}});
+    if (updateUserBalance.modifiedCount !== 1) {
+      throw "Error: Could not update user balance successfully";
+    }
+}   
 // Messages and calendar code can be reused from contractors.js
 
 module.exports = { 
@@ -196,7 +207,8 @@ module.exports = {
     getUser,
     updateStatus,
     addMessage,
-    payBill
+    payBill, 
+    depositMoney
 }
 
 
