@@ -24,20 +24,18 @@ const checkIsProper = function checkIsProper (val, varType, variableName) {
    : `Error: Trimmed ${variableName || 'provided variable'} must be at least ${length} characters long.`;
 };
 
-const checkId = (id) => {
-  if (!id) {
-    throw "Please provide an id";
-  }
-  if (typeof id != "string") {
-    throw "id must be a string";
-  }
+const checkId = function checkId(id, varName) {
+  if (!id) throw `Error: You must provide a ${varName}`;
+  if (typeof id !== 'string') throw `Error: ${varName} must be a string`;
   id = id.trim();
-  if (id.length === 0) {
-    throw "id must not be an empty string";
-  }
-  if (!ObjectId.isValid(id)) {
-    throw "Invalid objectId";
-  }
+  if (id.length === 0)
+    throw `Error: ${varName} cannot be an empty string or just spaces`;
+  
+  // apparently this is a better check than ObjectId.isValid(), according to
+  // https://stackoverflow.com/questions/13850819/can-i-determine-if-a-string-is-a-mongodb-objectid
+  if(id != new ObjectId(id)) throw `Error: ID is not a valid ObjectId.`;
+  
+  return id;
 };
 
 const checkPassword = function checkPassword(password) {

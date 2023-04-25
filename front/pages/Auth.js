@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Inter } from "next/font/google";
-import Calendar from "../Components/Calendar";
+import Calendar from "./Calendar";
 import ImageHandler from "./ImageHandler";
 import SignIn from "@/Components/SignIn";
 import SignUp from "@/Components/SignUp";
@@ -23,7 +23,7 @@ export default function Auth() {
             setAlreadyHave(!alreadyHave);
           }}
         >
-          Don't have an account? sign up
+          Don't have an account? Sign up
         </button>
       </div>
     );

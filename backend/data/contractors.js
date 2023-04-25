@@ -3,42 +3,15 @@ const users = mongoCollections.users;
 const contractors = mongoCollections.contractors;
 const { ObjectId } = require("mongodb");
 const validation = require("../validation");
-const { ConnectionCheckedInEvent, StreamDescription } = require("mongodb");
 
-async function getContractor(id) {
-  validation.checkId(id);
-
-  const contractorCollection = await contractors();
-  const contractor = await contractorCollection.findOne({
-    _id: new ObjectId(id),
-  });
-  if (!contractor) {
-    throw "No contractor found with the given id";
-  }
-  return contractor;
-}
-
-async function getMessages(contractor) {
-  validation.checkForValue(contractor);
-
-  let messages = contractor.messages;
-  let builder = [];
-  for (let i = 0; i < messages.length; i++) {
-    builder.push(messages[i].text);
-  }
-  return builder;
-}
-
-async function createContractor(
-  name,
-  email,
-  messages,
-  todo,
-  calendar,
-  bankPayment
-) {
-  validation.checkForValue(name);
-  validation.checkForValue(email);
+const createContractor = async (name, email, messages, todo, calendar, bankPayment) => {
+  validation.checkNumOfArgs(arguments, 6);
+  validation.checkIsProper(name, "string", "name");
+  validation.checkIsProper(email, "string", "email");
+  validation.checkIsProper(messages, "object", "messages");
+  validation.checkIsProper(todo, "object", "todo");
+  validation.checkIsProper(calendar, "object", "calendar");
+  validation.checkIsProper(bankPayment, "object", "bankPayment");
 
   const contractorCollection = await contractors();
 
@@ -48,6 +21,7 @@ async function createContractor(
     email: email,
     messages: messages,
     todo: todo,
+    inProgress: "No task",
     calendar: calendar,
     bankPayment: bankPayment,
   };
@@ -59,10 +33,11 @@ async function createContractor(
   return newContractor;
 }
 
-const getQueue = async (contractorId) => {
+const getContractor = async (contractorId) => {
+  validation.checkNumOfArgs(arguments, 1);
+  validation.checkIsProper(contractorId, "string", "contractorId");
+  validation.checkId(contractorId);
   try {
-    validation.checkId(contractorId);
-
     const contractorCollection = await contractors();
     const contractor = await contractorCollection.findOne({
       _id: new ObjectId(contractorId),
@@ -113,54 +88,98 @@ const getInProgress = async (contractorId) => {
   }
 };
 
-const startNextTaskInQueue = async (contractorId) => {
+const startNextTaskInQueue = async (contractorId, projectId) => {
+  validation.checkNumOfArgs(arguments, 2);
+  validation.checkIsProper(contractorId, "string", "contractorId");
   validation.checkId(contractorId);
+  validation.checkIsProper(projectId, "string", "projectId");
+  validation.checkId(projectId);
 
-  const contractorCollection = await contractors();
-  const contractor = await contractorCollection.findOne({
-    _id: new ObjectId(contractorId),
-  });
+  const contractor = await getContractor(contractorId);
 
-  const queue = contractor.queue;
-  if (queue.length == 0) {
-    console.log("Empty queue!");
-    throw "Empty queue!";
+  const todo = contractor.todo;
+  let target;
+  for (let project of todo) {
+    if (project.projectId == projectId) {
+      target = project;
+    }
+  }
+  if (!target) {
+    throw `Error: No project found with the given id ${projectId}.`;
+  }
+  if (target.tasks.length == 0) {
+    throw "Error: No more tasks in queue.";
   }
 
-  const task = contractor.queue[0];
-  await contractorCollection.updateOne(
-    { _id: new ObjectId(contractorId) },
-    { $pop: { queue: -1 } }
-  );
-  await contractorCollection.updateOne(
-    { _id: new ObjectId(contractorId) },
-    { $set: { inProgress: task } }
-  );
+  const task = target.tasks[0];
+  target.tasks = target.tasks.slice(1);
 
-  const newContractor = await contractorCollection.findOne({
-    _id: new ObjectId(contractorId),
-  });
-
-  console.log("In Progress: ", newContractor.inProgress);
-  console.log("Queue: ", newContractor.queue);
-  return true;
-};
-
-const addToInQueue = async (contractorId, task) => {
-  validation.checkId(contractorId);
-  validation.checkForValue(task);
+  for (let i = 0; i < todo.length; i++) {
+    if (todo[i].projectId == projectId) {
+      todo[i] = target;
+    }
+  }
 
   const contractorCollection = await contractors();
-  await contractorCollection.updateOne(
-    { _id: ObjectId(contractorId) },
-    { $push: { queue: task } }
+  const updated = await contractorCollection.updateOne(
+    { _id: new ObjectId(contractorId) },
+    { $set: {todo: todo, inProgress: task } }
   );
-  return true;
+  if (!updated.acknowledged) {
+    throw "Mongo Error: Could not set next task.";
+  }
+
+  const newContractor = await getContractor(contractorId);
+
+  return await getContractor(contractorId);
+};
+
+const addTaskToQueue = async (contractorId, projectId, task) => {
+  validation.checkNumOfArgs(arguments, 3);
+  validation.checkIsProper(contractorId, "string", "contractorId");
+  validation.checkId(contractorId);
+  validation.checkIsProper(projectId, "string", "projectId");
+  validation.checkId(projectId);
+  validation.checkForValue(task);
+
+  const contractor = await getContractor(contractorId);
+
+  const todo = contractor.todo;
+  let target;
+  for (let project of todo) {
+    if (project.projectId == projectId) {
+      target = project;
+    }
+  }
+  if (!target) {
+    throw `Error: No project found with the given id ${projectId}.`;
+  }
+  if (target.tasks.length == 0) {
+    throw "Error: No more tasks in queue.";
+  }
+
+  target.tasks.push(task);
+
+  for (let i = 0; i < todo.length; i++) {
+    if (todo[i].projectId == projectId) {
+      todo[i] = target;
+    }
+  }
+
+  const contractorCollection = await contractors();
+  const updated = await contractorCollection.updateOne(
+    { _id: new ObjectId(contractorId) },
+    { $set: {todo: todo} }
+  );
+  if (!updated.acknowledged) {
+    throw "Mongo Error: Could not add task to queue.";
+  }
+  return await getContractor(contractorId);
 };
 
 module.exports = {
+  createContractor,
   getContractor,
-  getMessages,
   createContractor,
   addImage,
 };

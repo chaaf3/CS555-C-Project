@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
+
 const SignIn = () => {
   const [email, setEmail] = useState({ email: undefined });
   const [password, setPassword] = useState({ password: undefined });
@@ -16,7 +18,7 @@ const SignIn = () => {
   if (!local) {
     return (
       <div>
-        <h1>Please enter your credentials</h1>
+        <header>Sign In</header>
         <form
           onSubmit={async (e) => {
             e.preventDefault();
@@ -36,7 +38,7 @@ const SignIn = () => {
             }
           }}
         >
-          <label>email:</label>
+          <label>Email:</label>
           <input
             onChange={(e) => {
               setEmail(e.target.value);
@@ -47,7 +49,7 @@ const SignIn = () => {
             value={email.email}
             name="email"
           />
-          <label>password:</label>
+          <label>Password:</label>
           <input
             onChange={(e) => {
               setPassword(e.target.value);
@@ -66,14 +68,19 @@ const SignIn = () => {
   } else {
     return (
       <div>
-        <h1>user with id: {localStorage.getItem("user")} is logged in</h1>;
+        <nav class='nav-bar'>
+          <Link href="Auth" class='page-link'>Sign In</Link>
+          <Link href="Calendar" class='page-link'>Calendar</Link>
+          <Link href="ImageHandler" class='page-link'>Upload Image</Link>
+        </nav>
+        <h1>User with ID: {localStorage.getItem("user")} is logged in</h1>
         <button
           onClick={() => {
             localStorage.clear();
             setLocal(null);
           }}
         >
-          logOut
+          Log Out
         </button>
       </div>
     );

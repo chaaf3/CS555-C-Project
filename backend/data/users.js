@@ -170,5 +170,5 @@ module.exports = {
   checkUserAccount,
   getUser,
   updateStatus,
-  addMessage,
+  addMessage
 };
