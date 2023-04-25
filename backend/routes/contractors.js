@@ -3,6 +3,33 @@ const router = express.Router();
 const data = require("../data");
 const contractorData = data.contractors;
 // const validation = require("../validation");
+router.post("/images", async (req, res) => {
+  try {
+    console.log("break");
+
+    let image = req.body;
+    console.log(image);
+    let answer = await contractorData.addImage(
+      "6423ab71b18ce2f0289517a0",
+      image
+    );
+
+    res.send(answer);
+  } catch (e) {
+    res.status(404).json({ error: e });
+  }
+});
+
+router.get("/images", async (req, res) => {
+  try {
+    let something = await contractorData.getContractor(
+      "6423ab71b18ce2f0289517a0"
+    );
+    res.send(something.image);
+  } catch (e) {
+    res.status(404).json({ error: e });
+  }
+});
 
 router.get("/queue/:contractorId", async (req, res) => {
   try {
@@ -31,5 +58,37 @@ router.get("/start_next_task/:contractorId", async (req, res) => {
     res.status(404).json({ error: e });
   }
 });
+
+router.post("/signUp", async (req, res) => {
+  try {
+    console.log("signup");
+    let inputs = req.body.values;
+    console.log(inputs.name, inputs.email, inputs.password);
+    let signUp = await contractorData.createContractor(
+      inputs.name,
+      inputs.email,
+      inputs.password
+    );
+    console.log("here");
+    console.log(signUp);
+    res.send(signUp);
+  } catch (e) {
+    console.log(e);
+    res.status(404).json({ error: e });
+  }
+});
+
+router.post("/signIn", async (req, res) => {
+  try {
+    let inputs = req.body.values;
+    console.log(inputs);
+    let signIn = await contractorData.checkContractor(inputs.email, inputs.password);
+    res.send(signIn);
+  } catch (e) {
+    console.log(e.error);
+    res.status(404).json({ error: e });
+  }
+});
+
 
 module.exports = router;
