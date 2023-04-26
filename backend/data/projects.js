@@ -5,7 +5,8 @@ const contractorData = require("./contractors");
 var nodemailer = require("nodemailer");
 const validation = require("../validation");
 
-// TODO: need to write project balance field/methods
+// TODO (refactoring): make sure that all functions error check for proper arguments
+// TODO (refactoring): figure out how to incorporate bank request and approval for project payment
 
 let stages = {
   InitialSiteVisit: 5,
@@ -47,15 +48,20 @@ const createProject = async (title, description, dueDate) => {
   validation.checkForValue(description);
   validation.checkForValue(dueDate);
 
+  maxProjectCost = 7500
+  minProjectCost = 2500
+
+  balance = Number((Math.random() * (maxProjectCost - minProjectCost + 1) + minProjectCost).toFixed(2));
+
   const projectCollection = await projects();
   let newProject = {
     title: title,
     description: description,
-    balance: 250,
+    balance: balance,
     tasksToDo: Object.keys(stages),
     inProgress: null,
-    notes: [],
-    comments: [],
+    notes: [], // general notes for the project overall
+    comments: [], // for specific tasks
     dueDate: dueDate,
     reminderDate: null,
     reminderSent: false,
@@ -139,7 +145,6 @@ const bankRequest = function bankRequest(projectId) {
 
   console.log("I am requesting bank approval for my project.");
   const randomNum = getRandomInt(2);
-  console.log(randomNum)
   if (randomNum == 0) {
     console.log("The bank has not approved this project.");
     return false;
@@ -184,7 +189,6 @@ const utilityRequest = function utilityRequest(projectId) {
   
   console.log("I am requesting utility approval for my project.");
   const randomNum = getRandomInt(2);
-  console.log(randomNum)
   if (randomNum == 0) {
     console.log("The utility company has not approved this project.");
     return false;
@@ -255,7 +259,8 @@ const approveContract = async (projectId) => {
     project.contract.approved = true;
     project.contract.dateApproved = new Date();
   } else {
-    throw "Cannot approve contract until all approvals are received";
+    console.log("Cannot approve contract until all approvals are received");
+    return;
   }
 
   const updatedInfo = await projectCollection.updateOne(
@@ -407,7 +412,7 @@ const addEquipment = async (projectId, items) => {
   });
 }
 
-const updateEquipmentDelivered = async (projectId, deliveredItems ) => {
+const updateEquipmentDelivered = async (projectId, deliveredItems) => {
   projectCollection = await projects();
   let currentProject = await projectCollection.findOne({_id: new ObjectId(projectId)});
   if (!currentProject) {
@@ -474,6 +479,12 @@ const createComment = async (projectId, taskNum, comment) =>
 const getComments = async (projectId) => {
   let currentProject = await getProject(projectId)
   return currentProject.comments
+}
+
+const generateBill = async (projectId) => {
+  //balance
+  //dueDate
+  //notes section
 }
 
 module.exports = {

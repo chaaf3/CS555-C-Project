@@ -41,7 +41,7 @@ const createContractor = async function (name, email, password) {
     password: hash,
     messages: [],
     todo: [],
-    inProgress: "No task",
+    inProgress: "No task", // Refactor (possibly remove)
     image: "",
   };
 
@@ -169,6 +169,7 @@ const addProjectToDo = async function (contractorId, projectId) {
   return await getContractor(contractorId);
 };
 
+// Refactor method
 const getTaskInProgress = async function (contractorId, projectId) {
   validation.checkNumOfArgs(arguments, 2);
   validation.checkIsProper(contractorId, "string", "contractorId");
