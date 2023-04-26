@@ -132,6 +132,7 @@ const addMessage = async (userId, message) => {
   return user;
 };
 
+// Refactor (not necessary?)
 const updateStatus = async (userId, projectId) => {
   validation.checkId(userId.toString());
   validation.checkId(projectId.toString());
