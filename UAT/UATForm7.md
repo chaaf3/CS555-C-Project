@@ -1,10 +1,10 @@
 ###  Test Case Name
 
-Input event to day calendar
+Input event to month calendar
 
 ### Description
 
-The user should be able to access the calendar page, switch to the DAY tab, and then input an event with a title, start and end time.
+The user should be able to access the calendar page, switch to the MONTH tab, and then input an event with a title, start and end time.
 
 ### Test Steps
 
@@ -14,7 +14,7 @@ The user should be able to access the calendar page, switch to the DAY tab, and 
 
 3. Click on the calendar page at localhost:3000/Calendar.
 
-4. Click on the DAY tab.
+4. Click on the MONTH tab.
 5. Select a timeslot.
 6. Fill out the pop up form
 7. Click confirm.
