@@ -45,6 +45,12 @@ const ImageHandler = () => {
           Calendar
         </Link>
         <Link
+          href="EnergyBill"
+          class="page-link"
+        >
+          Billing
+        </Link>
+        <Link
           href="ImageHandler"
           class="page-link"
         >

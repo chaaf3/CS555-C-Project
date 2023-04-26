@@ -129,12 +129,18 @@ const SignIn = () => {
             Calendar
           </Link>
           <Link
+            href="EnergyBill"
+            class="page-link"
+          >
+            Billing
+          </Link>
+          <Link
             href="ImageHandler"
             class="page-link"
           >
             Upload Image
           </Link>
-        </nav>
+        </nav>  
         <h1>User with ID: {localStorage.getItem("user")} is logged in</h1>
         <button
           onClick={() => {
