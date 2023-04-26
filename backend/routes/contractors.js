@@ -5,27 +5,19 @@ const contractorData = data.contractors;
 // const validation = require("../validation");
 router.post("/images", async (req, res) => {
   try {
-    console.log("break");
-
-    let image = req.body;
-    console.log(image);
-    let answer = await contractorData.addImage(
-      "6423ab71b18ce2f0289517a0",
-      image
-    );
-
+    let image = req.body.values;
+    let id = req.body.values.id;
+    let answer = await contractorData.addImage(id, image);
     res.send(answer);
   } catch (e) {
     res.status(404).json({ error: e });
   }
 });
 
-router.get("/images", async (req, res) => {
+router.get("/images:id", async (req, res) => {
   try {
-    let something = await contractorData.getContractor(
-      "6423ab71b18ce2f0289517a0"
-    );
-    res.send(something.image);
+    let something = await contractorData.getContractor(req.params.id);
+    res.send(something.image.images);
   } catch (e) {
     res.status(404).json({ error: e });
   }
@@ -61,7 +53,6 @@ router.get("/start_next_task/:contractorId", async (req, res) => {
 
 router.post("/signUp", async (req, res) => {
   try {
-    console.log("signup");
     let inputs = req.body.values;
     console.log(inputs.name, inputs.email, inputs.password);
     let signUp = await contractorData.createContractor(
@@ -70,7 +61,6 @@ router.post("/signUp", async (req, res) => {
       inputs.password
     );
     console.log("here");
-    console.log(signUp);
     res.send(signUp);
   } catch (e) {
     console.log(e);
@@ -82,13 +72,15 @@ router.post("/signIn", async (req, res) => {
   try {
     let inputs = req.body.values;
     console.log(inputs);
-    let signIn = await contractorData.checkContractor(inputs.email, inputs.password);
+    let signIn = await contractorData.checkContractor(
+      inputs.email,
+      inputs.password
+    );
     res.send(signIn);
   } catch (e) {
     console.log(e.error);
     res.status(404).json({ error: e });
   }
 });
-
 
 module.exports = router;

@@ -217,7 +217,7 @@ const startNextTaskInQueue = async function (contractorId, projectId) {
 };
 
 const addImage = async (contractorId, image) => {
-  console.log("made it here");
+  image = image;
   try {
     let contractorCollection = await contractors();
     let updatedContractor = await contractorCollection.updateOne(

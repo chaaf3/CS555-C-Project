@@ -16,13 +16,19 @@ export default function Home() {
           href="Auth"
           class="page-link"
         >
-          Sign In
+          Home
         </Link>
         <Link
           href="Calendar"
           class="page-link"
         >
           Calendar
+        </Link>
+        <Link
+          href="EnergyBill"
+          class="page-link"
+        >
+          Billing
         </Link>
         <Link
           href="ImageHandler"
