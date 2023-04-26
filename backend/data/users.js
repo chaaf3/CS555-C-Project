@@ -45,6 +45,7 @@ const createUser = async function createUser(name, email, password, balance) {
     messages: [],
     calendar: [],
     status: [],
+    project: null,
   };
 
   // Insert entry
