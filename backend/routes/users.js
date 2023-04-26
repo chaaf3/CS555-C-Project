@@ -33,4 +33,16 @@ router.post("/signUp", async (req, res) => {
     res.status(404).json({ error: e });
   }
 });
+
+router.get("/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let user = await userData.getUser(id);
+    res.send(user);
+  } catch (e) {
+    console.log(e);
+    res.status(404).json({ error: e });
+  }
+});
+
 module.exports = router;

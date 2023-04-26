@@ -93,6 +93,7 @@ const checkUserAccount = async function checkUserAccount(email, password) {
     messages: user.messages,
     calendar: user.calendar,
     status: user.status,
+    project: user.project,
   };
 };
 
@@ -233,6 +234,42 @@ const depositMoney = async (userId, amount) => {
   }
 };
 
+const getProject = async function (userId) {
+  validation.checkNumOfArgs(arguments, 1);
+  validation.checkIsProper(userId, "string", "contractorId");
+  validation.checkId(userId);
+
+  const contractor = await getUser(userId);
+  return contractor.project;
+};
+
+const addProject = async function (userId, projectId) {
+  validation.checkNumOfArgs(arguments, 2);
+  validation.checkIsProper(userId, "string", "contractorId");
+  validation.checkIsProper(projectId, "string", "projectId");
+  validation.checkId(userId);
+  validation.checkId(projectId);
+
+  const userCollection = await users();
+  if (!userCollection) throw "Error: Could not find contractorCollection.";
+
+  const user = await userCollection.findOne({
+    _id: new ObjectId(userId),
+  });
+  if (!user) throw "Error: User not found.";
+
+  const updatedUser = await userCollection.updateOne(
+    { _id: new ObjectId(userId) },
+    { $push: { todo: projectId } }
+  );
+
+  if (!updatedUser.matchedCount && !updatedUser.modifiedCount) {
+    throw "Update failed";
+  }
+
+  return await getUser(userId);
+};
+
 // Messages and calendar code can be reused from contractors.js
 
 module.exports = {
@@ -244,4 +281,6 @@ module.exports = {
   getBalance,
   payBill,
   depositMoney,
+  addProject,
+  getProject,
 };
