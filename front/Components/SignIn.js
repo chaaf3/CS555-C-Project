@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import UserDashboard from "./UserDashboard";
+import ContractorDashboard from "./ContractorDashboard";
 
 const SignIn = () => {
   const [email, setEmail] = useState({ email: undefined });
@@ -108,7 +110,6 @@ const SignIn = () => {
           <input type="submit" />
         </form>
         {error && <p>{error}</p>}
-        
       </div>
     );
   } else {
@@ -116,32 +117,22 @@ const SignIn = () => {
       <div>
         <header>Home Page</header>
         <nav class="nav-bar">
-          <Link
-            href="Auth"
-            class="page-link"
-          >
+          <Link href="Auth" class="page-link">
             Home
           </Link>
-          <Link
-            href="Calendar"
-            class="page-link"
-          >
+          <Link href="Calendar" class="page-link">
             Calendar
           </Link>
-          <Link
-            href="EnergyBill"
-            class="page-link"
-          >
+          <Link href="EnergyBill" class="page-link">
             Billing
           </Link>
-          <Link
-            href="ImageHandler"
-            class="page-link"
-          >
+          <Link href="ImageHandler" class="page-link">
             Upload Image
           </Link>
-        </nav>  
+        </nav>
         <h1>User with ID: {localStorage.getItem("user")} is logged in</h1>
+        {/* <UserDashboard /> */}
+        <ContractorDashboard />
         <button
           onClick={() => {
             localStorage.clear();

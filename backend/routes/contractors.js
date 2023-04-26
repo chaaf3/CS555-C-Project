@@ -23,11 +23,11 @@ router.get("/images:id", async (req, res) => {
   }
 });
 
-router.get("/queue/:contractorId", async (req, res) => {
+router.get("/todo/:contractorId", async (req, res) => {
   try {
     let id = req.params.contractorId;
-    let queue = await contractorData.getQueue(id);
-    res.send(queue);
+    let todo = await contractorData.getProjectsToDo(id);
+    res.send(todo);
   } catch (e) {
     res.status(404).json({ error: e });
   }
