@@ -33,6 +33,7 @@ const SignIn = () => {
                 );
                 console.log(localStorage.getItem("user"));
                 localStorage.setItem("user", temp.data._id);
+                localStorage.setItem("type", "user");
                 setLocal(temp.data._id);
               } catch (e) {
                 setError(e.response.data.error);
@@ -48,6 +49,7 @@ const SignIn = () => {
                 );
                 localStorage.setItem("user", temp.data._id);
                 setLocal(temp.data._id);
+                localStorage.setItem("type", "contractor");
               } catch (e) {
                 setError(e.response.data.error);
                 throw "bad inputs";

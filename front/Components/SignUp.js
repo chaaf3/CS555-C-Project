@@ -30,6 +30,7 @@ const SignUp = () => {
                   }
                 );
                 localStorage.setItem("user", temp.data._id);
+                localStorage.setItem("type", "user");
                 setLocal(temp.data._id);
               } catch (e) {
                 console.log(e.response.data.error);
@@ -50,6 +51,7 @@ const SignUp = () => {
                 );
                 localStorage.setItem("user", temp.data._id);
                 setLocal(temp.data._id);
+                localStorage.setItem("type", "contractor");
               } catch (e) {
                 console.log(e.response.data.error);
                 setError(e.response.data.error);

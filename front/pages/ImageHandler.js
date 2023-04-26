@@ -8,27 +8,28 @@ const ImageHandler = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!localStorage.getItem("user")) {
+    if (
+      !localStorage.getItem("user") ||
+      localStorage.getItem("type") != "contractor"
+    ) {
       window.location.href = "/Auth";
     }
   }, []);
   async function pleaseWork() {
     try {
-      let temp = await axios.get("http://localhost:3001/contractors/images", {
-        values: {
-          id: "6423ab71b18ce2f0289517a0",
-        },
-      });
+      let temp = await axios.get(
+        `http://localhost:3001/contractors/images${localStorage.getItem(
+          "user"
+        )}`
+      );
       setLoading(false);
-      return temp.data.values.images;
+      return temp.data;
     } catch (e) {
-      console.log("error");
       console.log(e);
     }
   }
   return (
     <div>
-      {!loading && <img src={display} />}
       <header>Please enter your image</header>
       <nav class="nav-bar">
         <Link
@@ -60,13 +61,11 @@ const ImageHandler = () => {
           let temp = await axios.post(
             "http://localhost:3001/contractors/images",
             {
-              values: { images: image },
+              values: { images: image, id: localStorage.getItem("user") },
             }
           );
-
           let holder = await pleaseWork();
           let makeImage = new Image();
-          //console.log(holder);
           makeImage.src = holder;
           //console.log(holder.images);
           setImage(makeImage.src);
@@ -79,18 +78,12 @@ const ImageHandler = () => {
           name="image"
           type="file"
           onChange={async (e) => {
-            try {
-              setLoading(true);
-              let fileReader = new FileReader();
-              await fileReader.readAsDataURL(e.target.files[0]);
-              fileReader.onload = () => {
-                setImage(fileReader.result);
-              };
-            } catch (e) {
-              console.log(e);
-            }
-
-            //console.log(image);
+            setLoading(true);
+            let fileReader = new FileReader();
+            await fileReader.readAsDataURL(e.target.files[0]);
+            fileReader.onload = () => {
+              setImage(fileReader.result);
+            };
           }}
         />
         <input
@@ -98,6 +91,8 @@ const ImageHandler = () => {
           value="Submit"
         />
       </form>
+
+      {!loading && <img src={image} />}
     </div>
   );
 };
