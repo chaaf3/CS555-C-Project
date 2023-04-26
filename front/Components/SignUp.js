@@ -148,7 +148,7 @@ const SignUp = () => {
           User with ID: {localStorage.getItem("user")} is created and logged in
         </h1>
         <ContractorDashboard />
-        <button
+        <button className='logout'
           onClick={() => {
             localStorage.clear();
             setLocal(null);
