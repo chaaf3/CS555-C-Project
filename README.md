@@ -151,7 +151,7 @@ Third, to seed the database, go back to the `backend/` folder, and type
 
 To populate the databases.
 
-Now, when you navigate to http://localhost:3000, sign in as vanna@stevens.edu, Password1- as a contractor in order to view your projects. 
+Now, when you navigate to http://localhost:3000, sign in as vanna@stevens.edu, Password1- as a contractor in order to view your projects. You can also sign in as abreslin@stevens.edu with ILoveCoding0^, or as chaaf@stevens.edu with Password123! for populated users. Feel free to create your own!
 
 Run
 
