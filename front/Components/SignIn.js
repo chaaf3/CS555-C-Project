@@ -138,7 +138,7 @@ const SignIn = () => {
         )}
         {/**/}
 
-        <button
+        <button className='logout'
           onClick={() => {
             localStorage.clear();
             setLocal(null);

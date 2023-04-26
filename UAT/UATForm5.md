@@ -4,7 +4,7 @@ Input event to day calendar
 
 ### Description
 
-The user should be able to access the calendar page, switch to the Today tab, and then input an event with a title, start and end time.
+The user should be able to access the calendar page, switch to the DAY tab, and then input an event with a title, start and end time.
 
 ### Test Steps
 
@@ -12,7 +12,7 @@ The user should be able to access the calendar page, switch to the Today tab, an
 
 2. Sign in or sign up, as done by previous forms.
 
-3. Click on the calendar page.
+3. Click on the calendar page at localhost:3000/Calendar.
 
 4. Click on the DAY tab.
 5. Select a timeslot.
@@ -34,4 +34,4 @@ The event is now viewable on the calendar.
 [  ] Fail 
 
 ### Name
-Chris Davis
+Jack Liedtka
