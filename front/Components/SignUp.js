@@ -128,25 +128,31 @@ const SignUp = () => {
         <header>Home Page</header>
 
         <nav class="nav-bar">
-          <Link
-            href="Auth"
-            class="page-link"
-          >
-            Home
-          </Link>
-          <Link
-            href="Calendar"
-            class="page-link"
-          >
-            Calendar
-          </Link>
-          <Link
-            href="ImageHandler"
-            class="page-link"
-          >
-            Upload Image
-          </Link>
-        </nav>
+        <Link
+          href="Auth"
+          class="page-link"
+        >
+          Home
+        </Link>
+        <Link
+          href="Calendar"
+          class="page-link"
+        >
+          Calendar
+        </Link>
+        <Link
+          href="EnergyBill"
+          class="page-link"
+        >
+          Billing
+        </Link>
+        <Link
+          href="ImageHandler"
+          class="page-link"
+        >
+          Upload Image
+        </Link>
+      </nav>
         <h1>
           User with ID: {localStorage.getItem("user")} is created and logged in
         </h1>
