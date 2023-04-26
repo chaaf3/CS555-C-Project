@@ -4,6 +4,8 @@ Hello and welcome to our project!
 
 The goal of this project is to create a communication platform for solar panel installations for both the customer and all parties involved in the installation process. The platform will provide an easy to use interface for customers to schedule installations and receive updates on the status of their project, as well as for installers to communicate with each other. For example, the platform will allow for communication between sales representatives, project managers, and installation teams, allowing them to collaborate to ensure timely and successful installations. The overall goal of the project is to reduce any resistance toward the customer experience or the internal work flow.
 
+
+
 ### Sprint 4 Review
 
 *Comparing Planned Features to Actual Features*
@@ -12,7 +14,7 @@ We were able to complete most of our features this sprint, keeping in tune with 
 
 *New features as user stories*
 
-This is the final sprint, so there is no ability to add new features as user stories.
+This is the final sprint, so there is no ability to add new features as user stories. The user acceptance tests have been added in the UAT folder on the repository. 
 
 *Reflection on Sprint*
 
@@ -26,7 +28,7 @@ While percentage wise we were in very good shape, user stories are misleading in
 
 *Planning for next sprint*
 
-This is our last sprint so we have not planned for a future sprint.
+This is our last sprint so we have not planned for a future sprint. However, we do have some refactoring changes still in mind to consider over the final week we are given. 
 
 *Improve the process*
 
@@ -124,32 +126,38 @@ Now that we have gotten accustomed to our technologies and created our framework
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## To Run
 
-In the project directory, you can run:
+In the project directory, go to the `backend/ `folder in your CLI. Then, type
 
 ### `npm start`
 
-Runs the app in the development mode.\
+To run the app in the development mode.
+
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+This must be run from within the `backend/` folder, and be run in conjunction with the frontend.
+
+Then, in a separate CLI window, go to the `front/` folder, and type 
+
+### `npm run dev`
+
+To build the app for production to the `dev` folder.\
+This is how the front end is run, this must be run in conjunction with the backend.
+
+Third, to seed the database, go back to the `backend/` folder, and type
+
+### `npm run seed`
+
+To populate the databases.
+
+Now, when you navigate to http://localhost:3000, sign in as vanna@stevens.edu, Password1- as a contractor in order to view your projects. 
+
+Run
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+to test all of the functionality we have developed.
 
 ### `npm run eject`
 
