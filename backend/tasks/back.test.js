@@ -84,7 +84,7 @@ const main = async () => {
   //   { projectId: project2._id, approved: false },
   // ]
 
-  user1 = await usersApi.createUser("Connor Haaf", "chaaf@stevens.edu", "Password123!", 757.27);
+  user1 = await usersApi.createUser("Connor Haaf", "chaaf@stevens.edu", "Password123!", 11757.27);
   console.log("made it past user")
   // const billPay = await usersApi.payBill(user1._id.toString(), project1._id)
   // const userBalance = await usersApi.getBalance(user1._id.toString())
@@ -105,6 +105,7 @@ describe("Project Tests", () => {
   afterAll(async () => {
     await mongoConnection.closeConnection();
   });
+  // Project Tests
   it("Verify title", async () => {
     expect(project1.title).toBe("Install solar panels");
   });
@@ -122,6 +123,25 @@ describe("Project Tests", () => {
   it("Verify Project 2 Description", async () => {
     expect(project2.description).toBe("Add 4 more solar panels to the roof");
   });
+
+  it("Verify get project", async () => {
+    const project = await projectsApi.getProject(project1._id);
+    expect(project.title).toBe("Install solar panels");
+  });
+
+  it("Verify create comment", async () => {
+    const project = await projectsApi.getProject(project1._id);
+    expect(project.comments[0]).toBe("CreateUtilityRequest: test comment");
+  });
+
+  it("Verify tasks", async () => {
+    const project = await projectsApi.getProject(project1._id);
+    console.log(project.tasksToDo)
+    console.log(nextTask2.tasksToDo)
+    expect(project.tasksToDo).toEqual(nextTask2.tasksToDo);
+  });
+
+  // Contractor tests
   it("Verify create contractor name", async () => {
     expect(contractor1.name).toBe("Venkat Anna");
   });
@@ -130,7 +150,6 @@ describe("Project Tests", () => {
     expect(contractor1.email).toBe("vanna@stevens.edu");
   });
 
-  // Contractor tests
   it("Verify create contractor messages", async () => {
     expect(contractor1.messages).toEqual([{from: "SenderId1", text: "Hello World!"},
     {from: "SenderId2", text: "Goodbye now!"}]);
@@ -162,6 +181,7 @@ describe("Project Tests", () => {
     expect(nextTask.todo).toEqual([project1._id, project2._id]);
   });
 
+  // User tests
   it("Verify user name", async () => {
     expect(user1.name).toBe("Connor Haaf");
   });
@@ -169,21 +189,21 @@ describe("Project Tests", () => {
   it("Verify user email", async () => {
     expect(user1.email).toBe("chaaf@stevens.edu");
   });
-
-  it("Verify get project", async () => {
-    const project = await projectsApi.getProject(project1._id);
-    expect(project.title).toBe("Install solar panels");
+  
+  it("Verify user balance", async () => {
+    expect(user1.balance).toBe(11757.27);
+  });
+  
+  it("Verify user pay bill", async () => {
+    await usersApi.payBill(user1._id.toString(), project1._id)
+    const userBalance = await usersApi.getBalance(user1._id.toString())
+    expect(userBalance).toBe(11757.27 - project1.balance);
   });
 
-  it("Verify create comment", async () => {
-    const project = await projectsApi.getProject(project1._id);
-    expect(project.comments[0]).toBe("CreateUtilityRequest: test comment");
+  it("Verify user deposit money", async () => {
+    const depositMoney = await usersApi.depositMoney(user1._id.toString(), 500)
+    const userBalance2 = await usersApi.getBalance(user1._id.toString())
+    expect(userBalance2).toBe(11757.27 - project1.balance + 500);
   });
 
-  it("Verify tasks", async () => {
-    const project = await projectsApi.getProject(project1._id);
-    console.log(project.tasksToDo)
-    console.log(nextTask2.tasksToDo)
-    expect(project.tasksToDo).toEqual(nextTask2.tasksToDo);
-  });
 });
