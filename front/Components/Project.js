@@ -1,33 +1,12 @@
 import { useState, useEffect } from "react";
-
-function Project() {
+import axios from "axios";
+function Project({ id }) {
   const [data, setData] = useState(null);
 
   useEffect(() => {
     async function fetch() {
-      const dummyData = {
-        title: "Sample Title",
-        description: "Sample Description",
-        tasksToDo: ["task 1", "task2", "task3"],
-        inProgress: null,
-        notes: [],
-        dueDate: new Date(),
-        reminderDate: new Date(),
-        reminderSent: false,
-        equipmentRequired: [],
-        deliveredEquipment: [],
-        neededEquipment: [],
-        contract: {
-          _id: 123,
-          bankApproval: false,
-          dateBankApproval: null,
-          utilityApproval: false,
-          dateUtilityApproval: null,
-          approved: false,
-          dateApproved: null,
-        },
-      };
-      setData(dummyData);
+      const { data } = await axios.get(`http://localhost:3001/project/${id}`);
+      setData(data);
     }
     fetch();
   }, []);
@@ -37,9 +16,9 @@ function Project() {
       <div style={{ textAlign: "start", padding: 30 }}>
         <h1 style={{ textAlign: "center" }}>Project Information</h1>
         <h2>{data.title}</h2>
-        <h6>{data.description}</h6>
+        <h4>{data.description}</h4>
         <div style={{ flex: 1, display: "inline" }}>
-          <p>Tasks: </p>
+          <h4>Tasks: </h4>
           {data.tasksToDo.map((task) => (
             <p key={task}>{task}</p>
           ))}
@@ -67,11 +46,11 @@ function Project() {
         ))}
         <h3>Contract:</h3>
         <p>id: {data.contract._id}</p>
-        <p>Bank Approval? {data.contract.bankApproval}</p>
+        <p>Bank Approval? {data.contract.bankApproval.toString()}</p>
         <p>Date of Bank Approval: {data.contract.dateBankApproval}</p>
-        <p>Utility Approval? {data.contract.utilityApproval}</p>
+        <p>Utility Approval? {data.contract.utilityApproval.toString()}</p>
         <p>Date of Utility Approval: {data.contract.dateUtilityApproval}</p>
-        <p>Approved? {data.contract.approved}</p>
+        <p>Approved? {data.contract.approved.toString()}</p>
         <p>Date Approved: {data.contract.utilityApproval}</p>
       </div>
     )

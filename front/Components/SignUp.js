@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import UserDashboard from "./UserDashboard";
+import ContractorDashboard from "./ContractorDashboard";
 
 const SignUp = () => {
   const [email, setEmail] = useState({ email: undefined });
@@ -121,7 +123,6 @@ const SignUp = () => {
           <input type="submit" />
         </form>
         {error && <p>{error}</p>}
-        
       </div>
     );
   } else {
@@ -130,34 +131,23 @@ const SignUp = () => {
         <header>Home Page</header>
 
         <nav class="nav-bar">
-        <Link
-          href="Auth"
-          class="page-link"
-        >
-          Home
-        </Link>
-        <Link
-          href="Calendar"
-          class="page-link"
-        >
-          Calendar
-        </Link>
-        <Link
-          href="EnergyBill"
-          class="page-link"
-        >
-          Billing
-        </Link>
-        <Link
-          href="ImageHandler"
-          class="page-link"
-        >
-          Upload Image
-        </Link>
-      </nav>
+          <Link href="Auth" class="page-link">
+            Home
+          </Link>
+          <Link href="Calendar" class="page-link">
+            Calendar
+          </Link>
+          <Link href="EnergyBill" class="page-link">
+            Billing
+          </Link>
+          <Link href="ImageHandler" class="page-link">
+            Upload Image
+          </Link>
+        </nav>
         <h1>
           User with ID: {localStorage.getItem("user")} is created and logged in
         </h1>
+        <ContractorDashboard />
         <button
           onClick={() => {
             localStorage.clear();
