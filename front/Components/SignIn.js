@@ -131,8 +131,13 @@ const SignIn = () => {
           </Link>
         </nav>
         <h1>User with ID: {localStorage.getItem("user")} is logged in</h1>
-        {/* <UserDashboard /> */}
-        <ContractorDashboard />
+        {localStorage.getItem("type") == "contractor" ? (
+          <ContractorDashboard />
+        ) : (
+          <UserDashboard />
+        )}
+        {/**/}
+
         <button
           onClick={() => {
             localStorage.clear();

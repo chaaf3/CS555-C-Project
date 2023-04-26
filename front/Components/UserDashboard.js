@@ -10,10 +10,10 @@ function UserDashboard() {
   useEffect(() => {
     async function fetch() {
       setLoading(true);
-      const id = await localStorage.getItem("user");
+      const id = localStorage.getItem("user");
       setUserId(id);
       console.log(id, userId);
-      const { data } = await axios.get(`http://localhost:3001/users/${userId}`);
+      const { data } = await axios.get(`http://localhost:3001/users/${id}`);
       setUserData(data);
       console.log(data);
       setLoading(false);
