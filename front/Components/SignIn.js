@@ -3,6 +3,7 @@ import axios from "axios";
 import Link from "next/link";
 import UserDashboard from "./UserDashboard";
 import ContractorDashboard from "./ContractorDashboard";
+import NewProject from "./NewProject";
 
 const SignIn = () => {
   const [email, setEmail] = useState({ email: undefined });
@@ -15,6 +16,7 @@ const SignIn = () => {
   useEffect(() => {
     if (localStorage.getItem("user")) {
       setLocal(localStorage.getItem("user"));
+      setContractor(localStorage.getItem("type") === "contractor");
     }
   }, []);
 
@@ -114,39 +116,23 @@ const SignIn = () => {
     );
   } else {
     return (
-      <div>
-        <header>Home Page</header>
-        <nav class="nav-bar">
-          <Link href="Auth" class="page-link">
-            Home
-          </Link>
-          <Link href="Calendar" class="page-link">
-            Calendar
-          </Link>
-          <Link href="EnergyBill" class="page-link">
-            Billing
-          </Link>
-          <Link href="ImageHandler" class="page-link">
-            Upload Image
-          </Link>
-        </nav>
-        <h1>User with ID: {localStorage.getItem("user")} is logged in</h1>
+      <>
         {localStorage.getItem("type") == "contractor" ? (
           <ContractorDashboard />
         ) : (
           <UserDashboard />
         )}
-        {/**/}
-
-        <button className='logout'
+        <button
+          className="logout"
           onClick={() => {
             localStorage.clear();
             setLocal(null);
+            setError(null);
           }}
         >
           Log Out
         </button>
-      </div>
+      </>
     );
   }
 };

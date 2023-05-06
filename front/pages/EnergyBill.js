@@ -48,21 +48,36 @@ function EnergyBill() {
         <div>
           <header>Energy Bill</header>
           <nav class="nav-bar">
-            <Link href="Auth" class="page-link">
+            <Link
+              href="Auth"
+              class="page-link"
+            >
               Home
             </Link>
-            <Link href="Calendar" class="page-link">
+            <Link
+              href="Calendar"
+              class="page-link"
+            >
               Calendar
             </Link>
-            <Link href="EnergyBill" class="page-link">
+            <Link
+              href="EnergyBill"
+              class="page-link"
+            >
               Billing
             </Link>
-            <Link href="ImageHandler" class="page-link">
+            <Link
+              href="ImageHandler"
+              class="page-link"
+            >
               Upload Image
             </Link>
           </nav>{" "}
           {projects.map((proj) => (
-            <Paper elevation={3} sx={{ width: "50%", textAlign: "center" }}>
+            <Paper
+              elevation={3}
+              sx={{ width: "50%", textAlign: "center" }}
+            >
               <h3>Bill for Project "{proj.title}" Details:</h3>
               <p>Project Description: {proj.description}</p>
               <p>Balance: ${proj.balance}</p>

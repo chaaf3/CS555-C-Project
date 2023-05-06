@@ -61,6 +61,7 @@ form {
     border-radius: 5px;
     background-color: #f2f2f2;
     padding: 20px;
+    color: black;
 }
 
 .logout {
@@ -72,3 +73,34 @@ form {
     border-radius: 4px;
     cursor: pointer;
 }
+
+.card {
+    display: inline-block;
+    background-color: #282c34;
+    color: white;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    box-shadow: 0 0px 0px 0;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 5px;
+}
+
+.card-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+  }
+
+.card-text {
+    font-size: 1.2em;
+    color: white;
+}
+
+.card-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    width: 200px;
+    height: 200px;
+  }

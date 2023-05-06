@@ -42,8 +42,12 @@ function ProjectDropdown({ projectId }) {
   };
   if (!loading)
     return (
-      <Card sx={{ width: 500 }}>
-        <CardContent>
+      <Card
+        style={{ backgroundColor: "gray" }}
+        className="card"
+        sx={{ width: 500 }}
+      >
+        <CardContent className="card-title">
           <Typography>{projectData.title}</Typography>
         </CardContent>
 
@@ -57,7 +61,11 @@ function ProjectDropdown({ projectId }) {
             <Typography>V</Typography>
           </ExpandMore>
         </CardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <Collapse
+          in={expanded}
+          timeout="auto"
+          unmountOnExit
+        >
           <CardContent>
             <Project id={projectId} />
           </CardContent>

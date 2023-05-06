@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import NavBar from "../Components/NavBar";
 
 const ImageHandler = () => {
   const [image, setImage] = useState(null);
@@ -12,6 +13,9 @@ const ImageHandler = () => {
       !localStorage.getItem("user") ||
       localStorage.getItem("type") != "contractor"
     ) {
+      alert(
+        "Only contractors may upload images of their solar panel progress."
+      );
       window.location.href = "/Auth";
     }
   }, []);
@@ -31,32 +35,7 @@ const ImageHandler = () => {
   return (
     <div>
       <header>Please enter your image</header>
-      <nav class="nav-bar">
-        <Link
-          href="Auth"
-          class="page-link"
-        >
-          Home
-        </Link>
-        <Link
-          href="Calendar"
-          class="page-link"
-        >
-          Calendar
-        </Link>
-        <Link
-          href="EnergyBill"
-          class="page-link"
-        >
-          Billing
-        </Link>
-        <Link
-          href="ImageHandler"
-          class="page-link"
-        >
-          Upload Image
-        </Link>
-      </nav>
+      <NavBar />
       <form
         onSubmit={async (e) => {
           e.preventDefault();

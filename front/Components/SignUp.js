@@ -3,6 +3,7 @@ import axios from "axios";
 import Link from "next/link";
 import UserDashboard from "./UserDashboard";
 import ContractorDashboard from "./ContractorDashboard";
+import NewProject from "./NewProject";
 
 const SignUp = () => {
   const [email, setEmail] = useState({ email: undefined });
@@ -10,7 +11,15 @@ const SignUp = () => {
   const [name, setName] = useState({ name: undefined });
   const [local, setLocal] = useState(null);
   const [error, setError] = useState(null);
-  const [isContractor, setContractor] = useState({ isContractor: undefined });
+  const [isContractor, setContractor] = useState(null);
+
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      setLocal(localStorage.getItem("user"));
+      setContractor(localStorage.getItem("type") == "contractor");
+      console.log(isContractor);
+    }
+  }, []);
 
   if (!local) {
     return (
@@ -41,6 +50,9 @@ const SignUp = () => {
               }
             } else {
               try {
+                console.log("name " + name);
+                console.log("email " + email);
+                console.log("password " + password);
                 let temp = await axios.post(
                   "http://localhost:3001/contractors/signUp",
                   {
@@ -104,7 +116,7 @@ const SignUp = () => {
             }}
             id="contractor"
             type="radio"
-            value={isContractor.isContractor}
+            value={isContractor}
           />
           <label style={{ display: "block", textAlign: "center" }}>
             Account Type User:
@@ -117,7 +129,7 @@ const SignUp = () => {
             }}
             id="user"
             type="radio"
-            value={isContractor.isContractor}
+            value={isContractor}
           />
 
           <input type="submit" />
@@ -127,28 +139,14 @@ const SignUp = () => {
     );
   } else {
     return (
-      <div>
-        <header>Home Page</header>
-
-        <nav class="nav-bar">
-          <Link href="Auth" class="page-link">
-            Home
-          </Link>
-          <Link href="Calendar" class="page-link">
-            Calendar
-          </Link>
-          <Link href="EnergyBill" class="page-link">
-            Billing
-          </Link>
-          <Link href="ImageHandler" class="page-link">
-            Upload Image
-          </Link>
-        </nav>
-        <h1>
-          User with ID: {localStorage.getItem("user")} is created and logged in
-        </h1>
-        <ContractorDashboard />
-        <button className='logout'
+      <>
+        {localStorage.getItem("type") == "contractor" ? (
+          <ContractorDashboard />
+        ) : (
+          <UserDashboard />
+        )}
+        <button
+          className="logout"
           onClick={() => {
             localStorage.clear();
             setLocal(null);
@@ -157,7 +155,7 @@ const SignUp = () => {
         >
           Log Out
         </button>
-      </div>
+      </>
     );
   }
 };

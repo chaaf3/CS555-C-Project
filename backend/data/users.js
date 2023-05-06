@@ -45,7 +45,7 @@ const createUser = async function createUser(name, email, password, balance) {
     messages: [],
     calendar: [],
     status: [],
-    project: null,
+    project: [],
   };
 
   // Insert entry
@@ -261,7 +261,7 @@ const addProject = async function (userId, projectId) {
 
   const updatedUser = await userCollection.updateOne(
     { _id: new ObjectId(userId) },
-    { $push: { todo: projectId } }
+    { $push: { project: projectId } }
   );
 
   if (!updatedUser.matchedCount && !updatedUser.modifiedCount) {

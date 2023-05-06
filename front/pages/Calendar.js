@@ -1,7 +1,7 @@
 import { Scheduler } from "@aldabil/react-scheduler";
 import React from "react";
 import Link from "next/link";
-
+import NavBar from "../Components/NavBar";
 const EVENTS = [
   {
     event_id: 1,
@@ -76,32 +76,7 @@ const EVENTS = [
 const Calendar = () => {
   return (
     <div>
-      <nav class="nav-bar">
-        <Link
-          href="Auth"
-          class="page-link"
-        >
-          Home
-        </Link>
-        <Link
-          href="Calendar"
-          class="page-link"
-        >
-          Calendar
-        </Link>
-        <Link
-          href="EnergyBill"
-          class="page-link"
-        >
-          Billing
-        </Link>
-        <Link
-          href="ImageHandler"
-          class="page-link"
-        >
-          Upload Image
-        </Link>
-      </nav>
+      <NavBar />
       <Scheduler
         view="month"
         events={EVENTS}
